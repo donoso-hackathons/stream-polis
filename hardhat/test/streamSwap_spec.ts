@@ -10,6 +10,9 @@ describe("Stream Swap", function () {
 
   let streamSwapContract:StreamSwap
 
+  let TOKEN1 = "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f";
+  let TOKEN2  = "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7";
+
   let deployer: SignerWithAddress;
   let user1: SignerWithAddress;
   let user2: SignerWithAddress;
@@ -21,7 +24,7 @@ describe("Stream Swap", function () {
 
     provider =   hre.ethers.provider;
 
-    streamSwapContract =  await new StreamSwap__factory(deployer).deploy("0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f","0x42bb40bF79730451B11f6De1CbA222F17b87Afd7");
+    streamSwapContract =  await new StreamSwap__factory(deployer).deploy(TOKEN1,TOKEN2);
 
   })
 
@@ -38,6 +41,16 @@ describe("Stream Swap", function () {
     let decimals = await streamSwapContract.DECIMALS_RATIO();
     expect(+ratio.toString()/+decimals.toString()).to.equal(1.5)
   });
+
+  it('should check correcty the liquidity and set correct ratio', async function () {
+    await streamSwapContract.addInitialLiquidity(450,300);
+
+    let p = await streamSwapContract.checkLiquidityToken1(300,TOKEN2)
+
+    console.log(p.toString())
+
+  });
+
 
 
 });

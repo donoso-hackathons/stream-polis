@@ -21,9 +21,12 @@ export interface StreamSwapInterface extends utils.Interface {
   functions: {
     "DECIMALS_RATIO()": FunctionFragment;
     "addInitialLiquidity(uint256,uint256)": FunctionFragment;
+    "addLiquidityToken1(uint256)": FunctionFragment;
+    "addLiquidityToken2()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "checkLiquidityToken1(uint256,address)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "getLPTokens()": FunctionFragment;
@@ -32,6 +35,7 @@ export interface StreamSwapInterface extends utils.Interface {
     "increaseAllowance(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "ratio()": FunctionFragment;
+    "shares_per_user(address)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
@@ -47,6 +51,14 @@ export interface StreamSwapInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "addLiquidityToken1",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addLiquidityToken2",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
   ): string;
@@ -55,6 +67,10 @@ export interface StreamSwapInterface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "checkLiquidityToken1",
+    values: [BigNumberish, string]
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "decreaseAllowance",
@@ -78,6 +94,10 @@ export interface StreamSwapInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "ratio", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "shares_per_user",
+    values: [string]
+  ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -100,9 +120,21 @@ export interface StreamSwapInterface extends utils.Interface {
     functionFragment: "addInitialLiquidity",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "addLiquidityToken1",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addLiquidityToken2",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "checkLiquidityToken1",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "decreaseAllowance",
@@ -126,6 +158,10 @@ export interface StreamSwapInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ratio", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "shares_per_user",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -195,6 +231,20 @@ export interface StreamSwap extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    addLiquidityToken1(
+      _addToken1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "addLiquidityToken2()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "addLiquidityToken2(uint256)"(
+      _addToken1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     allowance(
       owner: string,
       spender: string,
@@ -208,6 +258,12 @@ export interface StreamSwap extends BaseContract {
     ): Promise<ContractTransaction>;
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    checkLiquidityToken1(
+      _amount: BigNumberish,
+      _token: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -232,6 +288,11 @@ export interface StreamSwap extends BaseContract {
     name(overrides?: CallOverrides): Promise<[string]>;
 
     ratio(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    shares_per_user(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -259,6 +320,20 @@ export interface StreamSwap extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  addLiquidityToken1(
+    _addToken1: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "addLiquidityToken2()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "addLiquidityToken2(uint256)"(
+    _addToken1: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   allowance(
     owner: string,
     spender: string,
@@ -272,6 +347,12 @@ export interface StreamSwap extends BaseContract {
   ): Promise<ContractTransaction>;
 
   balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  checkLiquidityToken1(
+    _amount: BigNumberish,
+    _token: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -296,6 +377,8 @@ export interface StreamSwap extends BaseContract {
   name(overrides?: CallOverrides): Promise<string>;
 
   ratio(overrides?: CallOverrides): Promise<BigNumber>;
+
+  shares_per_user(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -323,6 +406,18 @@ export interface StreamSwap extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    addLiquidityToken1(
+      _addToken1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "addLiquidityToken2()"(overrides?: CallOverrides): Promise<void>;
+
+    "addLiquidityToken2(uint256)"(
+      _addToken1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -336,6 +431,12 @@ export interface StreamSwap extends BaseContract {
     ): Promise<boolean>;
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    checkLiquidityToken1(
+      _amount: BigNumberish,
+      _token: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -360,6 +461,11 @@ export interface StreamSwap extends BaseContract {
     name(overrides?: CallOverrides): Promise<string>;
 
     ratio(overrides?: CallOverrides): Promise<BigNumber>;
+
+    shares_per_user(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -412,6 +518,20 @@ export interface StreamSwap extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    addLiquidityToken1(
+      _addToken1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "addLiquidityToken2()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "addLiquidityToken2(uint256)"(
+      _addToken1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -425,6 +545,12 @@ export interface StreamSwap extends BaseContract {
     ): Promise<BigNumber>;
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    checkLiquidityToken1(
+      _amount: BigNumberish,
+      _token: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -449,6 +575,11 @@ export interface StreamSwap extends BaseContract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     ratio(overrides?: CallOverrides): Promise<BigNumber>;
+
+    shares_per_user(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -477,6 +608,20 @@ export interface StreamSwap extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    addLiquidityToken1(
+      _addToken1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "addLiquidityToken2()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "addLiquidityToken2(uint256)"(
+      _addToken1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     allowance(
       owner: string,
       spender: string,
@@ -491,6 +636,12 @@ export interface StreamSwap extends BaseContract {
 
     balanceOf(
       account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkLiquidityToken1(
+      _amount: BigNumberish,
+      _token: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -517,6 +668,11 @@ export interface StreamSwap extends BaseContract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ratio(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    shares_per_user(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
