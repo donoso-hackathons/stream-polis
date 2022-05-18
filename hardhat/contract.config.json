@@ -1,0 +1,9 @@
+{
+  "streamSwap": {
+    "artifactsPath": "StreamSwapt.sol/StreamSwap.json",
+    "name": "StreamSwap",
+    "ctor": [],
+    "jsonName": "stream_swap"
+  }
+}
+
