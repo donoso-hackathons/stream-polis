@@ -29,22 +29,27 @@ function toUnder(camel: string) {
 }
 
 
-const artifactsPath = '../src/assets/artifacts/contracts/';
+const artifactsPath = './artifacts/contracts/';
 
  async function wire() {
 
 
 
 
-  const contracts = readdirSync('./contracts/');
+  const contracts = readdirSync('./contracts/').filter(
+    (fil) => fil.substring(fil.length - 4, fil.length) === '.sol'
+  );
 
-
+  console.log(contracts)
 
   const contractArtifacts: Array<ICONTRACT_DEPLOY> = [];
   for (const contractFolder of contracts) {
     const jsonDir = readdirSync(join(artifactsPath, contractFolder)).filter(
       (fil) => fil.substring(fil.length - 9, fil.length) !== '.dbg.json'
     );
+
+      console.log(jsonDir)
+
     for (const jsonFile of jsonDir) {
       const contractArtifact = `${contractFolder}/${jsonFile}`;
 
@@ -68,6 +73,7 @@ const artifactsPath = '../src/assets/artifacts/contracts/';
 
   /// checking constructor parameters
   for (const contract of contractArtifacts) {
+    console.log(contract.name)
     const contract_abi = JSON.parse(
       readFileSync(join(artifactsPath, contract.artifactsPath), 'utf-8')
     ).abi;

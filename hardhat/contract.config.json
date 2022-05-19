@@ -2,8 +2,22 @@
   "streamSwap": {
     "artifactsPath": "StreamSwap.sol/StreamSwap.json",
     "name": "StreamSwap",
-    "ctor": ["0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f","0x42bb40bF79730451B11f6De1CbA222F17b87Afd7"],
+    "ctor": [
+      "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
+      "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7"
+    ],
     "jsonName": "stream_swap"
+  },
+  "lendingMarketPlace": {
+    "name": "LendingMarketPlace",
+    "artifactsPath": "LendingMarketPlace.sol/LendingMarketPlace.json",
+    "jsonName": "lending_market_place",
+    "ctor": ["0xEB796bdb90fFA0f28255275e16936D25d3418603", "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873"]
+  },
+  "streamHouse": {
+    "name": "StreamHouse",
+    "artifactsPath": "StreamHouse.sol/StreamHouse.json",
+    "jsonName": "stream_house",
+    "ctor": ["host:address", "cfa:address"]
   }
 }
-
