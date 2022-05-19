@@ -115,8 +115,7 @@ contract LendingMarketPlace is SuperAppBase {
       ISuperToken superToken;
     }
 
-
-    function afterAgreementCreated(
+       function afterAgreementCreated(
         ISuperToken _superToken,
         address _agreementClass,
         bytes32, // _agreementId,
@@ -130,7 +129,29 @@ contract LendingMarketPlace is SuperAppBase {
         onlyHost
         returns (bytes memory newCtx)
     {
-        
+         newCtx = _ctx;
+         _loansTradedCounter.increment();
+        return newCtx;
+    }
+
+    function afterAgreementCreated2(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32, // _agreementId,
+        bytes calldata _agreementData,
+        bytes calldata, // _cbdata,
+        bytes calldata _ctx
+    )
+        external
+
+        onlyExpected(_agreementClass)
+        onlyHost
+        returns (bytes memory newCtx)
+    {
+
+
+
+
       LocalStateCallBack memory _localState = LocalStateCallBack({
         newCtx:_ctx,
         decodedContext:_host.decodeCtx(_ctx),

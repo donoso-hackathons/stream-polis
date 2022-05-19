@@ -1,4 +1,4 @@
-import { BytesLike, Contract, ContractTransaction, Signer, Wallet } from 'ethers';
+import { BytesLike, Contract, ContractReceipt, ContractTransaction, Signer, Wallet } from 'ethers';
 import { ensureDir } from 'fs-extra';
 import { HardhatNetworkAccountConfig, HardhatNetworkAccountsConfig, HardhatNetworkConfig, HardhatRuntimeEnvironment } from 'hardhat/types';
 import { join } from 'path';
@@ -12,8 +12,9 @@ export function getHardhatNetwork(hre: HardhatRuntimeEnvironment) {
   return network;
 }
 
-export async function waitForTx(tx: Promise<ContractTransaction>) {
-  await (await tx).wait();
+export async function waitForTx(tx: Promise<ContractTransaction>):Promise<ContractReceipt> {
+ return await (await tx).wait();
+
 }
 
 export async function deployContract(tx: any): Promise<Contract> {
