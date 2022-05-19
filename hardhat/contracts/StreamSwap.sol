@@ -1,4 +1,5 @@
 //SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -41,9 +42,7 @@ contract StreamSwap is SuperAppBase, ERC20 {
     require(_token2 != address(0), "Token2 address passed is a null address");
     require(address(host) != address(0), "host is zero address");
     require(address(cfa) != address(0), "cfa is zero address");
-    require(
-      "acceptedToken is zero address"
-    );
+ 
         token1 = _token1;
         token2 = _token2;
 

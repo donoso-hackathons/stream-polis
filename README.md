@@ -1,27 +1,27 @@
 # StreamPolis
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
+Strean Polis Project has started in the frame of the hackmoney hackathon.
+This projects aims to be the one-stop shop for payments/services based upon superfluid
 
-## Development server
+## Major problems it solves
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Although the ability to stream payments with Superfluid is already on mainnet, the defi adopion is very low as there are no services offered for streams. 
+Stream Polis should help solving this issue providing the required infrastructure to connect  Superfluid users : "streamers".
 
-## Code scaffolding
+#### The major building blocks:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Stream Home: Dashboard for all relevant services/portfolios of a streamer. 
 
-## Build
+- Agora. The place where services are offered to be paid on streams (mainly subscriptions)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Company Saloon. Registry for companies willing to pay the salaries trough the stream polis. This will add a certain confidence for the services providers that the streamer will continue having the stream as is provided by the company (off chain verification)
 
-## Running unit tests
+- Lending Marketplace: Direct contact bewtween lenders and borrowers with specific stream and collateral.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Exchanges (SwapStream.sol)
 
-## Running end-to-end tests
+- ..
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+As for the sick of delivering somethingin the hackathon the first step will be the Stream Home and Lending Marketplace 

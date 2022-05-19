@@ -20,12 +20,20 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 export interface StreamSwapInterface extends utils.Interface {
   functions: {
     "DECIMALS_RATIO()": FunctionFragment;
+    "_acceptedToken()": FunctionFragment;
+    "_cfa()": FunctionFragment;
+    "_host()": FunctionFragment;
     "addInitialLiquidity(uint256,uint256)": FunctionFragment;
-    "addLiquidityToken1(uint256)": FunctionFragment;
-    "addLiquidityToken2()": FunctionFragment;
+    "addLiquidity(uint256,address)": FunctionFragment;
+    "afterAgreementCreated(address,address,bytes32,bytes,bytes,bytes)": FunctionFragment;
+    "afterAgreementTerminated(address,address,bytes32,bytes,bytes,bytes)": FunctionFragment;
+    "afterAgreementUpdated(address,address,bytes32,bytes,bytes,bytes)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "beforeAgreementCreated(address,address,bytes32,bytes,bytes)": FunctionFragment;
+    "beforeAgreementTerminated(address,address,bytes32,bytes,bytes)": FunctionFragment;
+    "beforeAgreementUpdated(address,address,bytes32,bytes,bytes)": FunctionFragment;
     "checkLiquidityToken1(uint256,address)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
@@ -47,16 +55,30 @@ export interface StreamSwapInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "_acceptedToken",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "_cfa", values?: undefined): string;
+  encodeFunctionData(functionFragment: "_host", values?: undefined): string;
+  encodeFunctionData(
     functionFragment: "addInitialLiquidity",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "addLiquidityToken1",
-    values: [BigNumberish]
+    functionFragment: "addLiquidity",
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "addLiquidityToken2",
-    values?: undefined
+    functionFragment: "afterAgreementCreated",
+    values: [string, string, BytesLike, BytesLike, BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "afterAgreementTerminated",
+    values: [string, string, BytesLike, BytesLike, BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "afterAgreementUpdated",
+    values: [string, string, BytesLike, BytesLike, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "allowance",
@@ -67,6 +89,18 @@ export interface StreamSwapInterface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "beforeAgreementCreated",
+    values: [string, string, BytesLike, BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "beforeAgreementTerminated",
+    values: [string, string, BytesLike, BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "beforeAgreementUpdated",
+    values: [string, string, BytesLike, BytesLike, BytesLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "checkLiquidityToken1",
     values: [BigNumberish, string]
@@ -117,20 +151,46 @@ export interface StreamSwapInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "_acceptedToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "_cfa", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "_host", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "addInitialLiquidity",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addLiquidityToken1",
+    functionFragment: "addLiquidity",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addLiquidityToken2",
+    functionFragment: "afterAgreementCreated",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "afterAgreementTerminated",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "afterAgreementUpdated",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "beforeAgreementCreated",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "beforeAgreementTerminated",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "beforeAgreementUpdated",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "checkLiquidityToken1",
     data: BytesLike
@@ -225,23 +285,51 @@ export interface StreamSwap extends BaseContract {
   functions: {
     DECIMALS_RATIO(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    _acceptedToken(overrides?: CallOverrides): Promise<[string]>;
+
+    _cfa(overrides?: CallOverrides): Promise<[string]>;
+
+    _host(overrides?: CallOverrides): Promise<[string]>;
+
     addInitialLiquidity(
       _amountToken1: BigNumberish,
       _amountToken2: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    addLiquidityToken1(
-      _addToken1: BigNumberish,
+    addLiquidity(
+      _amount1: BigNumberish,
+      _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "addLiquidityToken2()"(
+    afterAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "addLiquidityToken2(uint256)"(
-      _addToken1: BigNumberish,
+    afterAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    afterAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -259,8 +347,35 @@ export interface StreamSwap extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    beforeAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    beforeAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    beforeAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     checkLiquidityToken1(
-      _amount: BigNumberish,
+      _flow: BigNumberish,
       _token: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -314,23 +429,51 @@ export interface StreamSwap extends BaseContract {
 
   DECIMALS_RATIO(overrides?: CallOverrides): Promise<BigNumber>;
 
+  _acceptedToken(overrides?: CallOverrides): Promise<string>;
+
+  _cfa(overrides?: CallOverrides): Promise<string>;
+
+  _host(overrides?: CallOverrides): Promise<string>;
+
   addInitialLiquidity(
     _amountToken1: BigNumberish,
     _amountToken2: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  addLiquidityToken1(
-    _addToken1: BigNumberish,
+  addLiquidity(
+    _amount1: BigNumberish,
+    _token: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "addLiquidityToken2()"(
+  afterAgreementCreated(
+    arg0: string,
+    arg1: string,
+    arg2: BytesLike,
+    arg3: BytesLike,
+    arg4: BytesLike,
+    arg5: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "addLiquidityToken2(uint256)"(
-    _addToken1: BigNumberish,
+  afterAgreementTerminated(
+    arg0: string,
+    arg1: string,
+    arg2: BytesLike,
+    arg3: BytesLike,
+    arg4: BytesLike,
+    arg5: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  afterAgreementUpdated(
+    arg0: string,
+    arg1: string,
+    arg2: BytesLike,
+    arg3: BytesLike,
+    arg4: BytesLike,
+    arg5: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -348,8 +491,35 @@ export interface StreamSwap extends BaseContract {
 
   balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  beforeAgreementCreated(
+    arg0: string,
+    arg1: string,
+    arg2: BytesLike,
+    arg3: BytesLike,
+    arg4: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  beforeAgreementTerminated(
+    arg0: string,
+    arg1: string,
+    arg2: BytesLike,
+    arg3: BytesLike,
+    arg4: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  beforeAgreementUpdated(
+    arg0: string,
+    arg1: string,
+    arg2: BytesLike,
+    arg3: BytesLike,
+    arg4: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   checkLiquidityToken1(
-    _amount: BigNumberish,
+    _flow: BigNumberish,
     _token: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -400,23 +570,53 @@ export interface StreamSwap extends BaseContract {
   callStatic: {
     DECIMALS_RATIO(overrides?: CallOverrides): Promise<BigNumber>;
 
+    _acceptedToken(overrides?: CallOverrides): Promise<string>;
+
+    _cfa(overrides?: CallOverrides): Promise<string>;
+
+    _host(overrides?: CallOverrides): Promise<string>;
+
     addInitialLiquidity(
       _amountToken1: BigNumberish,
       _amountToken2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addLiquidityToken1(
-      _addToken1: BigNumberish,
+    addLiquidity(
+      _amount1: BigNumberish,
+      _token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "addLiquidityToken2()"(overrides?: CallOverrides): Promise<void>;
-
-    "addLiquidityToken2(uint256)"(
-      _addToken1: BigNumberish,
+    afterAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<string>;
+
+    afterAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    afterAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     allowance(
       owner: string,
@@ -432,8 +632,35 @@ export interface StreamSwap extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    beforeAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    beforeAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    beforeAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     checkLiquidityToken1(
-      _amount: BigNumberish,
+      _flow: BigNumberish,
       _token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -512,23 +739,51 @@ export interface StreamSwap extends BaseContract {
   estimateGas: {
     DECIMALS_RATIO(overrides?: CallOverrides): Promise<BigNumber>;
 
+    _acceptedToken(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _cfa(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _host(overrides?: CallOverrides): Promise<BigNumber>;
+
     addInitialLiquidity(
       _amountToken1: BigNumberish,
       _amountToken2: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    addLiquidityToken1(
-      _addToken1: BigNumberish,
+    addLiquidity(
+      _amount1: BigNumberish,
+      _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "addLiquidityToken2()"(
+    afterAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "addLiquidityToken2(uint256)"(
-      _addToken1: BigNumberish,
+    afterAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    afterAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -546,8 +801,35 @@ export interface StreamSwap extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    beforeAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    beforeAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    beforeAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     checkLiquidityToken1(
-      _amount: BigNumberish,
+      _flow: BigNumberish,
       _token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -602,23 +884,51 @@ export interface StreamSwap extends BaseContract {
   populateTransaction: {
     DECIMALS_RATIO(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    _acceptedToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _cfa(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _host(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     addInitialLiquidity(
       _amountToken1: BigNumberish,
       _amountToken2: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    addLiquidityToken1(
-      _addToken1: BigNumberish,
+    addLiquidity(
+      _amount1: BigNumberish,
+      _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "addLiquidityToken2()"(
+    afterAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "addLiquidityToken2(uint256)"(
-      _addToken1: BigNumberish,
+    afterAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    afterAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      arg5: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -639,8 +949,35 @@ export interface StreamSwap extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    beforeAgreementCreated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    beforeAgreementTerminated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    beforeAgreementUpdated(
+      arg0: string,
+      arg1: string,
+      arg2: BytesLike,
+      arg3: BytesLike,
+      arg4: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     checkLiquidityToken1(
-      _amount: BigNumberish,
+      _flow: BigNumberish,
       _token: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
