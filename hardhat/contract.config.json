@@ -12,12 +12,21 @@
     "name": "LendingMarketPlace",
     "artifactsPath": "LendingMarketPlace.sol/LendingMarketPlace.json",
     "jsonName": "lending_market_place",
-    "ctor": ["0xEB796bdb90fFA0f28255275e16936D25d3418603", "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873"]
+    "ctor": [
+      "0xEB796bdb90fFA0f28255275e16936D25d3418603",
+      "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873"
+    ]
   },
   "streamHouse": {
     "name": "StreamHouse",
     "artifactsPath": "StreamHouse.sol/StreamHouse.json",
     "jsonName": "stream_house",
     "ctor": ["host:address", "cfa:address"]
+  },
+  "loanFactory": {
+    "name": "LoanFactory",
+    "artifactsPath": "LoanFactory.sol/LoanFactory.json",
+    "jsonName": "loan_factory",
+    "ctor": []
   }
 }
