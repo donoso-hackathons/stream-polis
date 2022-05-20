@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 
 import {ISuperfluid, ISuperAgreement, ISuperToken, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
@@ -11,7 +12,11 @@ import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/app
 
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
-import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
+
+import {ILoanFactory} from "./interfaces/ILoanFactory.sol";
+
+
+
 import "hardhat/console.sol";
 
 contract LendingMarketPlace {
@@ -79,7 +84,7 @@ contract LendingMarketPlace {
    * @notice Allows anyone to crate a Loan Offering
    * @dev the calculation of the flowrate will happen in fronted / ui will ask about durations in days/momnths
    */
-  function DemandLoan(DataTypes.DemandConfig memory config) public {
+  function demandLoan(DataTypes.DemandConfig memory config) public {
     _loansDemandCounter.increment();
 
     uint256 loanId = _loansDemandCounter.current();
@@ -96,11 +101,32 @@ contract LendingMarketPlace {
     emit Events.LoanDemandCreated(_loan);
   }
 
-  function AcceptOffer() public {
+  function acceptOffer() public {
 
-    address tradeContractImpl = Clones.clone(loanFactory);
+    address loanContractImpl = Clones.clone(loanFactory);
 
-    
+
+  _loansTradedCounter.increment();
+  uint loadId = _loansTradedCounter.current();
+
+
+      DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
+      loanTradedId: loanId,
+      fee:20,
+      loanAmount: 2000,
+      collateralShare: loan.collateralShare,
+      flowRate: _localState.inFlowRate,
+      initTimeStamp: block.timestamp,
+      status: DataTypes.LOAN_STATUS.ACTIVE,
+      loanTaker:  _localState.loanTaker,
+      loanProvider:  _localState.loanTaker,
+      superToken: address(_localState.superToken)
+    });
+
+    ILoanFactory(loanContractImpl).initialize(host,cfa,loan);
+
+
+
 
     /// clone loan factory
     /// initialize factory

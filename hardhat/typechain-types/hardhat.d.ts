@@ -41,6 +41,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IConstantFlowAgreementV1__factory>;
     getContractFactory(
+      name: "IInstantDistributionAgreementV1",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IInstantDistributionAgreementV1__factory>;
+    getContractFactory(
       name: "ISuperAgreement",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ISuperAgreement__factory>;
@@ -76,6 +80,10 @@ declare module "hardhat/types/runtime" {
       name: "TokenInfo",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TokenInfo__factory>;
+    getContractFactory(
+      name: "ILoanFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ILoanFactory__factory>;
     getContractFactory(
       name: "LendingMarketPlace",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -133,6 +141,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IConstantFlowAgreementV1>;
     getContractAt(
+      name: "IInstantDistributionAgreementV1",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IInstantDistributionAgreementV1>;
+    getContractAt(
       name: "ISuperAgreement",
       address: string,
       signer?: ethers.Signer
@@ -177,6 +190,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.TokenInfo>;
+    getContractAt(
+      name: "ILoanFactory",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ILoanFactory>;
     getContractAt(
       name: "LendingMarketPlace",
       address: string,

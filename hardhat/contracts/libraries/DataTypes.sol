@@ -39,6 +39,11 @@ library DataTypes {
     OFFER_STATUS status;
   }
 
+struct TradeConfig {
+    uint offerId;
+    uint loanAmount;
+}
+
 
   struct LoanTraded {
     uint256 loanTradedId;
