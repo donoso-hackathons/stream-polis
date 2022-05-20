@@ -36,7 +36,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass"
+              "src/styles.css"
             ],
             "scripts": [
               "node_modules/prismjs/prism.js",

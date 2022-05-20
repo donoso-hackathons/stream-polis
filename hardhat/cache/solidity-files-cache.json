@@ -116,8 +116,8 @@
       ]
     },
     "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\stream-polis\\hardhat\\contracts\\libraries\\DataTypes.sol": {
-      "lastModificationDate": 1653033897888,
-      "contentHash": "8bbbfcc7f142d3b4cd236c4c6478a7da",
+      "lastModificationDate": 1653047732520,
+      "contentHash": "64cf872dce4daed7573ecb362e38e17f",
       "sourceName": "contracts/libraries/DataTypes.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -142,7 +142,9 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol"
+      ],
       "versionPragmas": [
         "^0.8.0"
       ],
@@ -1067,8 +1069,8 @@
       ]
     },
     "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\stream-polis\\hardhat\\contracts\\LendingMarketPlace.sol": {
-      "lastModificationDate": 1653045713776,
-      "contentHash": "7fba992926ecbd4cca61a550534d7e25",
+      "lastModificationDate": 1653047810067,
+      "contentHash": "91667b5bae08f10fd8f573aa5575f391",
       "sourceName": "contracts/LendingMarketPlace.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -1102,6 +1104,7 @@
         "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol",
         "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol",
         "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol",
         "./libraries/DataTypes.sol",
         "./libraries/Events.sol",
         "./interfaces/ILoanFactory.sol",

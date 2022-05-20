@@ -94,6 +94,9 @@ if (network == undefined) {
   );
   console.log(toDeployContract.name + ' Contract Deployed to:', loanFactory.address);
 
+  copySync(`./typechain-types/${toDeployContract.name}.ts`, join(contract_path, 'interfaces', `${toDeployContract.name}.ts`));
+
+
   ///// create the local accounts file
   if (
     !existsSync(`${contract_path}/local_accouts.json`) &&

@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
+
+import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
+
 /**
  * @title DataTypes
  * @author donoso_eth
@@ -58,7 +61,7 @@ struct TradeConfig {
     LOAN_STATUS status;    
     address loanTaker;
     address loanProvider;
-    address superToken;
+    ISuperToken superToken;
     address loanContract;
 
   }

@@ -6,11 +6,11 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 
-import {ISuperfluid, ISuperAgreement, ISuperToken, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
+import {ISuperfluid, ISuperAgreement, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
 import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
-
+import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
 
@@ -158,7 +158,7 @@ contract LendingMarketPlace {
       status: DataTypes.LOAN_STATUS.ACTIVE,
       loanTaker: msg.sender,
       loanProvider: offer.loanProvider,
-      superToken: address(offer.config.superToken),
+      superToken: ISuperToken(offer.config.superToken),
       loanContract: loanContractImpl
     });
 
@@ -166,8 +166,7 @@ contract LendingMarketPlace {
 
     bytes memory userData = abi.encode(loanId, msg.sender);
 
-     _cfaLib.createFlow(loan.loanProvider, loan.superToken, totalInflowRate);
-
+ 
     _cfaLib.createFlowByOperator(loan.loanTaker, loan.loanProvider, loan.superToken, totalInflowRate, userData);
 
 
