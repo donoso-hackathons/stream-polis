@@ -9,23 +9,36 @@ import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {ISuperfluid, ISuperAgreement, ISuperToken, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
+import {
+    CFAv1Library
+} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
+
 
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
 
 import {ILoanFactory} from "./interfaces/ILoanFactory.sol";
 
-
-
 import "hardhat/console.sol";
 
+
+
 contract LendingMarketPlace {
+  using CFAv1Library for CFAv1Library.InitData;
   using SafeMath for uint256;
   using Counters for Counters.Counter;
 
-  
-  ISuperfluid  immutable host; // host
-  IConstantFlowAgreementV1 immutable cfa; // the stored constant flow agreement class address
+  uint16 MARKET_PLACE_FEE;
+
+
+  // declare `_idaLib` of type InitData
+
+  ISuperfluid immutable host; // host
+  IConstantFlowAgreementV1 private cfa;
+   //initialize cfaV1 variable
+  using CFAv1Library for CFAv1Library.InitData;
+  CFAv1Library.InitData internal  _cfaLib;
+
 
 
   Counters.Counter public _loansOfferedCounter;
@@ -45,11 +58,31 @@ contract LendingMarketPlace {
 
   address immutable loanFactory;
 
-  constructor(address _loanFactory,ISuperfluid _host, IConstantFlowAgreementV1 _cfa) {
+  constructor(
+    address _loanFactory,
+    ISuperfluid _host,
+    IConstantFlowAgreementV1  __cfa,
+    uint16 _marketPlaceFee
+  ) {
     loanFactory = _loanFactory;
     host = _host;
-    cfa = _cfa;
-  }
+    MARKET_PLACE_FEE = _marketPlaceFee;
+      //initialize InitData struct, and set equal to cfaV1
+    cfa = IConstantFlowAgreementV1(address(_host.getAgreementClass(
+                    keccak256("org.superfluid-finance.agreements.ConstantFlowAgreement.v1")
+                )));
+ _cfaLib = CFAv1Library.InitData(
+        host,
+        //here, we are deriving the address of the CFA using the host contract
+        IConstantFlowAgreementV1(address(_host.getAgreementClass(
+                    keccak256("org.superfluid-finance.agreements.ConstantFlowAgreement.v1")
+                )))
+        );
+
+// _cfaLib = CFAv1Library.InitData(_host, cfa);
+
+    }
+  
 
   // ============= =============  Modifiers ============= ============= //
   // #region Modidiers
@@ -101,37 +134,55 @@ contract LendingMarketPlace {
     emit Events.LoanDemandCreated(_loan);
   }
 
-  function acceptOffer() public {
-
+  function acceptOffer(DataTypes.TradeConfig memory _config) public {
     address loanContractImpl = Clones.clone(loanFactory);
 
+    DataTypes.LoanOffer memory offer = _loansOfferedById[_config.offerId];
 
-  _loansTradedCounter.increment();
-  uint loadId = _loansTradedCounter.current();
+    _loansTradedCounter.increment();
+    uint256 loanId = _loansTradedCounter.current();
+
+    uint256 totalLoanAmount = _config.loanAmount
+    .mul(offer.config.fee)
+    .mul(MARKET_PLACE_FEE)
+    .div(1000*1000);
+
+    int96 totalInflowRate = int96(int256(totalLoanAmount.div(_config.duration)));
+
+    uint collateral = _config.loanAmount
+    .mul(offer.config.collateralShare)
+    .div(100);
 
 
-      DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
+    DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
       loanTradedId: loanId,
-      fee:20,
-      loanAmount: 2000,
-      collateralShare: loan.collateralShare,
-      flowRate: _localState.inFlowRate,
+      fee: offer.config.fee,
+      loanAmount: _config.loanAmount,
+      loanTotalAmount:totalLoanAmount,
+      collateral: collateral,
+      collateralShare: offer.config.collateralShare,
+      flowRate: totalInflowRate,
       initTimeStamp: block.timestamp,
       status: DataTypes.LOAN_STATUS.ACTIVE,
-      loanTaker:  _localState.loanTaker,
-      loanProvider:  _localState.loanTaker,
-      superToken: address(_localState.superToken)
+      loanTaker: msg.sender,
+      loanProvider: offer.loanProvider,
+      superToken: address(offer.config.superToken),
+      loanContract: loanContractImpl
     });
 
-    ILoanFactory(loanContractImpl).initialize(host,cfa,loan);
+    ILoanFactory(loanContractImpl).initialize(host, cfa, loan);
+
+    bytes memory userData =  abi.encode(loanId, msg.sender);
+
+   // _cfaLib.createFlow(loan.loanProvider, loan.superToken, totalInflowRate);
+
+    //_cfaLib.createFlowByOperator(loan.loanTaker, loan.loanProvider, loan.superToken, totalInflowRate, userData);
+
+   // cfa.createFlowByOperator(token, sender, receiver, flowRate, ctx);
 
 
-
-
-    /// clone loan factory
-    /// initialize factory
-    /// start stream to new loan contract
-    // cfa.createFlowByOperator(token, sender, receiver, flowRate,""0x);
+    /// USer shouold approve super app as 
+  // cfa.createFlowByOperator(loan.superToken, loan.loanTaker, loan.loanReceiver, totalInflowRate,"0x");
 
     //// event
     /// update state

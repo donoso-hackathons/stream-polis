@@ -88,9 +88,9 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "uint8",
+                  "internalType": "uint16",
                   "name": "fee",
-                  "type": "uint8"
+                  "type": "uint16"
                 },
                 {
                   "internalType": "address",
@@ -98,9 +98,9 @@
                   "type": "address"
                 },
                 {
-                  "internalType": "uint256",
+                  "internalType": "uint8",
                   "name": "collateralShare",
-                  "type": "uint256"
+                  "type": "uint8"
                 },
                 {
                   "internalType": "int96",
@@ -143,14 +143,29 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint8",
+              "internalType": "uint16",
               "name": "fee",
-              "type": "uint8"
+              "type": "uint16"
             },
             {
               "internalType": "uint256",
-              "name": "initTimeStamp",
+              "name": "loanAmount",
               "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "loanTotalAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint8",
+              "name": "collateralShare",
+              "type": "uint8"
             },
             {
               "internalType": "int96",
@@ -158,18 +173,8 @@
               "type": "int96"
             },
             {
-              "internalType": "address",
-              "name": "superToken",
-              "type": "address"
-            },
-            {
               "internalType": "uint256",
-              "name": "collateralShare",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "loanAmount",
+              "name": "initTimeStamp",
               "type": "uint256"
             },
             {
@@ -186,6 +191,11 @@
               "internalType": "address",
               "name": "loanProvider",
               "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "superToken",
+              "type": "address"
             }
           ],
           "indexed": false,
@@ -198,8 +208,8 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212203af0f020ce1e0bc3379fb8954402a7864f259fec5aa6005b5753899ca079db0f64736f6c63430008040033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212203af0f020ce1e0bc3379fb8954402a7864f259fec5aa6005b5753899ca079db0f64736f6c63430008040033",
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206e223da7705e09fca4193e3157168d0fb62f1e65c8108b99c999b2fa62a99d7e64736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206e223da7705e09fca4193e3157168d0fb62f1e65c8108b99c999b2fa62a99d7e64736f6c63430008040033",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }

@@ -13,9 +13,13 @@ import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/app
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
 
+import {ILoanFactory} from "./interfaces/ILoanFactory.sol";
+
+
+
 import "hardhat/console.sol";
 
-contract LendingFactory is SuperAppBase, Initializable {
+contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
   using SafeMath for uint256;
   using Counters for Counters.Counter;
 
@@ -37,7 +41,7 @@ contract LendingFactory is SuperAppBase, Initializable {
  /**
    * @notice initializer of the contract/oracle
    */
-  function initialize(ISuperfluid _host, IConstantFlowAgreementV1 _cfa, DataTypes.LoanTraded memory _loan) external initializer {
+  function initialize(ISuperfluid _host, IConstantFlowAgreementV1 _cfa, DataTypes.LoanTraded memory _loan) external override initializer {
     require(address(_host) != address(0), "host is zero address");
     require(address(_cfa) != address(0), "cfa is zero address");
 
@@ -170,22 +174,11 @@ contract LendingFactory is SuperAppBase, Initializable {
       _localState.newCtx
     );
 
-    DataTypes.LoanTraded memory _loanTraded = DataTypes.LoanTraded({
-      loanTradedId: loan.loanTradedId,
-      fee:20,
-      loanAmount: 2000,
-      collateralShare: loan.collateralShare,
-      flowRate: _localState.inFlowRate,
-      initTimeStamp: block.timestamp,
-      status: DataTypes.LOAN_STATUS.ACTIVE,
-      loanTaker:  _localState.loanTaker,
-      loanProvider:  _localState.loanTaker,
-      superToken: address(_localState.superToken)
-    });
 
 
 
-    emit Events.LoanTradeCreated(_loanTraded);
+
+   // emit Events.LoanTradeCreated();
 
     //registerGelato and set call back find stream
 

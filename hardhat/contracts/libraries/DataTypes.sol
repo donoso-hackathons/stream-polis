@@ -11,9 +11,9 @@ library DataTypes {
   struct OfferConfig {
     uint256 loanMaxAmount;
     uint256 loanMinAmount;
-    uint8 fee;
+    uint16 fee;
     address superToken;
-    uint256 collateralShare;
+    uint8 collateralShare;
     int96 flowRate;
   }
 
@@ -42,20 +42,25 @@ library DataTypes {
 struct TradeConfig {
     uint offerId;
     uint loanAmount;
+    uint duration;
 }
 
 
   struct LoanTraded {
     uint256 loanTradedId;
-    uint8 fee;
-    uint256 initTimeStamp;
-    int96 flowRate;
-    address superToken;
-    uint256 collateralShare;
+    uint16 fee;
     uint256 loanAmount;
-    LOAN_STATUS status;
+    uint256 loanTotalAmount;
+     uint256 collateral;
+    uint8 collateralShare;
+     int96 flowRate;
+    uint256 initTimeStamp;
+    LOAN_STATUS status;    
     address loanTaker;
     address loanProvider;
+    address superToken;
+    address loanContract;
+
   }
 
   struct K {

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {ISuperfluid, ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
-import {IInstantDistributionAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
+import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {DataTypes} from "../libraries/DataTypes.sol";
 
 /**
@@ -17,7 +17,7 @@ interface ILoanFactory {
      * symbol in the ERC20 Upgradeable contract.
      *
      */
-     function initialize(ISuperfluid _host, IConstantFlowAgreementV1 _cfa, ) external ;
+     function initialize(ISuperfluid _host, IConstantFlowAgreementV1 _cfa, DataTypes.LoanTraded memory loan ) external ;
 
     // /**
     //  * @notice Imint a PcrToken and add token owner to Index subscription
