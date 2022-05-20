@@ -8,43 +8,68 @@ pragma solidity ^0.8.0;
  * @notice A standard library of data types used throughout.
  */
 library DataTypes {
-    struct LoanOffer {
-        uint loanOfferId;
-        uint256 loanAmount;
-        address superToken;
-        uint256 collateralShare;
-        int96 flowRate;
-        address loanProvider;
-        OFFER_STATUS status;
-    }
+  struct OfferConfig {
+    uint256 loanMaxAmount;
+    uint256 loanMinAmount;
+    uint8 fee;
+    address superToken;
+    uint256 collateralShare;
+    int96 flowRate;
+  }
 
-    struct LoanTraded {
-        uint256 loanTradedId;
-        uint256 loanOfferId;
-        uint256 initTimeStamp;
-        int96 flowRate;
-        uint256 collateralShare;
-        uint256 loanAmount;
-        LOAN_STATUS status;
-    }
+  struct LoanOffer {
+    uint256 loanOfferId;
+    OfferConfig config;
+    address loanProvider;
+    OFFER_STATUS status;
+  }
 
-    struct K {
-        uint256 value;
-        uint256 timestamp;
-        uint256 flowRate1;
-        uint256 flowRate2;
-    }
+  struct DemandConfig {
+    uint256 loanAmount;
+    uint8 fee;
+    address superToken;
+    uint256 collateralShare;
+    int96 flowRate;
+  }
 
-    /////////// Enums
+  struct LoanDemand {
+    uint256 loanDemandId;
+    DemandConfig config;
+    address loanTaker;
+    OFFER_STATUS status;
+  }
 
-    enum LOAN_STATUS {
-        ACTIVE,
-        PAYED,
-        LIQUIDATED
-    }
 
-    enum OFFER_STATUS {
-        LIVE,
-        PAUSED
-    }
+  struct LoanTraded {
+    uint256 loanTradedId;
+    uint8 fee;
+    uint256 initTimeStamp;
+    int96 flowRate;
+    address superToken;
+    uint256 collateralShare;
+    uint256 loanAmount;
+    LOAN_STATUS status;
+    address loanTaker;
+    address loanProvider;
+  }
+
+  struct K {
+    uint256 value;
+    uint256 timestamp;
+    uint256 flowRate1;
+    uint256 flowRate2;
+  }
+
+  /////////// Enums
+
+  enum LOAN_STATUS {
+    ACTIVE,
+    PAYED,
+    LIQUIDATED
+  }
+
+  enum OFFER_STATUS {
+    LIVE,
+    PAUSED
+  }
 }

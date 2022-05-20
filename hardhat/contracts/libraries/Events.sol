@@ -10,11 +10,11 @@ import {DataTypes} from "./DataTypes.sol";
  * @notice A standard library of data types used throughout.
  */
 library Events {
+    
+  //// CREATE LOAN OFFER
+  event LoanOfferCreated(DataTypes.LoanOffer loanOffered);
 
-    //// CREATE LOAN OFFER
-    event LoanSupplyCreated(DataTypes.LoanOffer loanOffered);
+  event LoanDemandCreated(DataTypes.LoanDemand loanDemand);
 
-
-    event LoanTradeCreated(DataTypes.LoanTraded loanTraded);
-
+  event LoanTradeCreated(DataTypes.LoanTraded loanTraded);
 }

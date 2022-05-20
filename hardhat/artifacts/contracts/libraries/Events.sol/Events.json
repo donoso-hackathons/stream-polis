@@ -10,28 +10,107 @@
           "components": [
             {
               "internalType": "uint256",
+              "name": "loanDemandId",
+              "type": "uint256"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "loanAmount",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "fee",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "address",
+                  "name": "superToken",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateralShare",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int96",
+                  "name": "flowRate",
+                  "type": "int96"
+                }
+              ],
+              "internalType": "struct DataTypes.DemandConfig",
+              "name": "config",
+              "type": "tuple"
+            },
+            {
+              "internalType": "address",
+              "name": "loanTaker",
+              "type": "address"
+            },
+            {
+              "internalType": "enum DataTypes.OFFER_STATUS",
+              "name": "status",
+              "type": "uint8"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct DataTypes.LoanDemand",
+          "name": "loanDemand",
+          "type": "tuple"
+        }
+      ],
+      "name": "LoanDemandCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
               "name": "loanOfferId",
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "loanAmount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "superToken",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collateralShare",
-              "type": "uint256"
-            },
-            {
-              "internalType": "int96",
-              "name": "flowRate",
-              "type": "int96"
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "loanMaxAmount",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "loanMinAmount",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "fee",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "address",
+                  "name": "superToken",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateralShare",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int96",
+                  "name": "flowRate",
+                  "type": "int96"
+                }
+              ],
+              "internalType": "struct DataTypes.OfferConfig",
+              "name": "config",
+              "type": "tuple"
             },
             {
               "internalType": "address",
@@ -50,7 +129,7 @@
           "type": "tuple"
         }
       ],
-      "name": "LoanSupplyCreated",
+      "name": "LoanOfferCreated",
       "type": "event"
     },
     {
@@ -64,9 +143,9 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "loanOfferId",
-              "type": "uint256"
+              "internalType": "uint8",
+              "name": "fee",
+              "type": "uint8"
             },
             {
               "internalType": "uint256",
@@ -77,6 +156,11 @@
               "internalType": "int96",
               "name": "flowRate",
               "type": "int96"
+            },
+            {
+              "internalType": "address",
+              "name": "superToken",
+              "type": "address"
             },
             {
               "internalType": "uint256",
@@ -92,6 +176,16 @@
               "internalType": "enum DataTypes.LOAN_STATUS",
               "name": "status",
               "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "loanTaker",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "loanProvider",
+              "type": "address"
             }
           ],
           "indexed": false,
@@ -104,8 +198,8 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220f6660306d0ca3d59cdb8b2de08059adb25d028be28a90bc394ddfee85ad1ae1264736f6c63430008040033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220f6660306d0ca3d59cdb8b2de08059adb25d028be28a90bc394ddfee85ad1ae1264736f6c63430008040033",
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212203fd325f146b4c61dff18501960b5746b8fc89c6d84ede509bbed02d32e59f49964736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212203fd325f146b4c61dff18501960b5746b8fc89c6d84ede509bbed02d32e59f49964736f6c63430008040033",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }
