@@ -65,7 +65,7 @@ if (network == undefined) {
   );
 
   writeFileSync(
-    `add-ons/subgraph/abis/${toDeployContract.jsonName}.json`,
+    `../add-ons/subgraph/abis/${toDeployContract.jsonName}.json`,
     JSON.stringify(LoanFactory__factory.abi.concat(eventAbi))
   );
 
@@ -89,10 +89,10 @@ if (network == undefined) {
   );
 
   writeFileSync(
-    `add-ons/subgraph/abis/${toDeployContract.jsonName}.json`,
+    `../add-ons/subgraph/abis/${toDeployContract.jsonName}.json`,
     JSON.stringify(LendingMarketPlace__factory.abi)
   );
-
+  console.log(toDeployContract.name + ' Contract Deployed to:', loanFactory.address);
 
   ///// create the local accounts file
   if (

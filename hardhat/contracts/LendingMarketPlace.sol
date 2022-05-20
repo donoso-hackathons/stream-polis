@@ -166,13 +166,10 @@ contract LendingMarketPlace {
 
     bytes memory userData = abi.encode(loanId, msg.sender);
 
-    // _cfaLib.createFlow(loan.loanProvider, loan.superToken, totalInflowRate);
+     _cfaLib.createFlow(loan.loanProvider, loan.superToken, totalInflowRate);
 
-    //_cfaLib.createFlowByOperator(loan.loanTaker, loan.loanProvider, loan.superToken, totalInflowRate, userData);
+    _cfaLib.createFlowByOperator(loan.loanTaker, loan.loanProvider, loan.superToken, totalInflowRate, userData);
 
-    // cfa.createFlowByOperator(token, sender, receiver, flowRate, ctx);
-
-    // cfa.createFlowByOperator(loan.superToken, loan.loanTaker, loan.loanReceiver, totalInflowRate,"0x");
 
 
     emit Events.LoanTradeCreated(loan);
