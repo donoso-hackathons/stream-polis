@@ -110,8 +110,8 @@ export class DashboardPageComponent extends DappBaseComponent implements OnInit 
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   }
 
-  createPcr() {
-    this.router.navigateByUrl('create-pcr');
+  createOffer() {
+    this.router.navigateByUrl('create-offer');
   }
 
 

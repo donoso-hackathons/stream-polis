@@ -34,7 +34,7 @@ export type DemandConfigStruct = {
   fee: BigNumberish;
   superToken: string;
   collateralShare: BigNumberish;
-  flowRate: BigNumberish;
+  duration: BigNumberish;
 };
 
 export type DemandConfigStructOutput = [
@@ -48,7 +48,7 @@ export type DemandConfigStructOutput = [
   fee: number;
   superToken: string;
   collateralShare: BigNumber;
-  flowRate: BigNumber;
+  duration: BigNumber;
 };
 
 export type OfferConfigStruct = {
@@ -57,7 +57,7 @@ export type OfferConfigStruct = {
   fee: BigNumberish;
   superToken: string;
   collateralShare: BigNumberish;
-  flowRate: BigNumberish;
+  maxDuration: BigNumberish;
 };
 
 export type OfferConfigStructOutput = [
@@ -73,7 +73,7 @@ export type OfferConfigStructOutput = [
   fee: number;
   superToken: string;
   collateralShare: number;
-  flowRate: BigNumber;
+  maxDuration: BigNumber;
 };
 
 export interface LendingMarketPlaceInterface extends utils.Interface {
@@ -85,8 +85,9 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     "_loansTradedById(uint256)": FunctionFragment;
     "_loansTradedCounter()": FunctionFragment;
     "acceptOffer((uint256,uint256,uint256))": FunctionFragment;
-    "demandLoan((uint256,uint8,address,uint256,int96))": FunctionFragment;
-    "offerLoan((uint256,uint256,uint16,address,uint8,int96))": FunctionFragment;
+    "demandLoan((uint256,uint16,address,uint256,int96))": FunctionFragment;
+    "getMaths(uint256,uint16,uint256,uint16)": FunctionFragment;
+    "offerLoan((uint256,uint256,uint16,address,uint16,uint256))": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -122,6 +123,10 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     values: [DemandConfigStruct]
   ): string;
   encodeFunctionData(
+    functionFragment: "getMaths",
+    values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "offerLoan",
     values: [OfferConfigStruct]
   ): string;
@@ -155,6 +160,7 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "demandLoan", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getMaths", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "offerLoan", data: BytesLike): Result;
 
   events: {};
@@ -230,7 +236,7 @@ export interface LendingMarketPlace extends BaseContract {
         collateral: BigNumber;
         collateralShare: number;
         flowRate: BigNumber;
-        initTimeStamp: BigNumber;
+        initTimestamp: BigNumber;
         status: number;
         loanTaker: string;
         loanProvider: string;
@@ -252,6 +258,20 @@ export interface LendingMarketPlace extends BaseContract {
       config: DemandConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    getMaths(
+      _loanAmount: BigNumberish,
+      _fee: BigNumberish,
+      _duration: BigNumberish,
+      _collateralShare: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        totalLoanAmount: BigNumber;
+        totalInflowRate: BigNumber;
+        collateral: BigNumber;
+      }
+    >;
 
     offerLoan(
       config: OfferConfigStruct,
@@ -295,7 +315,7 @@ export interface LendingMarketPlace extends BaseContract {
       collateral: BigNumber;
       collateralShare: number;
       flowRate: BigNumber;
-      initTimeStamp: BigNumber;
+      initTimestamp: BigNumber;
       status: number;
       loanTaker: string;
       loanProvider: string;
@@ -315,6 +335,20 @@ export interface LendingMarketPlace extends BaseContract {
     config: DemandConfigStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  getMaths(
+    _loanAmount: BigNumberish,
+    _fee: BigNumberish,
+    _duration: BigNumberish,
+    _collateralShare: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber] & {
+      totalLoanAmount: BigNumber;
+      totalInflowRate: BigNumber;
+      collateral: BigNumber;
+    }
+  >;
 
   offerLoan(
     config: OfferConfigStruct,
@@ -356,7 +390,7 @@ export interface LendingMarketPlace extends BaseContract {
         collateral: BigNumber;
         collateralShare: number;
         flowRate: BigNumber;
-        initTimeStamp: BigNumber;
+        initTimestamp: BigNumber;
         status: number;
         loanTaker: string;
         loanProvider: string;
@@ -376,6 +410,20 @@ export interface LendingMarketPlace extends BaseContract {
       config: DemandConfigStruct,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getMaths(
+      _loanAmount: BigNumberish,
+      _fee: BigNumberish,
+      _duration: BigNumberish,
+      _collateralShare: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        totalLoanAmount: BigNumber;
+        totalInflowRate: BigNumber;
+        collateral: BigNumber;
+      }
+    >;
 
     offerLoan(
       config: OfferConfigStruct,
@@ -411,6 +459,14 @@ export interface LendingMarketPlace extends BaseContract {
     demandLoan(
       config: DemandConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    getMaths(
+      _loanAmount: BigNumberish,
+      _fee: BigNumberish,
+      _duration: BigNumberish,
+      _collateralShare: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     offerLoan(
@@ -454,6 +510,14 @@ export interface LendingMarketPlace extends BaseContract {
     demandLoan(
       config: DemandConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getMaths(
+      _loanAmount: BigNumberish,
+      _fee: BigNumberish,
+      _duration: BigNumberish,
+      _collateralShare: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     offerLoan(

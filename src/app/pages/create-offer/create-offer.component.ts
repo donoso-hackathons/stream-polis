@@ -7,8 +7,9 @@ import { DappBaseComponent, DappInjector,  global_address,  target_conditions,  
 
 import { doSignerTransaction } from 'src/app/dapp-injector/classes/transactor';
 import { Store } from '@ngrx/store';
-import { Description } from '@ethersproject/properties';
+
 import { MessageService } from 'primeng/api';
+import { OfferConfigStruct } from 'src/assets/contracts/interfaces/LendingMarketPlace';
 
 @Component({
   selector: 'create-offer',
@@ -16,7 +17,7 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./create-offer.component.sass']
 })
 export class CreateOfferComponent extends DappBaseComponent {
-  rewardForm: FormGroup;
+  loanOfferForm: FormGroup;
 
   conditions = target_conditions;
 
@@ -33,17 +34,26 @@ export class CreateOfferComponent extends DappBaseComponent {
       rewardToken: global_address.mumbai.fDai,
       superToken: global_address.mumbai.fDaix,
     },
+    {
+      name: 'USDC',
+      id: 0,
+      image: 'usd',
+      rewardToken: global_address.mumbai.fDai,
+      superToken: global_address.mumbai.fDaix,
+    },
     // { name: 'DAIx', id: 1, image: 'dai', rewardToken:global_address.mumbai.fDaix,superToken:global_address.mumbai.fDaix  },
     // { name: 'USDCx', id: 2, image: 'usdc' },
     // { name: 'USDC', id: 3, image: 'usdc' },
   ];
   /// intervals for pcr reward checking, factor interval in sec
-  intervals = [
-    { name: 'minutes', id: 0, factor: 60 },
+  durations = [
+    // { name: 'minutes', id: 0, factor: 60 },
     { name: 'hours', id: 1, factor: 3600 },
     { name: 'days', id: 2, factor: 86400 },
     { name: 'months', id: 3, factor: 2592000 },
   ];
+
+
 
   selectedToken!: { name: string; id: number; image: string };
 
@@ -53,15 +63,8 @@ export class CreateOfferComponent extends DappBaseComponent {
     super(dapp, store);
     this.selectedToken = this.tokens[0];
 
-    this.rewardForm = this.formBuilder.group({
-      titleCtrl: ['', [Validators.required, Validators.maxLength(100)]],
-      questionCtrl: ['', [Validators.required, Validators.maxLength(500)]],
-      urlCtrl: [''],
-
-      rewardTypeCtrl: [{ Condition: 'KPI with Yes/No Answer?', code: 'YES_OR_NO_QUERY', id: 0 }, [Validators.required]],
-
-      conditionTypeCtrl: [{ name: 'Equal', code: 'E', id: 2 }, [Validators.required]],
-      targetAmountCtrl: [1, [Validators.required, Validators.min(1)]],
+    this.loanOfferForm= this.formBuilder.group({
+    
 
       tokenCtrl: [
         {
@@ -73,25 +76,58 @@ export class CreateOfferComponent extends DappBaseComponent {
         },
         Validators.required,
       ],
-      tokenAmountCtrl: [10, [Validators.required, Validators.min(1)]],
-      intervalCtrl: [{ name: 'minutes', id: 0, factor: 60 }, [Validators.required]],
-      intervalAmountCtrl: [10, [Validators.required, Validators.min(1)]],
-      livenessCtrl: [{ name: 'minutes', id: 0, factor: 60 }, [Validators.required]],
-      livenessAmountCtrl: [10, [Validators.required, Validators.min(1)]],
+
+      loanMaxAmountCtrl: [10, [Validators.required, Validators.min(1)]],
+      loanMinAmountCtrl: [10, [Validators.required, Validators.min(1)]],
+      feeCtrl: [0, [Validators.required]],
+      collateralShareCtrl: [0, [Validators.required]],
+      durationCtrl: [ { name: 'hours', id: 1, factor: 3600 }, [Validators.required]],
+      durationAmountCtrl: [25, [Validators.required, Validators.min(1)]],
+      
+
+     
     });
   }
 
-  goHome() {
+  goDashboard() {
     this.display = false;
-    this.router.navigateByUrl('home');
+    this.router.navigateByUrl('dashboard');
   }
 
   async createPcr() {
     // //
 
-    // const titleValue = this.rewardForm.controls.titleCtrl.value;
-    // const descriptionValue = this.rewardForm.controls.questionCtrl.value;
-    // const urlValue = this.rewardForm.controls.urlCtrl.value;
+    let maxDuration = this.loanOfferForm.controls.durationAmountCtrl.value * this.loanOfferForm.controls.durationCtrl.value.factor;
+
+    const offerConfig:OfferConfigStruct =  {
+      loanMaxAmount:this.loanOfferForm.controls.loanMaxAmountCtrl.value,
+      loanMinAmount: this.loanOfferForm.controls.loanMinAmountCtrl.value,
+      fee:this.loanOfferForm.controls.feeCtrl.value,
+      superToken: this.loanOfferForm.controls.tokenCtrl.value.superToken,
+      collateralShare: this.loanOfferForm.controls.collateralShareCtrl.value,
+      maxDuration
+
+    }
+
+       this.store.dispatch(Web3Actions.chainBusy({ status: true }));
+
+    const result = await doSignerTransaction(this.dapp.defaultContract?.instance.offerLoan(offerConfig)!);
+    if (result.success == true) {
+      this.msg.add({ key: 'tst', severity: 'success', summary: 'Great!', detail: `Your Offer has been created` });
+ 
+      this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+
+    } else {
+      this.msg.add({ key: 'tst', severity: 'error', summary: 'OOPS', detail: `Error creating your Loan Offer` });
+      this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+    }
+
+    
+
+
+    // const titleValue = this.loanOfferForm.controls.titleCtrl.value;
+    // const descriptionValue = this.loanOfferForm.controls.questionCtrl.value;
+    // const urlValue = this.loanOfferForm.controls.urlCtrl.value;
     // const customAncillaryData = utils.hexlify(
     //   utils.toUtf8Bytes(`q: title: ${titleValue}?, description: ${descriptionValue}, url:${urlValue} . res_data: p1: 0, p2: 1, p3: 0.5. Where p2 corresponds to Yes, p1 to a No, p3 to unknown`)
     // );
@@ -113,25 +149,25 @@ export class CreateOfferComponent extends DappBaseComponent {
     // /// PriceIdentifier for ortimistic oracle
     // const priceIdentifier = utils.formatBytes32String('YES_OR_NO_QUERY');
 
-    // let condition = this.rewardForm.controls.conditionTypeCtrl.value.id;
+    // let condition = this.loanOfferForm.controls.conditionTypeCtrl.value.id;
     // let priceType = 0;
     // let target;
-    // if (this.rewardForm.controls.rewardTypeCtrl.value.id == 0) {
+    // if (this.loanOfferForm.controls.rewardTypeCtrl.value.id == 0) {
     //   target = utils.parseEther('1');
     //   condition = 2;
     // } else {
-    //   target = utils.parseEther(this.rewardForm.controls.targetAmountCtrl.value.toString());
+    //   target = utils.parseEther(this.loanOfferForm.controls.targetAmountCtrl.value.toString());
     //   priceType = 1;
     // }
 
     // const OptimisticOracle: OPTIMISTICORACLEINPUTStruct = {
     //   finder: global_address.mumbai.finder,
-    //   rewardAmount: utils.parseEther(this.rewardForm.controls.tokenAmountCtrl.value.toString()),
+    //   rewardAmount: utils.parseEther(this.loanOfferForm.controls.loanMaxAmountCtrl.value.toString()),
     //   target: target,
     //   priceType,
     //   targetCondition: condition,
-    //   interval: this.rewardForm.controls.intervalAmountCtrl.value * this.rewardForm.controls.intervalCtrl.value.factor,
-    //   optimisticOracleLivenessTime: this.rewardForm.controls.livenessAmountCtrl.value * this.rewardForm.controls.livenessCtrl.value.factor,
+    //   interval: this.loanOfferForm.controls.intervalAmountCtrl.value * this.loanOfferForm.controls.intervalCtrl.value.factor,
+    //   optimisticOracleLivenessTime: this.loanOfferForm.controls.loanMinAmountCtrl.value * this.loanOfferForm.controls.livenessCtrl.value.factor,
     //   customAncillaryData,
     //   priceIdentifier,
     // };
@@ -139,7 +175,7 @@ export class CreateOfferComponent extends DappBaseComponent {
     // const Ida: IDAINPUTStruct = {
     //   host: global_address.mumbai.host,
     //   ida: global_address.mumbai.ida,
-    //   rewardToken: this.rewardForm.controls.tokenCtrl.value.superToken,
+    //   rewardToken: this.loanOfferForm.controls.tokenCtrl.value.superToken,
     // };
 
     // this.store.dispatch(Web3Actions.chainBusy({ status: true }));
@@ -155,6 +191,6 @@ export class CreateOfferComponent extends DappBaseComponent {
   }
 
   back() {
-    this.router.navigateByUrl('home');
+    this.router.navigateByUrl('dashboard');
   }
 }

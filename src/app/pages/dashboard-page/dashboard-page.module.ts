@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardPageRoutingModule } from './dashboard-page-routing.module';
 import { DashboardPageComponent } from './dashboard-page.component';
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { DashboardPageComponent } from './dashboard-page.component';
   ],
   imports: [
     CommonModule,
+    ButtonModule,
     DashboardPageRoutingModule
   ]
 })

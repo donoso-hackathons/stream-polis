@@ -25,7 +25,7 @@ export type LoanTradedStruct = {
   collateral: BigNumberish;
   collateralShare: BigNumberish;
   flowRate: BigNumberish;
-  initTimeStamp: BigNumberish;
+  initTimestamp: BigNumberish;
   status: BigNumberish;
   loanTaker: string;
   loanProvider: string;
@@ -55,7 +55,7 @@ export type LoanTradedStructOutput = [
   collateral: BigNumber;
   collateralShare: number;
   flowRate: BigNumber;
-  initTimeStamp: BigNumber;
+  initTimestamp: BigNumber;
   status: number;
   loanTaker: string;
   loanProvider: string;
@@ -74,7 +74,7 @@ export interface LoanFactoryInterface extends utils.Interface {
     "beforeAgreementUpdated(address,address,bytes32,bytes,bytes)": FunctionFragment;
     "cfa()": FunctionFragment;
     "host()": FunctionFragment;
-    "initialize(address,address,(uint256,uint16,uint256,uint256,uint256,uint8,int96,uint256,uint8,address,address,address,address))": FunctionFragment;
+    "initialize((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address))": FunctionFragment;
     "parseLoanData(bytes)": FunctionFragment;
   };
 
@@ -110,7 +110,7 @@ export interface LoanFactoryInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "host", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, LoanTradedStruct]
+    values: [LoanTradedStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "parseLoanData",
@@ -258,8 +258,6 @@ export interface LoanFactory extends BaseContract {
     host(overrides?: CallOverrides): Promise<[string]>;
 
     initialize(
-      _host: string,
-      _cfa: string,
       _loan: LoanTradedStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -268,10 +266,7 @@ export interface LoanFactory extends BaseContract {
       data: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber] & {
-        loanOfferId: BigNumber;
-        loanDuration: BigNumber;
-      }
+      [BigNumber, string] & { loanOfferId: BigNumber; loanTaker: string }
     >;
   };
 
@@ -339,8 +334,6 @@ export interface LoanFactory extends BaseContract {
   host(overrides?: CallOverrides): Promise<string>;
 
   initialize(
-    _host: string,
-    _cfa: string,
     _loan: LoanTradedStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -349,7 +342,7 @@ export interface LoanFactory extends BaseContract {
     data: BytesLike,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber] & { loanOfferId: BigNumber; loanDuration: BigNumber }
+    [BigNumber, string] & { loanOfferId: BigNumber; loanTaker: string }
   >;
 
   callStatic: {
@@ -417,8 +410,6 @@ export interface LoanFactory extends BaseContract {
     host(overrides?: CallOverrides): Promise<string>;
 
     initialize(
-      _host: string,
-      _cfa: string,
       _loan: LoanTradedStruct,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -427,10 +418,7 @@ export interface LoanFactory extends BaseContract {
       data: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber] & {
-        loanOfferId: BigNumber;
-        loanDuration: BigNumber;
-      }
+      [BigNumber, string] & { loanOfferId: BigNumber; loanTaker: string }
     >;
   };
 
@@ -504,8 +492,6 @@ export interface LoanFactory extends BaseContract {
     host(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      _host: string,
-      _cfa: string,
       _loan: LoanTradedStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -584,8 +570,6 @@ export interface LoanFactory extends BaseContract {
     host(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
-      _host: string,
-      _cfa: string,
       _loan: LoanTradedStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
