@@ -45,7 +45,7 @@ const network = 'localhost';
     AppRoutingModule,
     DappInjectorModule.forRoot({wallet:'local', defaultNetwork:network}),
     StoreModule.forRoot({web3: we3ReducerFunction}),
-    GraphQlModule.forRoot({uri: ''}),
+    GraphQlModule.forRoot({uri: 'http://localhost:8000/subgraphs/name/donoso-eth/stream-polis'}),
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,

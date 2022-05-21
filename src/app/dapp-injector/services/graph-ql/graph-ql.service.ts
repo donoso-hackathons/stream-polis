@@ -33,10 +33,10 @@ export class GraphQlService implements OnDestroy {
   async queryOffers():Promise<any> {
     try {
  
-      const posts = await  firstValueFrom(this.apollo
+      const posts = await  this.apollo
       .query<any>({
         query: gql(GET_OFFERS)
-      }))
+      }).toPromise()
         
 
      

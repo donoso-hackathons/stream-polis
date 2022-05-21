@@ -72,15 +72,17 @@ export class DashboardPageComponent extends DappBaseComponent implements OnInit 
 
   async getTokens() {
 
+    const p = await this.graphqlService.queryOffers()
+    console.log(p)
     this.loanOffers  = [];
     this.loanDemand= [];
     this.loansSold = [];
     this.loansBougth = [];
     const  users = this.graphqlService.queryUser(this.dapp.signerAddress!).pipe(takeUntil(this.destroyHooks)).subscribe((val=> {
-   
+        console.log(val)
       if (!!val && !!val.data && !!val.data.user) {
         const user = val.data.user;
-        const localOffers= user.rewardsCreated;
+        const localOffers= user.offersCreated;
         if (localOffers !== undefined) {
           localOffers.forEach((each: any) => {
             const availableTokenIndex = this.loanOffers.map((fil) => fil.id).indexOf(each.id);

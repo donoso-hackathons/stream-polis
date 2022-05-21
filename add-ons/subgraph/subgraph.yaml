@@ -6,15 +6,15 @@ dataSources:
     name: LendingMarketPlace
     network: localhost
     source:
-      address: '0xD5f071F2D8BF6E7d6BC25A1D89e9b1430AC78A58'
+      address: '0xd44b059795c8286Bfe4C43C552039cEEaE68E7cd'
       abi: LendingMarketPlace
-      startBlock: 31578143
+      startBlock: 26376360
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Offer
+        - LoanOffer
         - LoanDemand
         - LoanTraded
         - User
@@ -25,7 +25,7 @@ dataSources:
       eventHandlers:
         - event: LoanOfferCreated((uint256,(uint256,uint256,uint16,address,uint16,uint256),address,uint8))
           handler: handleLoanOfferCreated
-        - event: LoanDemandCreated((uint256,(uint256,uint16,address,uint256,int96),address,uint8))
+        - event: LoanDemandCreated((uint256,(uint256,uint16,address,uint16,int96),address,uint8))
           handler: handleLoanDemadCreated
         - event: LoanTradeCreated((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address))
           handler: handleLoanTradeCreated

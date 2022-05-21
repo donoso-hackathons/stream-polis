@@ -32,7 +32,7 @@ library DataTypes {
     uint256 loanAmount;
     uint16 fee;
     address superToken;
-    uint256 collateralShare;
+    uint16 collateralShare;
     int96 duration;
   }
 

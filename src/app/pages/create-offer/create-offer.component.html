@@ -40,13 +40,13 @@
 							<h5>Collateral in % </h5>
 						
 						
-								<p-inputNumber formControlName="collateralShareCtrl"  placeholder="Collateral" mode="decimal" [showButtons]="true" [min]="0">
+								<p-inputNumber formControlName="collateralShareCtrl"  placeholder="Collateral" mode="decimal"  [max]="100"suffix=" %"  [step]="0.5" [showButtons]="true" [min]="0">
 								</p-inputNumber>
 
 								<h5>Fee in % </h5>
 						
 						
-								<p-inputNumber formControlName="feeCtrl"  placeholder="Fee" mode="decimal" [showButtons]="true" [min]="0">
+								<p-inputNumber formControlName="feeCtrl"  placeholder="Fee" mode="decimal"  [max]="100" [step]="0.1" suffix=" %" [showButtons]="true" [min]="0">
 								</p-inputNumber>
 
 

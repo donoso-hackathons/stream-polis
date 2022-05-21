@@ -6,7 +6,7 @@ type LoanOffer @entity {
   superToken: String!
   collateralShare: BigInt!
   maxDuration: BigInt!
-  loanProvider: String!
+  loanProvider: User!
   status: BigInt!
 }
 
@@ -17,20 +17,36 @@ type LoanDemand @entity {
   superToken: String!
   collateralShare: BigInt!
   duration: BigInt!
-  loanTaker: String!
+  loanTaker: User!
   status: BigInt!
 }
 
- 
 type LoanTraded @entity {
-  id:ID!
-  loanTotalAmount:BigInt!
-  collateral:BigInt!
-  initTimestamp:BigInt!
-  flowRate:BigInt!
+  id: ID!
+  loanTotalAmount: BigInt!
+  collateral: BigInt!
+  initTimestamp: BigInt!
+  flowRate: BigInt!
   status: BigInt!
-  collateralShare:BigInt!
- loanTaker:String!
-loanProvider:String!
+  collateralShare: BigInt!
+  loanTaker: User!
+  loanProvider: User!
+}
+
+type User @entity {
+  id: ID!
+  offersCreated: [LoanOffer!] @derivedFrom(field: "loanProvider")
+  demandsCreated: [LoanDemand!] @derivedFrom(field: "loanTaker")
+  loansSold: [LoanTraded!] @derivedFrom(field: "loanProvider")
+  loansBought: [LoanTraded!] @derivedFrom(field: "loanTaker")
+  totalIncoming: BigInt!
+  totalOutgoing: BigInt!
+}
+
+type TotalSummary @entity {
+  id:ID!
+  totalIncoming: BigInt!
+  totalBorrowed:BigInt!
+
 }
 

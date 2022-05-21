@@ -1,14 +1,16 @@
 export const GET_OFFERS = `
     {
-      loanOffers(first: 5, where: {status:"0"}, orderBy: id, orderDirection: asc) {
+      loanOffers(first: 5) {
         id
   loanMaxAmount
   loanMinAmount
   fee
-  superToken: 
+  superToken
   collateralShare
   maxDuration
-  loanProvider:
+  loanProvider {
+    id
+  }
   status
    
       }
@@ -31,34 +33,13 @@ export const GET_DEMANDS = `
     }
   `;
 
-export const GET_USER = `
-query($address: String!){
-    user(id:$address) {
-      id
-      rewardsCreated {  
-      id
-      title
-      rewardStep 
-      earliestNextAction
-      rewardToken
-      rewardAmount
-      rewardStatus
-      }
-      rewardsMembership {
-      id
-      units
-      reward  {  
-        id
-        title
-        rewardStep 
-        earliestNextAction
-        rewardToken
-        currentIndex
-        rewardAmount
-        rewardStatus
+  export const GET_USER = `
+  query($address: String!){
+      user(id:$address) {
+        offersCreated {
+          loanMaxAmount
+          id
         }
       }
-      proposaslsSubmitted
     }
-  }
-`;
+  `;
