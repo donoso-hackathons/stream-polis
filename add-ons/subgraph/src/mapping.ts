@@ -27,6 +27,8 @@ export function handleLoanOfferCreated(event:LoanOfferCreated):void {
 
 export function handleLoanDemandCreated(event:LoanDemandCreated):void {
   let id = event.params.loanDemand.loanDemandId.toString();
+  let userId = event.params.loanDemand.loanTaker.toHexString();
+  createUser(userId);
 
   let loanDemand = new LoanDemand(id)
   loanDemand.loanAmount = event.params.loanDemand.config.loanAmount;
@@ -34,9 +36,10 @@ export function handleLoanDemandCreated(event:LoanDemandCreated):void {
   loanDemand.superToken= event.params.loanDemand.config.superToken.toHexString();
   loanDemand.collateralShare= BigInt.fromI32(event.params.loanDemand.config.collateralShare);
  // loanDemand.duration= event.params.loanDemand.config.d;
-  loanDemand.loanTaker = event.params.loanDemand.loanTaker.toHexString();
+  loanDemand.loanTaker = userId;
   loanDemand.status = BigInt.fromI32(event.params.loanDemand.status);;
   
+  loanDemand.save()
 
 }
 
@@ -53,6 +56,7 @@ export function handleLoanTradeCreated(event:LoanTradeCreated):void {
   loanTraded.loanTaker=  event.params.loanTraded.loanTaker.toHexString();
   loanTraded.loanProvider=  event.params.loanTraded.loanProvider.toHexString();
   
+  loanTraded.save()
 
 }
 

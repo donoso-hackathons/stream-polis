@@ -94,7 +94,7 @@ export class CreateOfferComponent extends DappBaseComponent {
     this.router.navigateByUrl('dashboard');
   }
 
-  async createPcr() {
+  async createLoanOffer() {
     // //
 
     let maxDuration = this.loanOfferForm.controls.durationAmountCtrl.value * this.loanOfferForm.controls.durationCtrl.value.factor;
@@ -102,9 +102,9 @@ export class CreateOfferComponent extends DappBaseComponent {
     const offerConfig:OfferConfigStruct =  {
       loanMaxAmount:this.loanOfferForm.controls.loanMaxAmountCtrl.value,
       loanMinAmount: this.loanOfferForm.controls.loanMinAmountCtrl.value,
-      fee:this.loanOfferForm.controls.feeCtrl.value,
+      fee:this.loanOfferForm.controls.feeCtrl.value*100,
       superToken: this.loanOfferForm.controls.tokenCtrl.value.superToken,
-      collateralShare: this.loanOfferForm.controls.collateralShareCtrl.value,
+      collateralShare: this.loanOfferForm.controls.collateralShareCtrl.value*100,
       maxDuration
 
     }

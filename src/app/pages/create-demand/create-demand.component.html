@@ -1,1 +1,107 @@
-<p>create-demand works!</p>
+<div class="grid p-fluid justify-content-center">
+    <div [formGroup]="loanOfferForm" class="col-12">
+        <div class="card">
+
+            <div class="col-12">
+                <div style=" border-color: transparent;" class="card">
+                    <h5><i (click)="back()" style="color: var(--primary-color); font-size: large;cursor:pointer;"
+                            class="pi pi-arrow-left"></i> Which Loan would you like?</h5>
+
+                    <div class="mt-2 grid p-fluid">
+                        <div style="position:relative" class="col-12 md:col-7">
+
+                            <h5>Choose Your Loan Token</h5>
+                            <p-dropdown [options]="tokens" formControlName="tokenCtrl" placeholder="Select a Token">
+                                <ng-template pTemplate="selectedItem">
+                                    <div style="display:inline-flex; width: 100%;"
+                                        class="country-item country-item-value" *ngIf="selectedToken">
+                                        <img src="assets/images/tokens/{{loanOfferForm.controls.tokenCtrl.value.image}}_icon.svg"
+                                            style="width: 20px;margin-right: 10px;" />
+                                        <div>{{loanOfferForm.controls.tokenCtrl.value.name}}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-token pTemplate="token">
+                                    <div style="width: 100%;" class="flex align-items-center">
+                                        <img src="assets/images/tokens/{{token.image}}_icon.svg"
+                                            style="width: 20px;margin-right: 10px;" />
+                                        <span>{{token.name}}</span>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            <h5>Amount</h5>
+                            <p-inputNumber formControlName="loanAmountCtrl" placeholder="Amount" mode="decimal"
+                                [showButtons]="true" [min]="0">
+                            </p-inputNumber>
+
+
+
+                        </div>
+
+
+
+                        <div class="col-12 md:col-5">
+                            <h5>Collateral in % </h5>
+
+
+                            <p-inputNumber formControlName="collateralShareCtrl" placeholder="Collateral" mode="decimal"
+                                [max]="100" suffix=" %" [step]="0.5" [showButtons]="true" [min]="0">
+                            </p-inputNumber>
+
+                            <h5>Fee in % </h5>
+
+
+                            <p-inputNumber formControlName="feeCtrl" placeholder="Fee" mode="decimal" [max]="100"
+                                [step]="0.1" suffix=" %" [showButtons]="true" [min]="0">
+                            </p-inputNumber>
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+                    <h5>Reward duration</h5>
+                    <div class="mt-2 grid p-fluid">
+                     
+                        <div style="position:relative" class="col-12 md:col-6">
+
+
+                            <p-dropdown [options]="durations" formControlName="durationCtrl"
+                                placeholder="Select a duration">
+                                <ng-template pTemplate="selectedItem">
+                                    <div style="display:inline-flex" class="country-item country-item-value"
+                                        *ngIf="selectedToken">
+                                        <div>{{loanOfferForm.controls.durationCtrl.value.name}}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-duration pTemplate="duration">
+                                    <div class="flex align-items-center">
+
+                                        <span>{{duration.name}}</span>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div style="position:relative" class="col-12 md:col-6">
+                            <p-inputNumber formControlName="durationAmountCtrl" placeholder="duration" mode="decimal"
+                                [showButtons]="true" [min]="0">
+                            </p-inputNumber>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <button [disabled]="loanOfferForm.invalid" pButton pRipple style="margin:auto"
+                    (click)="createLoanDemand()" type="button" label="Create"
+                    class="p-button-rounded mr-2 mb-2"></button>
+
+            </div>
+
+
+        </div>
+    </div>

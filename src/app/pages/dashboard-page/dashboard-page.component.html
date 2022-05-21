@@ -3,44 +3,32 @@
       <div style="position: relative; border-color: transparent" class="card">
         <h5>Loan's Dashaboard</h5>
       
-        <button pButton pRipple style="position: absolute; top: 15px; right: 20px" (click)="createOffer()" type="button"
-          label="New" class="p-button-rounded mr-2 mb-2"></button>
+        <button pButton pRipple style="position: absolute; top: 15px; right: 215px" (click)="createOffer()" type="button"
+          label="New Offer" class="p-button-rounded mr-2 mb-2"></button>
+
+          <button pButton pRipple style="position: absolute; top: 15px; right: 20px" (click)="createDemand()" type="button"
+          label="New Request" class="p-button-rounded mr-2 mb-2"></button>
   
         <div style="margin-top: 20px" class="grid p-fluid">
           <div class="col-12">
-            <div (click)="seeDetailsOffer(reward)"  style="position:relative;cursor:pointer" class="card flex justify-content-between"
-              *ngFor="let reward of loanOffers;index as i">
+            <div (click)="seeDetailsOffer(loanOffer)"  style="position:relative;cursor:pointer" class="card flex justify-content-between"
+              *ngFor="let loanOffer of loanOffers;index as i">
   
               <h6 [ngStyle]="{ lineHeight: '2.5rem' }">
             
                   <i style="color:var(--primary-color);font-size:25px;position: relative;top: 4px;" class="pi pi-eye"></i>
-                  {{ utils.toUtf8String(reward.title) }}
+               
           
               </h6>
-              <div *ngIf="reward.rewardStatus == '0'">
-                <div *ngIf="reward.displayStep == 0">
-                  <p [ngStyle]="{ lineHeight: '2.5rem' }">Qualifying till {{reward.displayDate}}</p>
-                </div>
-                <div *ngIf="reward.displayStep == 1">
-                  <p [ngStyle]="{ lineHeight: '2.5rem' }">Waiting for Proposals</p>
-                </div>
-                <div *ngIf="reward.displayStep == 2">
-                  <p [ngStyle]="{ lineHeight: '2.5rem' }">Liveness till
-                    {{reward.displayDate}}</p>
-                </div>
-  
-                <div *ngIf="reward.displayStep == 3">
-                  <p [ngStyle]="{ lineHeight: '2.5rem' }">Waiting to be executed</p>
-                </div>
-              </div>
-              <div *ngIf="reward.rewardStatus !== '0'">
+       
+              <div *ngIf="loanOffer.status !== '0'">
               <p [ngStyle]="{ lineHeight: '2.5rem' }">This PCR is not active</p>
                 </div>
               <div class="flex align-items-center justify-content-end" [ngStyle]="{ width: '200px', height: '2.5rem' }">
   
                 <div class="flex justify-content-center align-items-center">
-                  <p class="mr-2 mb-0">Reward: {{utils.formatEther(reward.rewardAmount)}}</p>
-                  <img [width]="40" src="assets/images/tokens/{{reward?.fundToken?.image}}_icon.svg"
+                  <p class="mr-2 mb-0">loanOffer: {{utils.formatEther(loanOffer.loanOfferAmount)}}</p>
+                  <img [width]="40" src="assets/images/tokens/{{loanOffer?.fundToken?.image}}_icon.svg"
                     style="margin-right: 5px;" />
                 </div>
               </div>
@@ -53,7 +41,7 @@
   
                 </div>
                 <h1 class="text-900 font-bold text-5xl mb-2">Nothing Found</h1>
-                <span class="text-600">Please create a new Perpetual Conditional Reward</span>
+                <span class="text-600">Please create a new Perpetual Conditional loanOffer</span>
               </div>
   
             </div>
