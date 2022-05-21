@@ -348,6 +348,9 @@ export class User extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("totalIncoming", Value.fromBigInt(BigInt.zero()));
+    this.set("totalOutgoing", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -410,8 +413,8 @@ export class User extends Entity {
     }
   }
 
-  get loansTraded(): Array<string> | null {
-    let value = this.get("loansTraded");
+  get loansSold(): Array<string> | null {
+    let value = this.get("loansSold");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -419,11 +422,100 @@ export class User extends Entity {
     }
   }
 
-  set loansTraded(value: Array<string> | null) {
+  set loansSold(value: Array<string> | null) {
     if (!value) {
-      this.unset("loansTraded");
+      this.unset("loansSold");
     } else {
-      this.set("loansTraded", Value.fromStringArray(<Array<string>>value));
+      this.set("loansSold", Value.fromStringArray(<Array<string>>value));
     }
+  }
+
+  get loansBought(): Array<string> | null {
+    let value = this.get("loansBought");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set loansBought(value: Array<string> | null) {
+    if (!value) {
+      this.unset("loansBought");
+    } else {
+      this.set("loansBought", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+
+  get totalIncoming(): BigInt {
+    let value = this.get("totalIncoming");
+    return value!.toBigInt();
+  }
+
+  set totalIncoming(value: BigInt) {
+    this.set("totalIncoming", Value.fromBigInt(value));
+  }
+
+  get totalOutgoing(): BigInt {
+    let value = this.get("totalOutgoing");
+    return value!.toBigInt();
+  }
+
+  set totalOutgoing(value: BigInt) {
+    this.set("totalOutgoing", Value.fromBigInt(value));
+  }
+}
+
+export class TotalSummary extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("totalIncoming", Value.fromBigInt(BigInt.zero()));
+    this.set("totalBorrowed", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save TotalSummary entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save TotalSummary entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("TotalSummary", id.toString(), this);
+    }
+  }
+
+  static load(id: string): TotalSummary | null {
+    return changetype<TotalSummary | null>(store.get("TotalSummary", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get totalIncoming(): BigInt {
+    let value = this.get("totalIncoming");
+    return value!.toBigInt();
+  }
+
+  set totalIncoming(value: BigInt) {
+    this.set("totalIncoming", Value.fromBigInt(value));
+  }
+
+  get totalBorrowed(): BigInt {
+    let value = this.get("totalBorrowed");
+    return value!.toBigInt();
+  }
+
+  set totalBorrowed(value: BigInt) {
+    this.set("totalBorrowed", Value.fromBigInt(value));
   }
 }

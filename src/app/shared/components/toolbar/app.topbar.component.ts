@@ -23,7 +23,7 @@ export class AppTopBarComponent extends DappBaseComponent {
     super(dapp, store);
     this.localUserCtrl.valueChanges.pipe(takeUntil(this.destroyHooks)).subscribe((val) => {
       this.dapp.localWallet(val);
-      this.router.navigateByUrl('home');
+     // this.router.navigateByUrl('landing');
     });
   }
 
@@ -60,7 +60,7 @@ export class AppTopBarComponent extends DappBaseComponent {
       this.localUserCtrl.setValue(index + 1, { emitEvent: false });
     }
 
-    this.router.navigateByUrl('home')
+   // this.router.navigateByUrl('home')
   }
   
 }

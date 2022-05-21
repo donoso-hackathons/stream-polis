@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 
 import { GraphQlService } from 'src/app/dapp-injector/services/graph-ql/graph-ql.service';
+import { ILOAN_OFFER } from 'src/app/shared/models/models';
 
 
 
@@ -26,7 +27,8 @@ export enum REWARD_STEP {
 export class DashboardPageComponent extends DappBaseComponent implements OnInit {
   loanOffers: Array<any> = [];
   loanDemand:Array<any> = [];
-  loanTrades:Array<any> = [];
+  loansSold:Array<any> = [];
+  loansBougth:Array<any> = [];
   utils = utils
  
   activeStep = 0;
@@ -45,7 +47,7 @@ export class DashboardPageComponent extends DappBaseComponent implements OnInit 
 
 
 
-  goDetailsToken(reward:IPCR_REWARD){
+  seeDetailsOffer(reward:ILOAN_OFFER){
 
 
    this.router.navigateByUrl(`details-pcr/${reward.id}`)
@@ -56,7 +58,7 @@ export class DashboardPageComponent extends DappBaseComponent implements OnInit 
     this.router.navigateByUrl(`details-membership/${membership.id}`)
   }
 
-  transformRewardObject() {
+  transformOffer(offer:ILOAN_OFFER) {
 
 
     // reward.displayDate = new Date(+reward.earliestNextAction * 1000).toLocaleString()
@@ -70,44 +72,30 @@ export class DashboardPageComponent extends DappBaseComponent implements OnInit 
 
   async getTokens() {
 
-    this.pcrTokens = [];
-    this.pcrMemberships = [];
+    this.loanOffers  = [];
+    this.loanDemand= [];
+    this.loansSold = [];
+    this.loansBougth = [];
     const  users = this.graphqlService.queryUser(this.dapp.signerAddress!).pipe(takeUntil(this.destroyHooks)).subscribe((val=> {
    
       if (!!val && !!val.data && !!val.data.user) {
         const user = val.data.user;
-        const localTokens = user.rewardsCreated;
-        if (localTokens !== undefined) {
-          localTokens.forEach((each: any) => {
-            const availableTokenIndex = this.pcrTokens.map((fil) => fil.id).indexOf(each.id);
+        const localOffers= user.rewardsCreated;
+        if (localOffers !== undefined) {
+          localOffers.forEach((each: any) => {
+            const availableTokenIndex = this.loanOffers.map((fil) => fil.id).indexOf(each.id);
             if (availableTokenIndex == -1) {
-              this.pcrTokens.push(this.transformRewardObject(each));
+              this.loanOffers.push(this.transformOffer(each));
             } else {
-              this.pcrTokens[availableTokenIndex] = { ...this.pcrTokens[availableTokenIndex], ...each, ...{ step: calculateStep(+each.rewardStep,+each.earliestNextAction) } };
+              this.loanOffers[availableTokenIndex] = { ...this.loanOffers[availableTokenIndex], ...each};
             }
           });
         } else {
-          this.pcrTokens = [];
+          this.loanOffers = [];
         }
 
 
-        const localSubscriptions = user.rewardsMembership;
- 
-        if (localSubscriptions !== undefined) {
-          localSubscriptions.forEach((each: any) => {
-            const availableSubscriptionIndex = this.pcrMemberships.map((fil) => fil.id).indexOf(each.id);
-            if (availableSubscriptionIndex == -1) {
-              let membership = {... each.reward, ...{ units:each.units, id:each.id}}
-              this.pcrMemberships.push(this.transformRewardObject(membership));
-              
-            } else {
-              let membership = {... each.reward, ...{ units:each.units, id:each.id}}
-              this.pcrMemberships[availableSubscriptionIndex] = { ...this.pcrMemberships[availableSubscriptionIndex], ...membership, ...{ step: calculateStep(+membership.rewardStep, + membership.earliestNextAction) }};
-            }
-          });
-        } else {
-          this.pcrMemberships = [];
-        }
+
 
        
       }

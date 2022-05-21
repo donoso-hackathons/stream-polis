@@ -19,6 +19,10 @@ import { ButtonModule } from 'primeng/button';
 
 import LendingMarketplaceMetadata from '../assets/contracts/lending_market_place_metadata.json';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 export const contractMetadata = new InjectionToken<ICONTRACT_METADATA>('contractMetadata')
 
 export const contractProvider= {provide: 'contractMetadata', useValue:LendingMarketplaceMetadata};
@@ -36,6 +40,8 @@ const network = 'localhost';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     DappInjectorModule.forRoot({wallet:'local', defaultNetwork:network}),
     StoreModule.forRoot({web3: we3ReducerFunction}),

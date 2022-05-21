@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { LandingPageRoutingModule } from './landing-page-routing.module';
 import { LandingPageComponent } from './landing-page.component';
+import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { LandingPageComponent } from './landing-page.component';
   ],
   imports: [
     CommonModule,
-    LandingPageRoutingModule
+    LandingPageRoutingModule,
+    ButtonModule,
+    ProgressSpinnerModule
   ]
 })
 export class LandingPageModule { }

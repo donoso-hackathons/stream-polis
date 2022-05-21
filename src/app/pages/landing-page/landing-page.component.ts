@@ -17,11 +17,11 @@ export class LandingPageComponent extends DappBaseComponent{
 
  async  connect() {
 
-  //this.dapp.localWallet(1)
+  this.dapp.localWallet(1)
 
-  this.dapp.launchWebModal()
+  //this.dapp.launchWebModal()
 
-   // this.router.navigate(['home'])
+    this.router.navigate(['dashboard'])
     
   }
 
@@ -35,7 +35,7 @@ export class LandingPageComponent extends DappBaseComponent{
     // this.pcrOptimisticOracleContract.instance.on('RewardDeposit',(args1,args2)=> {
     //     console.log(args1, args2)
     // })
-    this.router.navigate(['home'])
+    this.router.navigate(['dashboard'])
 
   }
 }

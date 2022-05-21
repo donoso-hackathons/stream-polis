@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Apollo, QueryRef, gql } from 'apollo-angular';
 import { BehaviorSubject, firstValueFrom, Subject, Subscription } from 'rxjs';
-import { GET_DEMANDS, GET_OFFERS } from './queryDefinitions';
+import { GET_DEMANDS, GET_OFFERS, GET_USER } from './queryDefinitions';
 
 
 
