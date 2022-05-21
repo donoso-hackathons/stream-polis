@@ -21,9 +21,9 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "uint8",
+                  "internalType": "uint16",
                   "name": "fee",
-                  "type": "uint8"
+                  "type": "uint16"
                 },
                 {
                   "internalType": "address",
@@ -98,14 +98,14 @@
                   "type": "address"
                 },
                 {
-                  "internalType": "uint8",
+                  "internalType": "uint16",
                   "name": "collateralShare",
-                  "type": "uint8"
+                  "type": "uint16"
                 },
                 {
-                  "internalType": "int96",
-                  "name": "flowRate",
-                  "type": "int96"
+                  "internalType": "uint256",
+                  "name": "maxDuration",
+                  "type": "uint256"
                 }
               ],
               "internalType": "struct DataTypes.OfferConfig",
@@ -163,9 +163,9 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint8",
+              "internalType": "uint16",
               "name": "collateralShare",
-              "type": "uint8"
+              "type": "uint16"
             },
             {
               "internalType": "int96",
@@ -174,7 +174,7 @@
             },
             {
               "internalType": "uint256",
-              "name": "initTimeStamp",
+              "name": "initTimestamp",
               "type": "uint256"
             },
             {
@@ -213,8 +213,8 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220c0ed2fd1e4d2ffb56bb5b6253b576a205f90d8e0540ff0a7e812f3e036df157f64736f6c63430008040033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220c0ed2fd1e4d2ffb56bb5b6253b576a205f90d8e0540ff0a7e812f3e036df157f64736f6c63430008040033",
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220ac977cb8b9fb4dd9330182be89ef5443ccb4530f2a377197c063ba89acf672ed64736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220ac977cb8b9fb4dd9330182be89ef5443ccb4530f2a377197c063ba89acf672ed64736f6c63430008040033",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\stream-polis\\hardhat\\contracts\\interfaces\\ILoanFactory.sol": {
-      "lastModificationDate": 1653032433568,
-      "contentHash": "38e9538f56ef8d17aa170ed21ecf1ab5",
+      "lastModificationDate": 1653111968500,
+      "contentHash": "7a52494211796096731a6cd3acb19c95",
       "sourceName": "contracts/interfaces/ILoanFactory.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -116,8 +116,8 @@
       ]
     },
     "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\stream-polis\\hardhat\\contracts\\libraries\\DataTypes.sol": {
-      "lastModificationDate": 1653047732520,
-      "contentHash": "64cf872dce4daed7573ecb362e38e17f",
+      "lastModificationDate": 1653122621648,
+      "contentHash": "3485e02c7926d49705e1020a3f4b948e",
       "sourceName": "contracts/libraries/DataTypes.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -611,8 +611,8 @@
       ]
     },
     "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\stream-polis\\hardhat\\contracts\\LoanFactory.sol": {
-      "lastModificationDate": 1653036122604,
-      "contentHash": "23a1dfe807cc6dae9133a3dc64bc9370",
+      "lastModificationDate": 1653122865297,
+      "contentHash": "635a9f8eba2e61518a9de098454b7f8d",
       "sourceName": "contracts/LoanFactory.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -1069,8 +1069,8 @@
       ]
     },
     "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\stream-polis\\hardhat\\contracts\\LendingMarketPlace.sol": {
-      "lastModificationDate": 1653047810067,
-      "contentHash": "91667b5bae08f10fd8f573aa5575f391",
+      "lastModificationDate": 1653122639397,
+      "contentHash": "3cc6791d39c10a6644d80af7aee98e54",
       "sourceName": "contracts/LendingMarketPlace.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -1107,6 +1107,7 @@
         "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol",
         "./libraries/DataTypes.sol",
         "./libraries/Events.sol",
+        "./LoanFactory.sol",
         "./interfaces/ILoanFactory.sol",
         "hardhat/console.sol"
       ],

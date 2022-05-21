@@ -17,7 +17,7 @@ interface ILoanFactory {
      * symbol in the ERC20 Upgradeable contract.
      *
      */
-     function initialize(ISuperfluid _host, IConstantFlowAgreementV1 _cfa, DataTypes.LoanTraded memory loan ) external ;
+     function initialize( DataTypes.LoanTraded memory loan ) external ;
 
     // /**
     //  * @notice Imint a PcrToken and add token owner to Index subscription

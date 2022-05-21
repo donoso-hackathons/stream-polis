@@ -13,7 +13,7 @@ import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/app
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
-
+import {LoanFactory} from "./LoanFactory.sol";
 import {ILoanFactory} from "./interfaces/ILoanFactory.sol";
 
 import "hardhat/console.sol";
@@ -68,7 +68,7 @@ contract LendingMarketPlace {
         )
       )
     );
-    _cfaLib = CFAv1Library.InitData(_host,cfa);
+    _cfaLib = CFAv1Library.InitData(_host, cfa);
 
     // _cfaLib = CFAv1Library.InitData(_host, cfa);
   }
@@ -124,27 +124,27 @@ contract LendingMarketPlace {
   }
 
   function acceptOffer(DataTypes.TradeConfig memory _config) public {
-    address loanContractImpl = Clones.clone(loanFactory);
+    // address loanContractImpl = Clones.clone(loanFactory);
+
+    LoanFactory loanContract = new LoanFactory();
+
+    address loanContractImpl = address(loanContract);
 
     DataTypes.LoanOffer memory offer = _loansOfferedById[_config.offerId];
 
     _loansTradedCounter.increment();
     uint256 loanId = _loansTradedCounter.current();
 
-    uint256 totalLoanAmount = _config
-      .loanAmount
-      .mul(offer.config.fee)
-      .mul(MARKET_PLACE_FEE)
-      .div(1000 * 1000);
-
-    int96 totalInflowRate = int96(
-      int256(totalLoanAmount.div(_config.duration))
-    );
-
-    uint256 collateral = _config
-      .loanAmount
-      .mul(offer.config.collateralShare)
-      .div(100);
+    (
+      uint256 totalLoanAmount,
+      int96 totalInflowRate,
+      uint256 collateral
+    ) = getMaths(
+        _config.loanAmount,
+        offer.config.fee,
+        _config.duration,
+        offer.config.collateralShare
+      );
 
     DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
       loanTradedId: loanId,
@@ -154,7 +154,7 @@ contract LendingMarketPlace {
       collateral: collateral,
       collateralShare: offer.config.collateralShare,
       flowRate: totalInflowRate,
-      initTimeStamp: block.timestamp,
+      initTimestamp: block.timestamp,
       status: DataTypes.LOAN_STATUS.ACTIVE,
       loanTaker: msg.sender,
       loanProvider: offer.loanProvider,
@@ -162,14 +162,26 @@ contract LendingMarketPlace {
       loanContract: loanContractImpl
     });
 
-    ILoanFactory(loanContractImpl).initialize(host, cfa, loan);
+    _loansTradedById[loanId] = loan;
+
+    ILoanFactory(loanContractImpl).initialize(loan);
 
     bytes memory userData = abi.encode(loanId, msg.sender);
 
- 
-    _cfaLib.createFlowByOperator(loan.loanTaker, loan.loanProvider, loan.superToken, totalInflowRate, userData);
+    _cfaLib.createFlowByOperator(
+      loan.loanTaker,
+      loanContractImpl,
+      loan.superToken,
+      totalInflowRate,
+      userData
+    );
 
-
+    //  loantaker must approve the marketplace for tranfering the ERC20
+    loan.superToken.transferFrom(
+      loan.loanTaker,
+      loanContractImpl,
+      loan.collateral
+    );
 
     emit Events.LoanTradeCreated(loan);
 
@@ -180,4 +192,29 @@ contract LendingMarketPlace {
   function AcceptDemand() public {}
 
   // endregion
+
+  // internal
+
+  function getMaths(
+    uint256 _loanAmount,
+    uint16 _fee,
+    uint256 _duration,
+    uint16 _collateralShare
+  )
+    public
+    view
+    returns (
+      uint256 totalLoanAmount,
+      int96 totalInflowRate,
+      uint256 collateral
+    )
+  {
+    totalLoanAmount = _loanAmount.mul(_fee).mul(MARKET_PLACE_FEE).div(
+      1000 * 1000
+    );
+
+    totalInflowRate = int96(int256(totalLoanAmount.div(_duration)));
+
+    collateral = _loanAmount.mul(_collateralShare).div(1000);
+  }
 }

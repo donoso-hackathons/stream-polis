@@ -11,13 +11,14 @@ import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/inte
  * @notice A standard library of data types used throughout.
  */
 library DataTypes {
+
   struct OfferConfig {
     uint256 loanMaxAmount;
     uint256 loanMinAmount;
     uint16 fee;
     address superToken;
-    uint8 collateralShare;
-    int96 flowRate;
+    uint16 collateralShare;
+    uint256 maxDuration;
   }
 
   struct LoanOffer {
@@ -29,7 +30,7 @@ library DataTypes {
 
   struct DemandConfig {
     uint256 loanAmount;
-    uint8 fee;
+    uint16 fee;
     address superToken;
     uint256 collateralShare;
     int96 flowRate;
@@ -55,9 +56,9 @@ struct TradeConfig {
     uint256 loanAmount;
     uint256 loanTotalAmount;
      uint256 collateral;
-    uint8 collateralShare;
+    uint16 collateralShare;
      int96 flowRate;
-    uint256 initTimeStamp;
+    uint256 initTimestamp;
     LOAN_STATUS status;    
     address loanTaker;
     address loanProvider;

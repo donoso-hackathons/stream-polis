@@ -35,25 +35,31 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
 
 
   constructor() {
-  
+    
+    host = ISuperfluid(0xEB796bdb90fFA0f28255275e16936D25d3418603);
+        cfa = IConstantFlowAgreementV1(
+      address(
+        host.getAgreementClass(
+          keccak256(
+            "org.superfluid-finance.agreements.ConstantFlowAgreement.v1"
+          )
+        )
+      )
+    );
+    uint256 configWord = SuperAppDefinitions.APP_LEVEL_FINAL |
+      SuperAppDefinitions.BEFORE_AGREEMENT_CREATED_NOOP |
+      SuperAppDefinitions.BEFORE_AGREEMENT_UPDATED_NOOP |
+      SuperAppDefinitions.BEFORE_AGREEMENT_TERMINATED_NOOP;
+ 
+
+    host.registerApp(configWord);
   }
 
  /**
    * @notice initializer of the contract/oracle
    */
-  function initialize(ISuperfluid _host, IConstantFlowAgreementV1 _cfa, DataTypes.LoanTraded memory _loan) external override initializer {
-    require(address(_host) != address(0), "host is zero address");
-    require(address(_cfa) != address(0), "cfa is zero address");
-
-    host = _host;
-    cfa = _cfa;
-
-    uint256 configWord = SuperAppDefinitions.APP_LEVEL_FINAL |
-      SuperAppDefinitions.BEFORE_AGREEMENT_CREATED_NOOP |
-      SuperAppDefinitions.BEFORE_AGREEMENT_UPDATED_NOOP |
-      SuperAppDefinitions.BEFORE_AGREEMENT_TERMINATED_NOOP;
-
-    host.registerApp(configWord);
+  function initialize(DataTypes.LoanTraded memory _loan) external override initializer {
+  
 
     loan = _loan;
 
@@ -112,7 +118,7 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
     onlyHost
     returns (bytes memory newCtx)
   {
-
+    console.log('juay kuay');
 
     LocalStateCallBack memory _localState = LocalStateCallBack({
       newCtx: _ctx,
@@ -124,7 +130,7 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
       superToken: _superToken
     });
 
-    (_localState.loanOfferId, _localState.loanDuration) = parseLoanData(
+    (_localState.loanOfferId, _localState.loanTaker) = parseLoanData(
       _localState.decodedContext.userData
     );
 
@@ -135,7 +141,7 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
       "SUPERTOKEN_NOT_MATCH"
     );
 
-    (_localState.loanTaker, ) = abi.decode(_agreementData, (address, address));
+    (address marketplace, ) = abi.decode(_agreementData, (address, address));
 
     require(
        _loanIdByTaker[_localState.loanTaker] == 0,
@@ -146,16 +152,11 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
 
     // use case ony one loan per user
 
-    // loantaker must approve the marketplace for tranfering the ERC20
-    ISuperToken(_superToken).transferFrom(
-      _localState.loanTaker,
-      address(this),
-      loan.collateralShare
-    );
+
 
     (, _localState.inFlowRate, , ) = cfa.getFlow(
       _localState.superToken,
-      _localState.loanTaker,
+      marketplace,
       address(this)
     );
 
@@ -194,15 +195,26 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
     bytes calldata _ctx
   ) external virtual override returns (bytes memory newCtx) {
 
-
+    console.log('juppy juppy finish');
      try  this.parseLoanData(
        host.decodeCtx(_ctx).userData
-    ) returns (uint256 loanOfferId, uint256 loanDuration) {
-         
-         
+    ) returns (uint256 loanOfferId, address loanTaker) {
+
+            console.log('juppy juppy continue');
+
+          
+
+
+
+        uint alreadyPayed = (block.timestamp - loan.initTimestamp).mul(uint96(loan.flowRate));
+        console.log(alreadyPayed);
+        uint stillToPay = loan.loanTotalAmount - alreadyPayed;
+        console.log(stillToPay);
+            
         } catch (bytes memory /*lowLevelData*/) {
-            // This is executed in case revert() was used.
-     
+            // This is executed in case revert() was used.  
+            console.log('juppy juppy error');
+          loan.superToken.transfer(loan.loanProvider, loan.collateral);
             
         }
 
@@ -222,12 +234,15 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
     return _ctx;
   }
 
+
+  
+
   function parseLoanData(bytes memory data)
     public
     pure
-    returns (uint256 loanOfferId, uint256 loanDuration)
+    returns (uint256 loanOfferId, address loanTaker)
   {
-    (loanOfferId, loanDuration) = abi.decode(data, (uint256, uint256));
+    (loanOfferId, loanTaker) = abi.decode(data, (uint256, address));
   }
 
   /**************************************************************************
