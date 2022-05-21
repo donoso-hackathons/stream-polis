@@ -343,3 +343,87 @@ export class LoanTraded extends Entity {
     this.set("loanProvider", Value.fromString(value));
   }
 }
+
+export class User extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save User entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save User entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("User", id.toString(), this);
+    }
+  }
+
+  static load(id: string): User | null {
+    return changetype<User | null>(store.get("User", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get offersCreated(): Array<string> | null {
+    let value = this.get("offersCreated");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set offersCreated(value: Array<string> | null) {
+    if (!value) {
+      this.unset("offersCreated");
+    } else {
+      this.set("offersCreated", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+
+  get demandsCreated(): Array<string> | null {
+    let value = this.get("demandsCreated");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set demandsCreated(value: Array<string> | null) {
+    if (!value) {
+      this.unset("demandsCreated");
+    } else {
+      this.set("demandsCreated", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+
+  get loansTraded(): Array<string> | null {
+    let value = this.get("loansTraded");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set loansTraded(value: Array<string> | null) {
+    if (!value) {
+      this.unset("loansTraded");
+    } else {
+      this.set("loansTraded", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+}

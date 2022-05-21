@@ -237,3 +237,43 @@ export const netWorkById = (chainId:number) => {
   }
   return noNetwork
 };
+
+export const target_conditions  = [
+  { name: 'Greater Than', code: 'GT', id: 0 },
+  { name: 'Greater Than Equal', code: 'GTE', id: 1 },
+  { name: 'Equal', code: 'E', id: 2 },
+  { name: 'Less Than Equal', code: 'LTE', id: 3 },
+  { name: 'Less Than', code: 'LT', id: 4 },
+];
+
+export const global_address = {
+  localhost: {
+    host: '0xEB796bdb90fFA0f28255275e16936D25d3418603',
+    cfa: '0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873',
+    ida: '0x804348D4960a61f2d5F9ce9103027A3E849E09b8',
+    fDaix: '0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f',
+    fDai: '0x15F0Ca26781C3852f8166eD2ebce5D18265cceb7',
+    resolver:"0x8C54C83FbDe3C59e59dd6E324531FB93d4F504d3",
+    subgraph:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-kovan",
+    sfNetwork:"local",
+    graphUri:"http://localhost:8000/subgraphs/name/donoso-eth/perpetual-conditional-reward"
+  },
+
+  mumbai: {
+    host: '0xEB796bdb90fFA0f28255275e16936D25d3418603',
+    cfa: '0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873',
+    ida: '0x804348D4960a61f2d5F9ce9103027A3E849E09b8',
+    fDaix: '0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f',
+    fDai: '0x15F0Ca26781C3852f8166eD2ebce5D18265cceb7',
+    resolver:"0x8C54C83FbDe3C59e59dd6E324531FB93d4F504d3",
+    sfNetwork:"mumbai",
+    graphUri:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-mumbai"
+  },
+};
+
+export const global_tokens = [
+  { name: 'DAI', id: 0, image: 'dai', rewardToken:global_address.mumbai.fDai, superToken:global_address.mumbai.fDaix },
+ // { name: 'DAIx', id: 1, image: 'dai', rewardToken:global_address.kovan.fDaix,superToken:global_address.kovan.fDaix  },
+  // { name: 'USDCx', id: 2, image: 'usdc' },
+  // { name: 'USDC', id: 3, image: 'usdc' },
+];

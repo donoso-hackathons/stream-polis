@@ -21,6 +21,14 @@ export class GraphQlService implements OnDestroy {
   //   }).valueChanges;
   // }
 
+  queryUser(address: string) {
+    const variables = { address: address.toLowerCase() };
+    return this.apollo.watchQuery<any>({
+      query: gql(GET_USER),
+      variables,
+    }).valueChanges;
+  }
+
 
   async queryOffers():Promise<any> {
     try {

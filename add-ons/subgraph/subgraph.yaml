@@ -17,6 +17,8 @@ dataSources:
         - Offer
         - LoanDemand
         - LoanTraded
+        - User
+        - TotalSummary
       abis:
         - name: LendingMarketPlace
           file: ./abis/lending_market_place.json
