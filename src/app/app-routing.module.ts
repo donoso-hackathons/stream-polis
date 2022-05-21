@@ -26,6 +26,7 @@ const routes: Routes = [
   },
   { path: 'demand', loadChildren: () => import('./pages/demand-page/demand-page.module').then(m => m.DemandPageModule) },
   { path: 'create-offer', loadChildren: () => import('./pages/create-offer/create-offer.module').then(m => m.CreateOfferModule) },
+  { path: 'create-demand', loadChildren: () => import('./pages/create-demand/create-demand.module').then(m => m.CreateDemandModule) },
 ];
 
 @NgModule({
