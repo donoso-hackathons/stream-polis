@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Apollo, QueryRef, gql } from 'apollo-angular';
 import { BehaviorSubject, firstValueFrom, Subject, Subscription } from 'rxjs';
-import { GET_OFFERS } from './queryDefinitions';
+import { GET_DEMANDS, GET_OFFERS } from './queryDefinitions';
 
 
 
@@ -40,5 +40,38 @@ export class GraphQlService implements OnDestroy {
 
   }
 
+
+  async queryDemands():Promise<any> {
+    try {
+ 
+      const posts = await  firstValueFrom(this.apollo
+      .query<any>({
+        query: gql(GET_DEMANDS)
+      }))
+        
+      return posts;
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
+
+  }
+
+
+  async queryTead():Promise<any> {
+    try {
+ 
+      const posts = await  firstValueFrom(this.apollo
+      .query<any>({
+        query: gql(GET_DEMANDS)
+      }))
+        
+      return posts;
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
+
+  }
 
 }

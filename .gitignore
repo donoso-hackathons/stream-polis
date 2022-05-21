@@ -7,7 +7,8 @@
 /bazel-out
 
 /hardhat/artifacts
-
+/hardhat/typechain-types
+/add-ons/graph-node/data
 # Node
 /node_modules
 npm-debug.log
