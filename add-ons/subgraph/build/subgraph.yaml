@@ -21,7 +21,7 @@ dataSources:
         - TotalSummary
       abis:
         - name: LendingMarketPlace
-          file: LendingMarketPlace/abis/lending_market_place.json
+          file: LendingMarketPlace\abis\lending_market_place.json
       eventHandlers:
         - event: LoanOfferCreated((uint256,(uint256,uint256,uint16,address,uint16,uint256),address,uint8))
           handler: handleLoanOfferCreated
@@ -29,4 +29,4 @@ dataSources:
           handler: handleLoanDemadCreated
         - event: LoanTradeCreated((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address))
           handler: handleLoanTradeCreated
-      file: LendingMarketPlace/LendingMarketPlace.wasm
+      file: LendingMarketPlace\LendingMarketPlace.wasm
