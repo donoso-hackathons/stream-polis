@@ -37,7 +37,7 @@ export class CreateOfferComponent extends DappBaseComponent {
     {
       name: 'USDC',
       id: 0,
-      image: 'usd',
+      image: 'usdc',
       rewardToken: global_address.mumbai.fDai,
       superToken: global_address.mumbai.fDaix,
     },
@@ -124,70 +124,6 @@ export class CreateOfferComponent extends DappBaseComponent {
 
     
 
-
-    // const titleValue = this.loanOfferForm.controls.titleCtrl.value;
-    // const descriptionValue = this.loanOfferForm.controls.questionCtrl.value;
-    // const urlValue = this.loanOfferForm.controls.urlCtrl.value;
-    // const customAncillaryData = utils.hexlify(
-    //   utils.toUtf8Bytes(`q: title: ${titleValue}?, description: ${descriptionValue}, url:${urlValue} . res_data: p1: 0, p2: 1, p3: 0.5. Where p2 corresponds to Yes, p1 to a No, p3 to unknown`)
-    // );
-
-    // const title = utils.hexlify(utils.toUtf8Bytes(titleValue));
-
-    // const description = utils.hexlify(utils.toUtf8Bytes(descriptionValue));
-
-    // const url = utils.hexlify(utils.toUtf8Bytes(urlValue));
-
-    // const rewardConfig: PCRHOSTCONFIGINPUTStruct = {
-    //   title,
-    //   description,
-    //   url,
-    //   pcrTokenImpl: this.dapp.tokenImpl,
-    //   pcrOptimisticOracleImpl: this.dapp.optimisticOracleImpl,
-    // };
-
-    // /// PriceIdentifier for ortimistic oracle
-    // const priceIdentifier = utils.formatBytes32String('YES_OR_NO_QUERY');
-
-    // let condition = this.loanOfferForm.controls.conditionTypeCtrl.value.id;
-    // let priceType = 0;
-    // let target;
-    // if (this.loanOfferForm.controls.rewardTypeCtrl.value.id == 0) {
-    //   target = utils.parseEther('1');
-    //   condition = 2;
-    // } else {
-    //   target = utils.parseEther(this.loanOfferForm.controls.targetAmountCtrl.value.toString());
-    //   priceType = 1;
-    // }
-
-    // const OptimisticOracle: OPTIMISTICORACLEINPUTStruct = {
-    //   finder: global_address.mumbai.finder,
-    //   rewardAmount: utils.parseEther(this.loanOfferForm.controls.loanMaxAmountCtrl.value.toString()),
-    //   target: target,
-    //   priceType,
-    //   targetCondition: condition,
-    //   interval: this.loanOfferForm.controls.intervalAmountCtrl.value * this.loanOfferForm.controls.intervalCtrl.value.factor,
-    //   optimisticOracleLivenessTime: this.loanOfferForm.controls.loanMinAmountCtrl.value * this.loanOfferForm.controls.livenessCtrl.value.factor,
-    //   customAncillaryData,
-    //   priceIdentifier,
-    // };
-
-    // const Ida: IDAINPUTStruct = {
-    //   host: global_address.mumbai.host,
-    //   ida: global_address.mumbai.ida,
-    //   rewardToken: this.loanOfferForm.controls.tokenCtrl.value.superToken,
-    // };
-
-    // this.store.dispatch(Web3Actions.chainBusy({ status: true }));
-
-    // const result = await doSignerTransaction(this.dapp.pcrHostContract?.instance.createPcrReward(rewardConfig, Ida, OptimisticOracle)!);
-    // if (result.success == true) {
-    //   this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-    //   this.display = true;
-    // } else {
-    //   this.msg.add({ key: 'tst', severity: 'error', summary: 'OOPS', detail: `Error creating your PCR with txHash:${result.txHash}` });
-    //   this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-    // }
   }
 
   back() {
