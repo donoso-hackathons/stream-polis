@@ -1,7 +1,9 @@
 
+import {LoanDemand,LoanOffer,LoanTraded} from '../generated/schema'
+import {LoanDemandCreated, LoanOfferCreated, LoanTradeCreated} from '../generated/LendingMarketPlace/LendingMarketPlace'
 
 export function handleLoanOfferCreated(event:LoanOfferCreated):void {
-  let id = event.params.loanOfferId.toString();
+  let id = event.params.loanOffered.loanOfferId.toString();
 
   let loanOffer = new LoanOffer(id)
 
@@ -9,8 +11,8 @@ export function handleLoanOfferCreated(event:LoanOfferCreated):void {
 
 }
 
-export function handleLoanDemandCreated(event:LoanOfferCreated):void {
-  let id = event.params.loanDemandId.toString();
+export function handleLoanDemandCreated(event:LoanDemandCreated):void {
+  let id = event.params.loanDemand.loanDemandId.toString();
 
   let loanOffer = new LoanDemand(id)
 
@@ -19,10 +21,10 @@ export function handleLoanDemandCreated(event:LoanOfferCreated):void {
 }
 
 
-export function handleLoanTradeCreated(event:LoanOfferCreated):void {
-  let id = event.params.loanTradedId.toString();
+export function handleLoanTradeCreated(event:LoanTradeCreated):void {
+  let id = event.params.loanTraded.loanTradedId.toString();
 
-  let loanOffer = new LoanTrade(id)
+  let loanOffer = new LoanTraded(id)
 
   
 

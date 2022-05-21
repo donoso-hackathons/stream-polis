@@ -19,7 +19,7 @@
     "tinker": "cd hardhat && npx hardhat --tsconfig ./tsconfig.hardhat.json run ./scripts/tinker.ts",
     "publish:subgraph": "cd hardhat && npx hardhat --tsconfig ./tsconfig.hardhat.json run ./scripts/publish.ts",
     "codegen": "cd add-ons/subgraph && graph codegen",
-    "build-graph": "cd subgraph && graph build",
+    "build-graph": "cd add-ons/subgraph && graph build",
     "deploy-graph": "cd services/graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ GITHUB_USERNAME/your-contract",
     "run-graph-node": "cd add-ons/graph-node && docker-compose up",
     "remove-graph-node": "cd add-ons/graph-node && docker-compose down",
@@ -32,6 +32,7 @@
   "dependencies": {
     "@angular-builders/custom-webpack": "^13.1.0",
     "@angular/animations": "~13.3.0",
+    "@angular/cdk": "^13.3.0",
     "@angular/common": "~13.3.0",
     "@angular/compiler": "~13.3.0",
     "@angular/core": "~13.3.0",

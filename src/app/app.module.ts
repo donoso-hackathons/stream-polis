@@ -18,6 +18,7 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 
 import LendingMarketplaceMetadata from '../assets/contracts/lending_market_place_metadata.json';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export const contractMetadata = new InjectionToken<ICONTRACT_METADATA>('contractMetadata')
 
 export const contractProvider= {provide: 'contractMetadata', useValue:LendingMarketplaceMetadata};
@@ -39,7 +40,8 @@ const network = 'localhost';
     DappInjectorModule.forRoot({wallet:'local', defaultNetwork:network}),
     StoreModule.forRoot({web3: we3ReducerFunction}),
     GraphQlModule.forRoot({uri: ''}),
-
+    FormsModule,
+    ReactiveFormsModule,
     DropdownModule,
     ProgressSpinnerModule,
     ToastModule,
