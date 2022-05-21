@@ -33,7 +33,7 @@ library DataTypes {
     uint16 fee;
     address superToken;
     uint256 collateralShare;
-    int96 flowRate;
+    int96 duration;
   }
 
   struct LoanDemand {

@@ -1,50 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Apollo, QueryRef, gql } from 'apollo-angular';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subject, Subscription } from 'rxjs';
+import { GET_OFFERS } from './queryDefinitions';
 
-const GET_POSTS = gql`
-{
-  gratitudeTokens(first: 5) {
-    id
-    status
-    sender
-    receiver
-  }
-  gratitudeCampaigns(first: 5) {
-    id
-    campaign_creator
-    name
-    status
-  }
-}
-`;
+
 
 @Injectable({
   providedIn: 'root',
 })
-export class GraphQlService {
-  loading!: boolean;
-  posts: any;
-  postsQuery!: QueryRef<any>;
-  private querySubscription!: Subscription;
+export class GraphQlService implements OnDestroy {
   constructor(private apollo: Apollo) {}
-  
-  
- async  query() {
-    // this.postsQuery = this.apollo.watchQuery<any>({
-    //   query: GET_POSTS,
-    //   pollInterval: 500,
-    // });
+  ngOnDestroy(): void {}
 
-  const posts = await  this.apollo.query<any>({
-      query: GET_POSTS
-    }).toPromise()
+  // watchOffers(id: string) {
+  //   const variables = { id: id };
+  //   return this.apollo.watchQuery<any>({
+  //     query: gql(GET_OFFERS),
+  //     pollInterval: 500,
+  //     variables,
+  //   }).valueChanges;
+  // }
 
-    console.log(posts)
 
-    // this.querySubscription = this.postsQuery.valueChanges.subscribe(({ data, loading }) => {
-    //   this.loading = loading;
-    //   this.posts = data.posts;
-    // });
+  async queryOffers():Promise<any> {
+    try {
+ 
+      const posts = await  firstValueFrom(this.apollo
+      .query<any>({
+        query: gql(GET_OFFERS)
+      }))
+        
+
+     
+      return posts;
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
+
   }
+
+
 }

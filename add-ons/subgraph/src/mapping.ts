@@ -1,26 +1,34 @@
-import { NewGravatar, UpdatedGravatar} from '../generated/GravatarRegistry/GravatarRegistry' 
 
-import { Gravatar} from '../generated/schema'
 
-export function handleNewGravatar(event: NewGravatar): void {
-  let gravatar = new Gravatar(event.params.id.toHex())
-  gravatar.owner = event.params.owner
-  gravatar.displayName = event.params.displayName
-  gravatar.imageUrl = event.params.imageUrl
-  gravatar.save()
+export function handleLoanOfferCreated(event:LoanOfferCreated):void {
+  let id = event.params.loanOfferId.toString();
+
+  let loanOffer = new LoanOffer(id)
+
+  
+
 }
 
-export function handleUpdatedGravatar(event: UpdatedGravatar): void {
-  let id = event.params.id.toHex()
-  let gravatar = Gravatar.load(id)
-  if (gravatar == null) {
-    gravatar = new Gravatar(id)
-  }
-  gravatar.owner = event.params.owner
-  gravatar.displayName = event.params.displayName
-  gravatar.imageUrl = event.params.imageUrl
-  gravatar.save()
+export function handleLoanDemandCreated(event:LoanOfferCreated):void {
+  let id = event.params.loanDemandId.toString();
+
+  let loanOffer = new LoanDemand(id)
+
+  
+
 }
+
+
+export function handleLoanTradeCreated(event:LoanOfferCreated):void {
+  let id = event.params.loanTradedId.toString();
+
+  let loanOffer = new LoanTrade(id)
+
+  
+
+}
+
+
 
 
 

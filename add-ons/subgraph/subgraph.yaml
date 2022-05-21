@@ -3,24 +3,49 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: GravatarRegistry
+    name: LendingMarketPlace
     network: localhost
     source:
-      address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-      abi: GravatarRegistry
-      startBlock: 1
+      address: '0xD5f071F2D8BF6E7d6BC25A1D89e9b1430AC78A58'
+      abi: LendingMarketPlace
+      startBlock: 31578143
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Gravatar
+        - Offer
+        - LoanDemand
+        - LoanTraded
       abis:
-        - name: GravatarRegistry
-          file: ./abis/gravity.json
+        - name: LendingMarketPlace
+          file: ./abis/lending_market_place.json
       eventHandlers:
-        - event: NewGravatar(uint256,address,string,string)
-          handler: handleNewGravatar
-        - event: UpdatedGravatar(uint256,address,string,string)
-          handler: handleUpdatedGravatar
+        - event: LoanOfferCreated()
+          handler: handleLoanOfferCreated
+        - event: LoanDemandCreated()
+          handler: handleLoanDemadCreated
+        - event: LoanTradeCreated()
+          handler: handleLoanTradeCreated
       file: ./src/mapping.ts
+# templates:
+#   - name: LoanFactory
+#     kind: ethereum/contract
+#     network: localhost
+#     source:
+#       abi: LoanFactory
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.5
+#       language: wasm/assemblyscript
+#       file: ./src/mapping.ts
+#       entities:
+#         - Offer
+#         - LoanDemand
+#         - LoanTraded
+#       abis:
+#         - name: LoanFactory
+#           file: ./abis/loan_factory.json
+#       eventHandlers:
+#         - event: RewardDeposit(uint256,uint256)
+#           handler: handleRewardDeposit
