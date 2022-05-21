@@ -1,1 +1,385 @@
-[{"inputs":[{"internalType":"address","name":"_loanFactory","type":"address"},{"internalType":"contract ISuperfluid","name":"_host","type":"address"},{"internalType":"uint16","name":"_marketPlaceFee","type":"uint16"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"AcceptDemand","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"_loanIdByTaker","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"_loansDemandCounter","outputs":[{"internalType":"uint256","name":"_value","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"_loansOfferedCounter","outputs":[{"internalType":"uint256","name":"_value","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"_loansTradedById","outputs":[{"internalType":"uint256","name":"loanTradedId","type":"uint256"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"uint256","name":"loanAmount","type":"uint256"},{"internalType":"uint256","name":"loanTotalAmount","type":"uint256"},{"internalType":"uint256","name":"collateral","type":"uint256"},{"internalType":"uint16","name":"collateralShare","type":"uint16"},{"internalType":"int96","name":"flowRate","type":"int96"},{"internalType":"uint256","name":"initTimestamp","type":"uint256"},{"internalType":"enum DataTypes.LOAN_STATUS","name":"status","type":"uint8"},{"internalType":"address","name":"loanTaker","type":"address"},{"internalType":"address","name":"loanProvider","type":"address"},{"internalType":"contract ISuperToken","name":"superToken","type":"address"},{"internalType":"address","name":"loanContract","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"_loansTradedCounter","outputs":[{"internalType":"uint256","name":"_value","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"uint256","name":"offerId","type":"uint256"},{"internalType":"uint256","name":"loanAmount","type":"uint256"},{"internalType":"uint256","name":"duration","type":"uint256"}],"internalType":"struct DataTypes.TradeConfig","name":"_config","type":"tuple"}],"name":"acceptOffer","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"uint256","name":"loanAmount","type":"uint256"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"address","name":"superToken","type":"address"},{"internalType":"uint16","name":"collateralShare","type":"uint16"},{"internalType":"int96","name":"duration","type":"int96"}],"internalType":"struct DataTypes.DemandConfig","name":"config","type":"tuple"}],"name":"demandLoan","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_loanAmount","type":"uint256"},{"internalType":"uint16","name":"_fee","type":"uint16"},{"internalType":"uint256","name":"_duration","type":"uint256"},{"internalType":"uint16","name":"_collateralShare","type":"uint16"}],"name":"getMaths","outputs":[{"internalType":"uint256","name":"totalLoanAmount","type":"uint256"},{"internalType":"int96","name":"totalInflowRate","type":"int96"},{"internalType":"uint256","name":"collateral","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"uint256","name":"loanMaxAmount","type":"uint256"},{"internalType":"uint256","name":"loanMinAmount","type":"uint256"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"address","name":"superToken","type":"address"},{"internalType":"uint16","name":"collateralShare","type":"uint16"},{"internalType":"uint256","name":"maxDuration","type":"uint256"}],"internalType":"struct DataTypes.OfferConfig","name":"config","type":"tuple"}],"name":"offerLoan","outputs":[],"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"components":[{"internalType":"uint256","name":"loanDemandId","type":"uint256"},{"components":[{"internalType":"uint256","name":"loanAmount","type":"uint256"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"address","name":"superToken","type":"address"},{"internalType":"uint16","name":"collateralShare","type":"uint16"},{"internalType":"int96","name":"duration","type":"int96"}],"internalType":"struct DataTypes.DemandConfig","name":"config","type":"tuple"},{"internalType":"address","name":"loanTaker","type":"address"},{"internalType":"enum DataTypes.OFFER_STATUS","name":"status","type":"uint8"}],"indexed":false,"internalType":"struct DataTypes.LoanDemand","name":"loanDemand","type":"tuple"}],"name":"LoanDemandCreated","type":"event"},{"anonymous":false,"inputs":[{"components":[{"internalType":"uint256","name":"loanOfferId","type":"uint256"},{"components":[{"internalType":"uint256","name":"loanMaxAmount","type":"uint256"},{"internalType":"uint256","name":"loanMinAmount","type":"uint256"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"address","name":"superToken","type":"address"},{"internalType":"uint16","name":"collateralShare","type":"uint16"},{"internalType":"uint256","name":"maxDuration","type":"uint256"}],"internalType":"struct DataTypes.OfferConfig","name":"config","type":"tuple"},{"internalType":"address","name":"loanProvider","type":"address"},{"internalType":"enum DataTypes.OFFER_STATUS","name":"status","type":"uint8"}],"indexed":false,"internalType":"struct DataTypes.LoanOffer","name":"loanOffered","type":"tuple"}],"name":"LoanOfferCreated","type":"event"},{"anonymous":false,"inputs":[{"components":[{"internalType":"uint256","name":"loanTradedId","type":"uint256"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"uint256","name":"loanAmount","type":"uint256"},{"internalType":"uint256","name":"loanTotalAmount","type":"uint256"},{"internalType":"uint256","name":"collateral","type":"uint256"},{"internalType":"uint16","name":"collateralShare","type":"uint16"},{"internalType":"int96","name":"flowRate","type":"int96"},{"internalType":"uint256","name":"initTimestamp","type":"uint256"},{"internalType":"enum DataTypes.LOAN_STATUS","name":"status","type":"uint8"},{"internalType":"address","name":"loanTaker","type":"address"},{"internalType":"address","name":"loanProvider","type":"address"},{"internalType":"contract ISuperToken","name":"superToken","type":"address"},{"internalType":"address","name":"loanContract","type":"address"}],"indexed":false,"internalType":"struct DataTypes.LoanTraded","name":"loanTraded","type":"tuple"}],"name":"LoanTradeCreated","type":"event"}]
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_loanFactory", "type": "address" },
+      {
+        "internalType": "contract ISuperfluid",
+        "name": "_host",
+        "type": "address"
+      },
+      { "internalType": "uint16", "name": "_marketPlaceFee", "type": "uint16" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AcceptDemand",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "_loanIdByTaker",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_loansDemandCounter",
+    "outputs": [
+      { "internalType": "uint256", "name": "_value", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_loansOfferedCounter",
+    "outputs": [
+      { "internalType": "uint256", "name": "_value", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "_loansTradedById",
+    "outputs": [
+      { "internalType": "uint256", "name": "loanTradedId", "type": "uint256" },
+      { "internalType": "uint16", "name": "fee", "type": "uint16" },
+      { "internalType": "uint256", "name": "loanAmount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "loanTotalAmount",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "collateral", "type": "uint256" },
+      { "internalType": "uint16", "name": "collateralShare", "type": "uint16" },
+      { "internalType": "int96", "name": "flowRate", "type": "int96" },
+      { "internalType": "uint256", "name": "initTimestamp", "type": "uint256" },
+      {
+        "internalType": "enum DataTypes.LOAN_STATUS",
+        "name": "status",
+        "type": "uint8"
+      },
+      { "internalType": "address", "name": "loanTaker", "type": "address" },
+      { "internalType": "address", "name": "loanProvider", "type": "address" },
+      {
+        "internalType": "contract ISuperToken",
+        "name": "superToken",
+        "type": "address"
+      },
+      { "internalType": "address", "name": "loanContract", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_loansTradedCounter",
+    "outputs": [
+      { "internalType": "uint256", "name": "_value", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "offerId", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "loanAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "duration", "type": "uint256" }
+        ],
+        "internalType": "struct DataTypes.TradeConfig",
+        "name": "_config",
+        "type": "tuple"
+      }
+    ],
+    "name": "acceptOffer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "loanAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint16", "name": "fee", "type": "uint16" },
+          {
+            "internalType": "address",
+            "name": "superToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "collateralShare",
+            "type": "uint16"
+          },
+          { "internalType": "int96", "name": "duration", "type": "int96" }
+        ],
+        "internalType": "struct DataTypes.DemandConfig",
+        "name": "config",
+        "type": "tuple"
+      }
+    ],
+    "name": "demandLoan",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_loanAmount", "type": "uint256" },
+      { "internalType": "uint16", "name": "_fee", "type": "uint16" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" },
+      { "internalType": "uint16", "name": "_collateralShare", "type": "uint16" }
+    ],
+    "name": "getMaths",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalLoanAmount",
+        "type": "uint256"
+      },
+      { "internalType": "int96", "name": "totalInflowRate", "type": "int96" },
+      { "internalType": "uint256", "name": "collateral", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "loanMaxAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "loanMinAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint16", "name": "fee", "type": "uint16" },
+          {
+            "internalType": "address",
+            "name": "superToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "collateralShare",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxDuration",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.OfferConfig",
+        "name": "config",
+        "type": "tuple"
+      }
+    ],
+    "name": "offerLoan",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "loanDemandId",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "loanAmount",
+                "type": "uint256"
+              },
+              { "internalType": "uint16", "name": "fee", "type": "uint16" },
+              {
+                "internalType": "address",
+                "name": "superToken",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "collateralShare",
+                "type": "uint16"
+              },
+              { "internalType": "int96", "name": "duration", "type": "int96" }
+            ],
+            "internalType": "struct DataTypes.DemandConfig",
+            "name": "config",
+            "type": "tuple"
+          },
+          { "internalType": "address", "name": "loanTaker", "type": "address" },
+          {
+            "internalType": "enum DataTypes.OFFER_STATUS",
+            "name": "status",
+            "type": "uint8"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct DataTypes.LoanDemand",
+        "name": "loanDemand",
+        "type": "tuple"
+      }
+    ],
+    "name": "LoanDemandCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "loanOfferId",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "loanMaxAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "loanMinAmount",
+                "type": "uint256"
+              },
+              { "internalType": "uint16", "name": "fee", "type": "uint16" },
+              {
+                "internalType": "address",
+                "name": "superToken",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "collateralShare",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint256",
+                "name": "maxDuration",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct DataTypes.OfferConfig",
+            "name": "config",
+            "type": "tuple"
+          },
+          {
+            "internalType": "address",
+            "name": "loanProvider",
+            "type": "address"
+          },
+          {
+            "internalType": "enum DataTypes.OFFER_STATUS",
+            "name": "status",
+            "type": "uint8"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct DataTypes.LoanOffer",
+        "name": "loanOffered",
+        "type": "tuple"
+      }
+    ],
+    "name": "LoanOfferCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "loanTradedId",
+            "type": "uint256"
+          },
+          { "internalType": "uint16", "name": "fee", "type": "uint16" },
+          {
+            "internalType": "uint256",
+            "name": "loanAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "loanTotalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateral",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint16",
+            "name": "collateralShare",
+            "type": "uint16"
+          },
+          { "internalType": "int96", "name": "flowRate", "type": "int96" },
+          {
+            "internalType": "uint256",
+            "name": "initTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum DataTypes.LOAN_STATUS",
+            "name": "status",
+            "type": "uint8"
+          },
+          { "internalType": "address", "name": "loanTaker", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "loanProvider",
+            "type": "address"
+          },
+          {
+            "internalType": "contract ISuperToken",
+            "name": "superToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "loanContract",
+            "type": "address"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct DataTypes.LoanTraded",
+        "name": "loanTraded",
+        "type": "tuple"
+      }
+    ],
+    "name": "LoanTradeCreated",
+    "type": "event"
+  }
+]

@@ -92,7 +92,7 @@ if (network == undefined) {
     `../add-ons/subgraph/abis/${toDeployContract.jsonName}.json`,
     JSON.stringify(LendingMarketPlace__factory.abi.concat(eventAbi))
   );
-  console.log(toDeployContract.name + ' Contract Deployed to:', loanFactory.address);
+  console.log(toDeployContract.name + ' Contract Deployed to:', lendingMarketPlace.address);
 
   copySync(`./typechain-types/${toDeployContract.name}.ts`, join(contract_path, 'interfaces', `${toDeployContract.name}.ts`));
 
