@@ -22,7 +22,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DemandDisplayComponent } from './shared/components/demand-display/demand-display.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 export const contractMetadata = new InjectionToken<ICONTRACT_METADATA>('contractMetadata')
@@ -57,9 +56,6 @@ const network = 'localhost';
     DragDropModule
   ],
   providers: [contractProvider, MessageService],
-  bootstrap: [AppComponent],
-  exports: [
-    TradeDisplayComponent
-  ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
