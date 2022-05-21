@@ -33,7 +33,7 @@ const contract_path_relative = '../src/assets/contracts/';
 const processDir = process.cwd()
 const contract_path = join(processDir,contract_path_relative)
 
-const eventAbi = Events__factory.abi;
+const eventAbi:any[] = Events__factory.abi;
 
 ensureDir(contract_path)
 
@@ -81,7 +81,7 @@ if (network == undefined) {
   writeFileSync(
     `${contract_path}/${toDeployContract.jsonName}_metadata.json`,
     JSON.stringify({
-      abi: LendingMarketPlace__factory.abi,
+      abi: LendingMarketPlace__factory.abi.concat(eventAbi),
       name: toDeployContract.name,
       address: lendingMarketPlace.address,
       network: network,
@@ -90,7 +90,7 @@ if (network == undefined) {
 
   writeFileSync(
     `../add-ons/subgraph/abis/${toDeployContract.jsonName}.json`,
-    JSON.stringify(LendingMarketPlace__factory.abi)
+    JSON.stringify(LendingMarketPlace__factory.abi.concat(eventAbi))
   );
   console.log(toDeployContract.name + ' Contract Deployed to:', loanFactory.address);
 

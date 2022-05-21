@@ -41,13 +41,13 @@ export type DemandConfigStructOutput = [
   BigNumber,
   number,
   string,
-  BigNumber,
+  number,
   BigNumber
 ] & {
   loanAmount: BigNumber;
   fee: number;
   superToken: string;
-  collateralShare: BigNumber;
+  collateralShare: number;
   duration: BigNumber;
 };
 
@@ -85,7 +85,7 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     "_loansTradedById(uint256)": FunctionFragment;
     "_loansTradedCounter()": FunctionFragment;
     "acceptOffer((uint256,uint256,uint256))": FunctionFragment;
-    "demandLoan((uint256,uint16,address,uint256,int96))": FunctionFragment;
+    "demandLoan((uint256,uint16,address,uint16,int96))": FunctionFragment;
     "getMaths(uint256,uint16,uint256,uint16)": FunctionFragment;
     "offerLoan((uint256,uint256,uint16,address,uint16,uint256))": FunctionFragment;
   };
