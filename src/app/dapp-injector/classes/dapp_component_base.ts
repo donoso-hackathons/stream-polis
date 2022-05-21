@@ -3,7 +3,8 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { Store } from '@ngrx/store';
 import { Signer } from 'ethers';
 import { pipe, Subject, takeUntil } from 'rxjs';
-import { MinimalContract} from 'src/assets/contracts/interfaces/MinimalContract';
+import { LendingMarketPlace } from 'src/assets/contracts/interfaces/LendingMarketPlace';
+
 import { DappInjector } from '../dapp-injector.service';
 import { NETWORK_STATUS, web3Selectors } from '../store';
 import { AngularContract } from './contract';
@@ -16,7 +17,7 @@ export class DappBaseComponent implements OnDestroy, AfterViewInit {
   blockchain_is_busy: boolean = true;
   blockchain_status: NETWORK_STATUS = 'loading';
 
-  defaultContract!: AngularContract< MinimalContract>;
+  defaultContract!: AngularContract< LendingMarketPlace>;
 
   defaultProvider!: JsonRpcProvider;
 

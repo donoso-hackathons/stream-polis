@@ -15,6 +15,8 @@ import { Web3ModalComponent } from './web3-modal/web3-modal.component';
 import { Subject, takeUntil } from 'rxjs';
 
 import { AngularContract } from './classes';
+import { LendingMarketPlace } from 'src/assets/contracts/interfaces/LendingMarketPlace';
+
 
 
 @Injectable({
@@ -25,7 +27,7 @@ export class DappInjector implements OnDestroy {
   private destroyHooks: Subject<void> = new Subject();
 
   ///// ---------  DAPP STATE INITIALIZATION
-  DAPP_STATE:IDAPP_STATE<MinimalContract> = {
+  DAPP_STATE:IDAPP_STATE<LendingMarketPlace> = {
    
     defaultProvider: null,
     connectedNetwork: null,
@@ -191,7 +193,7 @@ async localWallet(index:number) {
   ///// ---------  Contract Initialization
   private async contractInitialization() {
 
-    const contract = new AngularContract<MinimalContract>({
+    const contract = new AngularContract<LendingMarketPlace>({
       metadata: this.contractMetadata,
       provider: this.DAPP_STATE.defaultProvider!,
       signer: this.DAPP_STATE.signer!,
