@@ -19,6 +19,7 @@ export class TradeDisplayComponent extends DappBaseComponent implements OnInit {
   finish!: string;
   twoDec!: string;
   fourDec!: string;
+  provider: boolean = false;
   constructor(dapp:DappInjector,
     private superfluidService:SuperFluidServiceService,
      private msg: MessageService,store:Store) {
@@ -28,9 +29,11 @@ export class TradeDisplayComponent extends DappBaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.superToken =  global_tokens.filter((fil) => fil.superToken.toLowerCase() == this.trade.superToken)[0];
-    console.log(this.trade)
+ 
     this.signerAddress = this.dapp.signerAddress?.toLocaleLowerCase()
-    console.log((this.trade.initTimestamp))
+    this.provider =  this.signerAddress == this.trade.loanProvider
+
+
 
     this.finish = (new Date((+this.trade.initTimestamp + +this.trade.duration )*1000)).toLocaleString()
     const source = interval(500);

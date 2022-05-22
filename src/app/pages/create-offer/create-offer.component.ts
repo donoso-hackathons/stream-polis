@@ -21,10 +21,7 @@ export class CreateOfferComponent extends DappBaseComponent {
 
   conditions = target_conditions;
 
-  rewardTypes = [
-    { Condition: 'KPI with Yes/No Answer?', code: 'YES_OR_NO_QUERY', id: 0 },
-    { Condition: 'KPI with Numeric Target', code: 'YES_OR_NO_QUERY', id: 1 },
-  ];
+
 
   tokens = [
     {
@@ -34,13 +31,13 @@ export class CreateOfferComponent extends DappBaseComponent {
       token: global_address.mumbai.fDai,
       superToken: global_address.mumbai.fDaix,
     },
-    {
-      name: 'USDC',
-      id: 0,
-      image: 'usdc',
-      token: global_address.mumbai.fDai,
-      superToken: global_address.mumbai.fDaix,
-    },
+    // {
+    //   name: 'USDC',
+    //   id: 0,
+    //   image: 'usdc',
+    //   token: global_address.mumbai.fDai,
+    //   superToken: global_address.mumbai.fDaix,
+    // },
     // { name: 'DAIx', id: 1, image: 'dai', token:global_address.mumbai.fDaix,superToken:global_address.mumbai.fDaix  },
     // { name: 'USDCx', id: 2, image: 'usdc' },
     // { name: 'USDC', id: 3, image: 'usdc' },

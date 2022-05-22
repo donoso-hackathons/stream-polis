@@ -50,7 +50,7 @@ export class OfferDisplayComponent extends DappBaseComponent implements OnInit {
       this.offer.collateralShare
     );
   
-      console.log(getMaths)
+  
      
       const resultApprove = await doSignerTransaction(createERC20Instance(this.offer.superToken, this.dapp.signer!)
       .approve(this.dapp.defaultContract?.address,getMaths!.collateral.toString() ));
@@ -100,10 +100,18 @@ export class OfferDisplayComponent extends DappBaseComponent implements OnInit {
 
   }
 
+override async hookContractConnected(): Promise<void> {
+  this.signerAddress = this.dapp.signerAddress?.toLocaleLowerCase()
+
+
+}
+
   ngOnInit(): void {
     this.superToken =  global_tokens.filter((fil) => fil.superToken.toLowerCase() == this.offer.superToken)[0];
-    console.log(this.offer)
-    this.signerAddress = this.dapp.signerAddress?.toLocaleLowerCase()
+  
+
+
+
   }
 
 }

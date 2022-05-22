@@ -37,7 +37,6 @@ export class SupplySharedComponent extends DappBaseComponent implements OnInit {
     const val =  await this.graphqlService
       .queryOffers()
 
-        console.log(val);
         if (!!val && !!val.data && !!val.data.loanOffers) {
           const user = val.data.user;
           const localOffers = val.data.loanOffers;
@@ -62,7 +61,7 @@ export class SupplySharedComponent extends DappBaseComponent implements OnInit {
           }
         }
  
-      console.log(JSON.stringify(this.loanOffers))
+   
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   }
 

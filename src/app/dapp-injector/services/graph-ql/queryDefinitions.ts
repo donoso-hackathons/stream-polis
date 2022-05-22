@@ -33,6 +33,16 @@ export const GET_DEMANDS = `
     }
   `;
 
+
+  export const GET_SUMMARY = `
+    {
+      totalSummaries(first: 5) {
+        id
+        totalIncoming
+        totalBorrowed
+      }
+    }
+  `;
   export const GET_USER = `
   query($address: String!){
       user(id:$address) {

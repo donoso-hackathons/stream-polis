@@ -11,7 +11,66 @@
     </div>
 
     <p>You have a stream, you trade it!</p>
-
+    <div  class="card mb-3">
+        <div class="grid p-fluid justify-content-center">
+          <div class="col-12 flex align-items-center justify-content-center">
+        
+            <span  style="color:lightgreen;font-weight: bold;" class="block font-small ml-2">
+              Summary</span
+            >
+          </div>
+          <!-- #region Max ////  -->
+          <div class="col-4 text-center">
+            <div class="flex justify-content-between flex-column mb-3">
+              <div class="text-900 font-medium text-lg">
+                Total Borrowed <br />
+                <span
+                
+                >
+                {{borrowed}}
+								</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="flex justify-content-between flex-column mb-3">
+              <div class="text-900 font-medium text-lg">
+                PayFlow/sec<br />
+                <span>
+                
+                {{flowRate}}
+               </span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="flex justify-content-between flex-column mb-3">
+              <div class="text-900 font-medium text-lg">
+                Token <br />
+                <span
+                
+                >
+                <img src="assets/images/tokens/dai_icon.svg" style="width: 40px;margin-right: 10px;" />
+								</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- #endregion Max ////  -->
+      
+     
+          <!-- #endregion Fee ////  -->
+      
+      
+          <!-- #endregion Fee ////  -->
+  
+      
+          <!-- #endregion Fee ////  -->
+     
+        </div>
+      </div>
     <button style="width:fit-content" pButton pRipple (click)="connect()" type="button" label="Connect"
         class="p-button-rounded mr-2 mb-2"></button>
         <supply-shared></supply-shared>
