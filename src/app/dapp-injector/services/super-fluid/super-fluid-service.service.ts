@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import {
   Framework,
@@ -7,31 +8,74 @@ import {
   Host,
 } from '@superfluid-finance/sdk-core';
 import Operation from '@superfluid-finance/sdk-core/dist/module/Operation';
-import { ethers, Signer, utils } from 'ethers';
+import { Contract, ethers, Signer, utils } from 'ethers';
+import { CASH_AGREEMENT_ABI } from 'src/app/shared/data/cashFlow_abi';
+import { HOST_ABI } from 'src/app/shared/data/host_abi';
+import { normalizeAddress } from '../../constants';
 import { DappInjector } from '../../dapp-injector.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SuperFluidServiceService {
-  sf!: Framework;
-  flow!: ConstantFlowAgreementV1;
+   sf!: Framework;
+   flow!: ConstantFlowAgreementV1;
   operations: Array<Operation> = [];
   constructor(private dapp: DappInjector) {}
 
   async getContracts() {}
 
   async initializeFramework() {
-    this.sf = await Framework.create({
-      networkName: this.dapp.DAPP_STATE.connectedNetwork!,
-      provider: this.dapp.DAPP_STATE.defaultProvider!,
-    });
+  
+    // this.sf = await Framework.create({
+    //   networkName: this.dapp.DAPP_STATE.connectedNetwork!,
+    //   provider: this.dapp.DAPP_STATE.defaultProvider!,
+    // });
 
     this.flow = this.sf.cfaV1;
 
     console.log(this.sf.settings);
     //675833120
   }
+///// ---------  --------- ACLg ---------  ---------  ////
+async approveOperator(token:string, permissions:number, flowRateAllowance:string){
+  if (this.sf == undefined){
+    await this.initializeFramework()
+  }
+
+const host= new Contract("0xEB796bdb90fFA0f28255275e16936D25d3418603",HOST_ABI,this.dapp.signer!)
+
+const cfaInterface = new ethers.utils.Interface(
+    CASH_AGREEMENT_ABI
+);
+const normalizedToken = normalizeAddress(token);
+const normalizedFlowOperator = normalizeAddress(this.dapp.defaultContract?.address!);
+const callData = cfaInterface.encodeFunctionData(
+  "authorizeFlowOperatorWithFullControl",
+  [normalizedToken, normalizedFlowOperator, "0x"]
+);
+
+
+ let tx = await host.callAgreement(
+  "0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873",
+  callData,
+   "0x",
+ {}
+);
+
+await tx.wait()
+
+// tx = await cfa.authorizeFlowOperatorWithFullControl(token,this.dapp.defaultContract?.address!,"0x")
+
+
+
+//  this.sf.cfaV1.updateFlowOperatorPermissions({
+//     superToken: token,
+//     flowOperator: this.dapp.defaultContract?.address!,
+//     permissions,
+//     flowRateAllowance
+//   });
+}
 
 
 ///// ---------  ---------  Money Streaming ---------  ---------  ////
@@ -175,49 +219,49 @@ export class SuperFluidServiceService {
       ethers.utils.parseEther(approveAmount.toString())
     );
   }
-  async executeBatchCall(upgradeAmt: any, recipient: any, flowRate: any) {
-    const DAIx = await this.sf.loadSuperToken(
-      '0xe3cb950cb164a31c66e32c320a800d477019dcff'
-    );
+  // async executeBatchCall(upgradeAmt: any, recipient: any, flowRate: any) {
+  //   const DAIx = await this.sf.loadSuperToken(
+  //     '0xe3cb950cb164a31c66e32c320a800d477019dcff'
+  //   );
 
-    try {
-      const amtToUpgrade = ethers.utils.parseEther(upgradeAmt.toString());
-      const upgradeOperation = DAIx.upgrade({
-        amount: amtToUpgrade.toString(),
-      });
-      //upgrade and create stream at once
-      const createFlowOperation = DAIx.createFlow({
-        sender: '0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721',
-        receiver: recipient,
-        flowRate: flowRate,
-      });
+  //   try {
+  //     const amtToUpgrade = ethers.utils.parseEther(upgradeAmt.toString());
+  //     const upgradeOperation = DAIx.upgrade({
+  //       amount: amtToUpgrade.toString(),
+  //     });
+  //     //upgrade and create stream at once
+  //     const createFlowOperation = DAIx.createFlow({
+  //       sender: '0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721',
+  //       receiver: recipient,
+  //       flowRate: flowRate,
+  //     });
 
-      console.log('Upgrading tokens and creating stream...');
+  //     console.log('Upgrading tokens and creating stream...');
 
-      await this.sf
-        .batchCall([upgradeOperation, createFlowOperation])
-        .exec(this.dapp.signer!)
-        .then(function (tx) {
-          console.log(
-            `Congrats - you've just successfully executed a batch call!
-              You have completed 2 operations in a single tx 🤯
-              View the tx here:  https://kovan.etherscan.io/tx/${tx.hash}
-              View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
-              Network: Kovan
-              Super Token: DAIx
-              Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
-              Receiver: ${recipient},
-              FlowRate: ${flowRate}
-              `
-          );
-        });
-    } catch (error) {
-      console.log(
-        "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
-      );
-      console.error(error);
-    }
-  }
+  //     await this.sf
+  //       .batchCall([upgradeOperation, createFlowOperation])
+  //       .exec(this.dapp.signer!)
+  //       .then(function (tx) {
+  //         console.log(
+  //           `Congrats - you've just successfully executed a batch call!
+  //             You have completed 2 operations in a single tx 🤯
+  //             View the tx here:  https://kovan.etherscan.io/tx/${tx.hash}
+  //             View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+  //             Network: Kovan
+  //             Super Token: DAIx
+  //             Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+  //             Receiver: ${recipient},
+  //             FlowRate: ${flowRate}
+  //             `
+  //         );
+  //       });
+  //   } catch (error) {
+  //     console.log(
+  //       "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
+  //     );
+  //     console.error(error);
+  //   }
+  // }
 
 
 

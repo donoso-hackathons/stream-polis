@@ -1,3 +1,7 @@
+import { Contract, Signer, utils } from "ethers";
+import { abi_ERC20 } from "./erc20";
+import { abi_SuperToken } from "./superToken";
+
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
 export const INFURA_ID = "460f40a260564ac4a4f4b3fffb032dad";
 
@@ -102,7 +106,7 @@ export const NETWORKS:{[key:string]: INETWORK} = {
     chainId: 80001,
     price: 1,
     gasPrice: 1000000000,
-    rpcUrl: "https://rpc-mumbai.maticvigil.com",
+    rpcUrl: "https://polygon-mumbai.g.alchemy.com/v2/P2lEQkjFdNjdN0M_mpZKB8r3fAa2M0vT",
     faucet: "https://faucet.polygon.technology/",
     blockExplorer: "https://mumbai.polygonscan.com/",
   },
@@ -254,7 +258,7 @@ export const global_address = {
     fDaix: '0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f',
     fDai: '0x15F0Ca26781C3852f8166eD2ebce5D18265cceb7',
     resolver:"0x8C54C83FbDe3C59e59dd6E324531FB93d4F504d3",
-    subgraph:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-kovan",
+    subgraph:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-mumbai",
     sfNetwork:"local",
     graphUri:"http://localhost:8000/subgraphs/name/donoso-eth/perpetual-conditional-reward"
   },
@@ -267,13 +271,32 @@ export const global_address = {
     fDai: '0x15F0Ca26781C3852f8166eD2ebce5D18265cceb7',
     resolver:"0x8C54C83FbDe3C59e59dd6E324531FB93d4F504d3",
     sfNetwork:"mumbai",
-    graphUri:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-mumbai"
+    subgraph:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-mumbai",
+    graphUri:"https://api.thegraph.com/subgraphs/name/donoso-eth/stream-polis"
   },
 };
 
 export const global_tokens = [
-  { name: 'DAI', id: 0, image: 'dai', rewardToken:global_address.mumbai.fDai, superToken:global_address.mumbai.fDaix },
- // { name: 'DAIx', id: 1, image: 'dai', rewardToken:global_address.kovan.fDaix,superToken:global_address.kovan.fDaix  },
+  { name: 'DAI', id: 0, image: 'dai', token:global_address.mumbai.fDai, superToken:global_address.mumbai.fDaix },
+ // { name: 'DAIx', id: 1, image: 'dai', token:global_address.kovan.fDaix,superToken:global_address.kovan.fDaix  },
   // { name: 'USDCx', id: 2, image: 'usdc' },
   // { name: 'USDC', id: 3, image: 'usdc' },
 ];
+
+export const normalizeAddress = (address?: string): string => {
+  if (!address) return "";
+  if (utils.isAddress(address) === false) {
+      throw new Error(
+      "INVALID_ADDRESS");
+  }
+
+  return address.toLowerCase();
+};
+
+export const createERC20Instance = (ERC: string, signer: Signer): Contract => {
+  return new Contract(ERC, abi_ERC20, signer);
+};
+
+export const createSuperTokenInstance = (SuperToken: string, signer: Signer): Contract => {
+  return new Contract(SuperToken, abi_SuperToken, signer);
+};

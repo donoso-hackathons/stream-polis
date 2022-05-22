@@ -31,17 +31,17 @@ export class CreateOfferComponent extends DappBaseComponent {
       name: 'DAI',
       id: 0,
       image: 'dai',
-      rewardToken: global_address.mumbai.fDai,
+      token: global_address.mumbai.fDai,
       superToken: global_address.mumbai.fDaix,
     },
     {
       name: 'USDC',
       id: 0,
       image: 'usdc',
-      rewardToken: global_address.mumbai.fDai,
+      token: global_address.mumbai.fDai,
       superToken: global_address.mumbai.fDaix,
     },
-    // { name: 'DAIx', id: 1, image: 'dai', rewardToken:global_address.mumbai.fDaix,superToken:global_address.mumbai.fDaix  },
+    // { name: 'DAIx', id: 1, image: 'dai', token:global_address.mumbai.fDaix,superToken:global_address.mumbai.fDaix  },
     // { name: 'USDCx', id: 2, image: 'usdc' },
     // { name: 'USDC', id: 3, image: 'usdc' },
   ];
@@ -71,7 +71,7 @@ export class CreateOfferComponent extends DappBaseComponent {
           name: 'DAI',
           id: 0,
           image: 'dai',
-          rewardToken: global_address.mumbai.fDai,
+          token: global_address.mumbai.fDai,
           superToken: global_address.mumbai.fDaix,
         },
         Validators.required,
@@ -100,8 +100,8 @@ export class CreateOfferComponent extends DappBaseComponent {
     let maxDuration = this.loanOfferForm.controls.durationAmountCtrl.value * this.loanOfferForm.controls.durationCtrl.value.factor;
 
     const offerConfig:OfferConfigStruct =  {
-      loanMaxAmount:this.loanOfferForm.controls.loanMaxAmountCtrl.value,
-      loanMinAmount: this.loanOfferForm.controls.loanMinAmountCtrl.value,
+      loanMaxAmount: utils.parseEther(this.loanOfferForm.controls.loanMaxAmountCtrl.value.toString()),
+      loanMinAmount: utils.parseEther(this.loanOfferForm.controls.loanMinAmountCtrl.value.toString()),
       fee:this.loanOfferForm.controls.feeCtrl.value*100,
       superToken: this.loanOfferForm.controls.tokenCtrl.value.superToken,
       collateralShare: this.loanOfferForm.controls.collateralShareCtrl.value*100,

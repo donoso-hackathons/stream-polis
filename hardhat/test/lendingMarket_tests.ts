@@ -38,7 +38,7 @@ let user3: SignerWithAddress;
 let provider: BaseProvider;
 let eventsLib: any;
 let sf: Framework;
-
+let MARKET_PLACE_FEE = 25
 describe('Lending market Place', function () {
   beforeEach(async () => {
     [deployer, user1, user2, user3] = await initEnv(hre);
@@ -48,7 +48,7 @@ describe('Lending market Place', function () {
 
     lendMarketPlaceContract = await new LendingMarketPlace__factory(
       deployer
-    ).deploy(loanFactory.address, HOST, 2);
+    ).deploy(loanFactory.address, HOST, MARKET_PLACE_FEE);
 
     eventsLib = await new Events__factory(deployer).deploy();
 
@@ -104,20 +104,28 @@ describe('Lending market Place', function () {
     ]);
   });
 
-  it('Should Create a loan trade and emit the correc event ', async function () {
-    let amountLoan = +utils.parseEther('10').toString();
-    let collateralShare = (amountLoan / 10).toFixed(0);
-    let durationDays = 365;
-    let inflowRate = (amountLoan / (durationDays * 24 * 60 * 60)).toFixed(0);
+  it.only('Should Create a loan trade and emit the correc event ', async function () {
 
     let offerConfig: OfferConfigStruct = {
       loanMaxAmount: parseEther('20'),
       loanMinAmount: parseEther('5'),
       fee: 30,
       superToken: TOKEN1,
-      collateralShare: 100,
+      collateralShare: 10,
       maxDuration: 30 * 24 * 60 * 60,
     };
+    let durationHours = 24;
+    let seconds = durationHours  * 60 * 60
+    let loanAmount = parseEther("25")
+    let totalamountLoan = +(loanAmount.toString()) * ((+offerConfig.fee.toString() + 1000)/1000) *(1000 + MARKET_PLACE_FEE/1000);
+    let inflowRate = (totalamountLoan / (seconds)).toFixed(0);
+
+ 
+
+
+
+
+
 
     const lendMarketPlaceContractUser1 =
       await LendingMarketPlace__factory.connect(
@@ -127,25 +135,44 @@ describe('Lending market Place', function () {
 
     await waitForTx(lendMarketPlaceContractUser1.offerLoan(offerConfig));
 
-    const superotkenContract = await ERC20__factory.connect(TOKEN1, deployer);
-    await superotkenContract.approve(
-      lendMarketPlaceContract.address,
-      collateralShare
-    );
-
     let tradeConfig: TradeConfigStruct = {
       offerId: 1,
-      loanAmount: parseEther('5'),
-      duration: 60 * 60,
+      loanAmount,
+      duration: seconds.toString(),
     };
 
+
     const getMaths = await lendMarketPlaceContract.getMaths(
-      tradeConfig.loanAmount,
+      loanAmount,
       offerConfig.fee,
-      tradeConfig.duration,
-      offerConfig.collateralShare
+      tradeConfig.duration.toString(),
+      offerConfig.collateralShare.toString()
     );
-    console.log(getMaths.totalInflowRate.toString());
+
+
+  
+
+    let superotkenContract = await ERC20__factory.connect(TOKEN1, deployer);
+    await superotkenContract.approve(
+      lendMarketPlaceContract.address,
+      getMaths.collateral
+    );
+
+
+
+    await superotkenContract.transfer(user1.address, utils.parseEther('100'))
+
+    superotkenContract = await ERC20__factory.connect(TOKEN1, user1);
+    console.log(utils.formatEther(await superotkenContract.balanceOf(user1.address)))
+
+    console.log(utils.formatEther(await superotkenContract.balanceOf(deployer.address)))
+
+    await superotkenContract.approve(
+      lendMarketPlaceContract.address,
+      loanAmount
+    );
+
+
     inflowRate = getMaths.totalInflowRate.toString();
     let oper = sf.cfaV1.updateFlowOperatorPermissions({
       superToken: TOKEN1,
@@ -154,18 +181,20 @@ describe('Lending market Place', function () {
       flowRateAllowance: inflowRate,
     });
 
+  
     let tx2 = await oper.exec(deployer);
     let receipt2 = await tx2.wait();
-
     let rexeot = await waitForTx(
       lendMarketPlaceContract.acceptOffer(tradeConfig)
     );
 
+
+
     let trade1 = await (
       await lendMarketPlaceContract._loansTradedById(1)
-    ).loanContract;
+    );
+    console.log('XXXXXX TRADE XXXX ')
 
-    console.log(trade1);
 
     const userData = utils.defaultAbiCoder.encode(
       ['uint', 'address'],
@@ -176,25 +205,27 @@ describe('Lending market Place', function () {
 
     const loanStream = await sf.cfaV1.getFlow({
       superToken: TOKEN1,
-      sender: trade1,
+      sender: trade1.loanContract,
       receiver: user1.address,
       providerOrSigner: user1,
     });
 
+    console.log(utils.formatEther(await superotkenContract.balanceOf(user1.address)))
 
+    console.log(utils.formatEther(await superotkenContract.balanceOf(deployer.address)))
 
     expect(loanStream.flowRate).to.equal(inflowRate.toString());
 
     let balance = await ISuperfluidToken__factory.connect(
       TOKEN1,
       deployer
-    ).realtimeBalanceOfNow(trade1);
-    console.log(balance.availableBalance.toString());
+    ).realtimeBalanceOfNow(trade1.loanContract);
+
     matchEvent(rexeot, 'LoanTradeCreated', eventsLib, [
       [
         1,
         offerConfig.fee,
-        tradeConfig.loanAmount,
+        tradeConfig.loanAmount.toString(),
         getMaths.totalLoanAmount.toString(),
         getMaths.collateral.toString(),
         offerConfig.collateralShare,
@@ -204,14 +235,16 @@ describe('Lending market Place', function () {
         deployer.address,
         user1.address,
         TOKEN1,
-        trade1,
+        trade1.loanContract,
       ],
     ]);
+
+
   });
 
 
 
-  it.only('Should Terminate Flow', async function () {
+  it('Should Terminate Flow', async function () {
     let amountLoan = +utils.parseEther('10').toString();
     let collateralShare = (amountLoan / 10).toFixed(0);
     let durationDays = 365;

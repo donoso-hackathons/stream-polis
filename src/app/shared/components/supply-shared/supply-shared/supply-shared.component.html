@@ -1,0 +1,53 @@
+<div class="grid supply">
+    <div class="col-12">
+      <div style="position: relative; border-color: transparent" >
+   
+  
+ 
+  
+  
+        <div style="margin-top: 20px" class="grid p-fluid">
+          <div class="col-12">
+            <p-tabView orientation="center">
+
+              <p-tabPanel header="Loan Offers" class="line-height-3 m-0">
+                <div class="grid p-fluid">
+               <offer-display (acceptOfferEvent)="acceptOffer()" class="col-12 lg:col-6 xl:col-6"  [offer]="loanOffer" *ngFor="let loanOffer of loanOffers;"></offer-display>
+              </div>
+   
+              </p-tabPanel>
+              <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                blanditiis praesentium voluptatum deleniti atque corrupti quos
+                dolores et quas molestias excepturi sint occaecati cupiditate non
+                provident, similique sunt in culpa qui officia deserunt mollitia
+                animi, id est laborum et dolorum fuga. Et harum quidem rerum
+                facilis est et expedita distinctio. Nam libero tempore, cum soluta
+                nobis est eligendi optio cumque nihil impedit quo minus.
+              </p-tabPanel>
+            </p-tabView>
+  
+            <div *ngIf="loanOffers?.length == 0" class="card">
+              <div class="grid flex flex-column align-items-center">
+                <div
+                  class="flex justify-content-center align-items-center bg-pink-500 border-circle"
+                  style="height: 3.2rem; width: 3.2rem"
+                >
+                  <i
+                    class="pi pi-fw pi-exclamation-circle text-2xl text-white"
+                  ></i>
+                </div>
+                <h1 class="text-900 font-bold text-5xl mb-2">Nothing Found</h1>
+                <span class="text-600"
+                  >Please create a new Perpetual Conditional loanOffer</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  

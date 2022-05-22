@@ -61,15 +61,14 @@ export class DashboardPageComponent
 
   transformOffer(offer: ILOAN_OFFER) {
     // reward.displayDate = new Date(+reward.earliestNextAction * 1000).toLocaleString()
-    // const displayReward = global_tokens.filter((fil) => fil.superToken == reward.rewardToken)[0];
+    // const displayReward = global_tokens.filter((fil) => fil.superToken == reward.token)[0];
     // reward.fundToken = displayReward;
     // reward.displayStep = calculateStep(+reward.rewardStep,+reward.earliestNextAction);
     // return reward;
   }
 
   async getTokens() {
-    const p = await this.graphqlService.queryOffers();
-    console.log(p);
+  
     this.loanOffers = [];
     this.loanDemand = [];
     this.loansSold = [];
@@ -88,7 +87,9 @@ export class DashboardPageComponent
                 .map((fil) => fil.id)
                 .indexOf(each.id);
               if (availableTokenIndex == -1) {
-                this.loanOffers.push(this.transformOffer(each));
+                let updated = {...each, ...{ loanProvider:each.loanProvider.id}}
+
+                this.loanOffers.push(updated);
               } else {
                 this.loanOffers[availableTokenIndex] = {
                   ...this.loanOffers[availableTokenIndex],
@@ -101,7 +102,7 @@ export class DashboardPageComponent
           }
         }
       });
-
+      console.log(JSON.stringify(this.loanOffers))
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   }
 

@@ -38,7 +38,15 @@ export const GET_DEMANDS = `
       user(id:$address) {
         offersCreated {
           loanMaxAmount
+          loanMinAmount
+          fee
+          collateralShare
           id
+          maxDuration
+          superToken
+          loanProvider {
+            id
+          }
         }
       }
     }

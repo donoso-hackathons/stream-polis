@@ -32,9 +32,10 @@ export class AppTopBarComponent extends DappBaseComponent {
   toggleTopMenu(val: any) {}
 
   doDisconnect() {
+  
     this.store.dispatch(Web3Actions.chainBusy({ status: true }));
-   // this.store.dispatch(Web3Actions.disconnectChain({ status: 'force-disconnect' }));
-    this.store.dispatch(Web3Actions.chainBusy({ status: false}));
+   this.store.dispatch(Web3Actions.disconnectChain({ status: 'force-disconnect' }));
+      this.router.navigate(['supply'])
   }
 
 
@@ -43,7 +44,7 @@ export class AppTopBarComponent extends DappBaseComponent {
     //this.dapp.localWallet(1)
   
     this.dapp.launchWebModal()
-  
+   
      // this.router.navigate(['home'])
       
     }
@@ -60,7 +61,7 @@ export class AppTopBarComponent extends DappBaseComponent {
       this.localUserCtrl.setValue(index + 1, { emitEvent: false });
     }
 
-   // this.router.navigateByUrl('home')
+    this.router.navigate(['dashboard'])
   }
   
 }

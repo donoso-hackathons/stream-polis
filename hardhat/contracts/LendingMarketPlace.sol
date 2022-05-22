@@ -145,7 +145,7 @@ contract LendingMarketPlace {
         _config.duration,
         offer.config.collateralShare
       );
-
+      
     DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
       loanTradedId: loanId,
       fee: offer.config.fee,
@@ -183,6 +183,13 @@ contract LendingMarketPlace {
       loan.collateral
     );
 
+      loan.superToken.transferFrom(
+      loan.loanProvider,
+      loan.loanTaker,
+      loan.loanAmount
+    );
+
+
     emit Events.LoanTradeCreated(loan);
 
     //// event
@@ -209,7 +216,9 @@ contract LendingMarketPlace {
       uint256 collateral
     )
   {
-    totalLoanAmount = _loanAmount.mul(_fee).mul(MARKET_PLACE_FEE).div(
+    console.log(_fee);
+    console.log(MARKET_PLACE_FEE);
+    totalLoanAmount = _loanAmount.mul(1000 + _fee).mul(1000 + MARKET_PLACE_FEE).div(
       1000 * 1000
     );
 

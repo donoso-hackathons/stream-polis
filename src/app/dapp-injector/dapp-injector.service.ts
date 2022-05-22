@@ -83,10 +83,11 @@ export class DappInjector implements OnDestroy {
     switch (this.dappConfig.wallet) {
       case 'wallet':
         const walletResult = await this.walletInitialization();
-
+        if (walletResult !== undefined) {
         this.DAPP_STATE.signer = walletResult.signer;
         this.DAPP_STATE.defaultProvider = walletResult.provider;
-
+        this.contractInitialization();
+        }
         this.webModalInstanceLaunch()
 
         break;
@@ -99,7 +100,7 @@ export class DappInjector implements OnDestroy {
         let wallet:Wallet = new Wallet(this.harhdat_local_privKeys[0].key);
         this.DAPP_STATE.signer = await wallet.connect(this.DAPP_STATE.defaultProvider!);
         this.DAPP_STATE.signerAddress = this.harhdat_local_privKeys[0].address //await this.DAPP_STATE.signer.getAddress()
-
+        this.contractInitialization();
       
         break;
 
@@ -113,8 +114,8 @@ export class DappInjector implements OnDestroy {
         break;
     }
 
-
-    this.contractInitialization();
+    
+   
     
   } catch (error) {
       console.log(error)
@@ -178,7 +179,7 @@ async localWallet(index:number) {
       } else {
         this.store.dispatch(Web3Actions.chainStatus({ status: 'wallet-not-connected' }));
         this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-        throw new Error("WALLET_NOT_CONNECTED");
+        return
         
       }
     } else {
@@ -186,7 +187,8 @@ async localWallet(index:number) {
       this.store.dispatch(Web3Actions.chainStatus({ status: 'wallet-not-connected' }));
 
       this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-      throw new Error("WALLET_NOT_CONNECTED");
+     // throw new Error("WALLET_NOT_CONNECTED");
+     return
     }
   }
 

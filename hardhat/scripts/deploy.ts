@@ -44,7 +44,7 @@ if (network == undefined) {
   network = config.defaultNetwork;
 }
 
-[deployer, user1, user2, user3] = await initEnv(hre);
+[deployer] = await initEnv(hre);
 
 
   const contract_config = JSON.parse(readFileSync( join(processDir,'contract.config.json'),'utf-8')) as {[key:string]: ICONTRACT_DEPLOY}
@@ -76,7 +76,7 @@ if (network == undefined) {
 
 
 
-  const lendingMarketPlace = await new LendingMarketPlace__factory(deployer).deploy(loanFactory.address,HOST,30)
+  const lendingMarketPlace = await new LendingMarketPlace__factory(deployer).deploy(loanFactory.address,HOST,25)
   toDeployContract = contract_config['lendingMarketPlace'];
   writeFileSync(
     `${contract_path}/${toDeployContract.jsonName}_metadata.json`,
