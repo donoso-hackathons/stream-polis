@@ -6,14 +6,14 @@
       <button
         pButton
         pRipple
-        style="position: absolute; top: 15px; right: 215px"
+        style="position: absolute; top: 15px; right: 20px"
         (click)="createOffer()"
         type="button"
         label="New Offer"
         class="p-button-rounded mr-2 mb-2"
       ></button>
 
-      <button
+      <!-- <button
         pButton
         pRipple
         style="position: absolute; top: 15px; right: 20px"
@@ -21,7 +21,7 @@
         type="button"
         label="New Request"
         class="p-button-rounded mr-2 mb-2"
-      ></button>
+      ></button> -->
 
       <div style="margin-top: 20px" class="grid p-fluid">
         <div class="col-12">
@@ -44,12 +44,12 @@
                 ></offer-display>
               </div>
             </p-tabPanel>
-            <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
+            <!-- <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
             ///// TODO ///////     
-            </p-tabPanel>
+            </p-tabPanel> -->
           </p-tabView>
 
-          <div *ngIf="loanOffers?.length == 0" class="card">
+          <div *ngIf="loanOffers?.length == 0 && loanTrades?.length == 0" class="card">
             <div class="grid flex flex-column align-items-center">
               <div
                 class="flex justify-content-center align-items-center bg-pink-500 border-circle"
