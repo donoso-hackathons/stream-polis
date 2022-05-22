@@ -29,7 +29,7 @@ export const contractMetadata = new InjectionToken<ICONTRACT_METADATA>('contract
 
 export const contractProvider= {provide: 'contractMetadata', useValue:LendingMarketplaceMetadata};
 
-const network = 'localhost';
+const network = 'mumbai';
 
 
 @NgModule({
@@ -45,7 +45,7 @@ const network = 'localhost';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    DappInjectorModule.forRoot({wallet:'local', defaultNetwork:network}),
+    DappInjectorModule.forRoot({wallet:'wallet', defaultNetwork:network}),
     StoreModule.forRoot({web3: we3ReducerFunction}),
     GraphQlModule.forRoot({uri: global_address[network].graphUri}),
     SuperFluidServiceModule,

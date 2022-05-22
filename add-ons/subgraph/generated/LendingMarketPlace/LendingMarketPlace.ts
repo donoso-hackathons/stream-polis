@@ -549,6 +549,10 @@ export class ConstructorCall__Inputs {
   get _marketPlaceFee(): i32 {
     return this._call.inputValues[2].value.toI32();
   }
+
+  get _gelato(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -740,5 +744,115 @@ export class OfferLoanCallConfigStruct extends ethereum.Tuple {
 
   get maxDuration(): BigInt {
     return this[5].toBigInt();
+  }
+}
+
+export class SubmitTaskCycleCall extends ethereum.Call {
+  get inputs(): SubmitTaskCycleCall__Inputs {
+    return new SubmitTaskCycleCall__Inputs(this);
+  }
+
+  get outputs(): SubmitTaskCycleCall__Outputs {
+    return new SubmitTaskCycleCall__Outputs(this);
+  }
+}
+
+export class SubmitTaskCycleCall__Inputs {
+  _call: SubmitTaskCycleCall;
+
+  constructor(call: SubmitTaskCycleCall) {
+    this._call = call;
+  }
+
+  get _provider(): SubmitTaskCycleCall_providerStruct {
+    return changetype<SubmitTaskCycleCall_providerStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
+  }
+
+  get _tasks(): Array<SubmitTaskCycleCall_tasksStruct> {
+    return this._call.inputValues[1].value.toTupleArray<
+      SubmitTaskCycleCall_tasksStruct
+    >();
+  }
+
+  get _expiryDate(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get _cycles(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+}
+
+export class SubmitTaskCycleCall__Outputs {
+  _call: SubmitTaskCycleCall;
+
+  constructor(call: SubmitTaskCycleCall) {
+    this._call = call;
+  }
+}
+
+export class SubmitTaskCycleCall_providerStruct extends ethereum.Tuple {
+  get addr(): Address {
+    return this[0].toAddress();
+  }
+
+  get module(): Address {
+    return this[1].toAddress();
+  }
+}
+
+export class SubmitTaskCycleCall_tasksStruct extends ethereum.Tuple {
+  get conditions(): Array<SubmitTaskCycleCall_tasksConditionsStruct> {
+    return this[0].toTupleArray<SubmitTaskCycleCall_tasksConditionsStruct>();
+  }
+
+  get actions(): Array<SubmitTaskCycleCall_tasksActionsStruct> {
+    return this[1].toTupleArray<SubmitTaskCycleCall_tasksActionsStruct>();
+  }
+
+  get selfProviderGasLimit(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get selfProviderGasPriceCeil(): BigInt {
+    return this[3].toBigInt();
+  }
+}
+
+export class SubmitTaskCycleCall_tasksConditionsStruct extends ethereum.Tuple {
+  get inst(): Address {
+    return this[0].toAddress();
+  }
+
+  get data(): Bytes {
+    return this[1].toBytes();
+  }
+}
+
+export class SubmitTaskCycleCall_tasksActionsStruct extends ethereum.Tuple {
+  get addr(): Address {
+    return this[0].toAddress();
+  }
+
+  get data(): Bytes {
+    return this[1].toBytes();
+  }
+
+  get operation(): i32 {
+    return this[2].toI32();
+  }
+
+  get dataFlow(): i32 {
+    return this[3].toI32();
+  }
+
+  get value(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get termsOkCheck(): boolean {
+    return this[5].toBoolean();
   }
 }

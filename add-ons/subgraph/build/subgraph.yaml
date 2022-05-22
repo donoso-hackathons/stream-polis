@@ -4,9 +4,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: LendingMarketPlace
-    network: localhost
+    network: mumbai
     source:
-      address: "0x16e19d86e6401DCC9FFdbc58a9Cc6070b93ddb61"
+      address: "0x325F148E904fE7BB4Ae50bc6179B8E58b212eDf9"
       abi: LendingMarketPlace
       startBlock: 26418855
     mapping:

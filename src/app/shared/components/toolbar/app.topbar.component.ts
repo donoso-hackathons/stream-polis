@@ -35,17 +35,17 @@ export class AppTopBarComponent extends DappBaseComponent {
   
     this.store.dispatch(Web3Actions.chainBusy({ status: true }));
    this.store.dispatch(Web3Actions.disconnectChain({ status: 'force-disconnect' }));
-      this.router.navigate(['supply'])
+      this.router.navigate(['landing'])
   }
 
 
   async  connect() {
 
-    this.dapp.localWallet(1)
+    //this.dapp.localWallet(1)
   
-   // this.dapp.launchWebModal()
+    this.dapp.launchWebModal()
    
-     // this.router.navigate(['home'])
+    // this.router.navigate(['home'])
       
     }
 
@@ -61,7 +61,7 @@ export class AppTopBarComponent extends DappBaseComponent {
       this.localUserCtrl.setValue(index + 1, { emitEvent: false });
     }
 
-    this.router.navigate(['dashboard'])
+    this.router.navigate(['supply'])
   }
   
 }

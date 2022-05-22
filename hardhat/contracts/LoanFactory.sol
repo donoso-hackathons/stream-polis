@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 
-import {GelatoStatefulConditionsStandard} from "@gelatonetwork/core/contracts/conditions/GelatoStatefulConditionsStandard.sol";
-import {IGelatoCore} from "@gelatonetwork/core/contracts/gelato_core/interfaces/IGelatoCore.sol";
+
+
 
 import {ISuperfluid, ISuperAgreement, ISuperToken, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
@@ -57,6 +57,10 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
  
 
     host.registerApp(configWord);
+
+ 
+  
+
   }
 
  /**
@@ -64,7 +68,7 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
    */
   function initialize(DataTypes.LoanTraded memory _loan) external override initializer {
   
-
+  
     loan = _loan;
 
 
@@ -87,12 +91,7 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
 
   // endregion
 
-  // ============= =============  Public Functions ============= ============= //
-  // #region Public Functions
 
-
-
-  // endregion
 
   /**************************************************************************
    * SuperApp callbacks

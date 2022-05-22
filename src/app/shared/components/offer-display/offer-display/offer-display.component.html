@@ -138,13 +138,13 @@
 >
   <div  style="padding:10px" class="grid p-fluid">
     <p class="line-height-3 m-0">
-      Do you want to Accept The Loan.<br />
-      Your current balance is
+      Do you want to Accept The Loan?<br />
+ 
       <!-- <span style="font-weight: bold; color: var(--primary-color)">{{ toUpdateReward!?.fundToken?.rewardTokenBalance! }} DAI </span> <br />
         It requires the {{ toUpdateReward!?.fundToken?.name }} superToken, your current balance is:
         <span style="font-weight: bold; color: var(--primary-color)">{{ toUpdateReward!?.fundToken?.superTokenBalance! }} DAIx </span>. -->
     </p>
-    <h6>Fund The PCR with SuperToken DAIx (values in tokens)</h6>
+    <h6>Please input the Amount that you are willing to accept</h6>
     <p class="flex">
       <p-inputNumber
         [formControl]="loanAmountCtrl"
@@ -159,7 +159,7 @@
         pButton
         icon="pi pi-check"
         style="margin-left: 30px"
-        label="Fund"
+        label="Accept Offer"
         (click)="acceptOffer()"
         class="p-button-outlined"
       ></button>

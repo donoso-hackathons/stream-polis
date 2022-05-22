@@ -42,9 +42,9 @@ export async function initEnv(hre: HardhatRuntimeEnvironment): Promise<any[]> {
     const deployer_wallet = new Wallet(privKeyDEPLOYER);
     const deployer = await deployer_wallet.connect(deployer_provider);
 
-    // const privKeyUSER = process.env['USER1_KEY'] as BytesLike;
-    // const user_wallet = new Wallet(privKeyUSER);
-    // const user1 = await user_wallet.connect(deployer_provider);
+    const privKeyUSER = process.env['USER1_KEY'] as BytesLike;
+    const user_wallet = new Wallet(privKeyUSER);
+    const user1 = await user_wallet.connect(deployer_provider);
 
     // const privKeyUSER2 = process.env['USER2_KEY'] as BytesLike;
     // const user2_wallet = new Wallet(privKeyUSER2);
@@ -58,7 +58,7 @@ export async function initEnv(hre: HardhatRuntimeEnvironment): Promise<any[]> {
     // const user4_wallet = new Wallet(privKeyUSER4);
     // const user4 = await user4_wallet.connect(deployer_provider);
 
-    return [deployer];
+    return [deployer,user1];
   }
 }
 

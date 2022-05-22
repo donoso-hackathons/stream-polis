@@ -5,6 +5,7 @@ import { LandingPageRoutingModule } from './landing-page-routing.module';
 import { LandingPageComponent } from './landing-page.component';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SupplySharedModule } from 'src/app/shared/components/supply-shared/supply-shared.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     CommonModule,
     LandingPageRoutingModule,
     ButtonModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    SupplySharedModule
   ]
 })
 export class LandingPageModule { }

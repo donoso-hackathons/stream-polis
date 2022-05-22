@@ -5,7 +5,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
-
+import {IGelatoCore} from "@gelatonetwork/core/contracts/gelato_core/interfaces/IGelatoCore.sol";
+import {GelatoBytes} from "@gelatonetwork/core/contracts/libraries/GelatoBytes.sol";
+import {
+    Action, Operation, Provider, Task, TaskReceipt, IGelatoCore
+} from "@gelatonetwork/core/contracts/gelato_core/interfaces/IGelatoCore.sol";
 import {ISuperfluid, ISuperAgreement, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
@@ -25,6 +29,8 @@ contract LendingMarketPlace {
 
   uint16 MARKET_PLACE_FEE;
 
+
+  address gelato;
   // declare `_idaLib` of type InitData
 
   ISuperfluid immutable host; // host
@@ -53,7 +59,8 @@ contract LendingMarketPlace {
   constructor(
     address _loanFactory,
     ISuperfluid _host,
-    uint16 _marketPlaceFee
+    uint16 _marketPlaceFee,
+    address _gelato
   ) {
     loanFactory = _loanFactory;
     host = _host;
@@ -69,6 +76,8 @@ contract LendingMarketPlace {
       )
     );
     _cfaLib = CFAv1Library.InitData(_host, cfa);
+
+    gelato = _gelato;
 
     // _cfaLib = CFAv1Library.InitData(_host, cfa);
   }
@@ -231,4 +240,36 @@ contract LendingMarketPlace {
 
     collateral = _loanAmount.mul(_collateralShare).div(1000);
   }
+
+    // ============= =============  GELATO Functions ============= ============= //
+  // #region Public Functions
+
+  function testPrint() pure public{
+    revert('TEST_WORK');
+  }
+
+
+    function submitTaskCycle(
+        Provider calldata _provider,
+        Task[] calldata _tasks,
+        uint256 _expiryDate,
+        uint256 _cycles  // num of full cycles
+    )
+        public
+       
+    {
+        try IGelatoCore(gelato).submitTaskCycle(
+            _provider,
+            _tasks,
+            _expiryDate,
+            _cycles
+        ) {
+        } catch Error(string memory err) {
+            revert(string(abi.encodePacked("GelatoUserProxy.submitTaskCycle:", err)));
+        } catch {
+            revert("GelatoUserProxy.submitTaskCycle:undefinded");
+        }
+    }
+
+  // endregion
 }

@@ -8,24 +8,17 @@
   
         <div style="margin-top: 20px" class="grid p-fluid">
           <div class="col-12">
-            <p-tabView orientation="center">
+            <!-- <p-tabView orientation="center">
 
-              <p-tabPanel header="Loan Offers" class="line-height-3 m-0">
+              <p-tabPanel header="Loan Offers" class="line-height-3 m-0"> -->
                 <div class="grid p-fluid">
                <offer-display (acceptOfferEvent)="acceptOffer()" class="col-12 lg:col-6 xl:col-6"  [offer]="loanOffer" *ngFor="let loanOffer of loanOffers;"></offer-display>
               </div>
    
-              </p-tabPanel>
-              <!-- <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias excepturi sint occaecati cupiditate non
-                provident, similique sunt in culpa qui officia deserunt mollitia
-                animi, id est laborum et dolorum fuga. Et harum quidem rerum
-                facilis est et expedita distinctio. Nam libero tempore, cum soluta
-                nobis est eligendi optio cumque nihil impedit quo minus.
-              </p-tabPanel> -->
-            </p-tabView>
+              <!-- </p-tabPanel>
+             <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
+              
+            </p-tabView> -->
   
             <div *ngIf="loanOffers?.length == 0" class="card">
               <div class="grid flex flex-column align-items-center">

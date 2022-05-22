@@ -74,7 +74,7 @@ export class DashboardPageComponent
     this.loansSold = [];
     this.loanTrades = [];
     const users = this.graphqlService
-      .queryUser(this.dapp.signerAddress!)
+      .watchUser(this.dapp.signerAddress!)
       .pipe(takeUntil(this.destroyHooks))
       .subscribe((val) => {
         console.log(val);

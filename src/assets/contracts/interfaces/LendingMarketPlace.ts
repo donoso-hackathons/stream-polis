@@ -76,6 +76,64 @@ export type OfferConfigStructOutput = [
   maxDuration: BigNumber;
 };
 
+export type ProviderStruct = { addr: string; module: string };
+
+export type ProviderStructOutput = [string, string] & {
+  addr: string;
+  module: string;
+};
+
+export type ConditionStruct = { inst: string; data: BytesLike };
+
+export type ConditionStructOutput = [string, string] & {
+  inst: string;
+  data: string;
+};
+
+export type ActionStruct = {
+  addr: string;
+  data: BytesLike;
+  operation: BigNumberish;
+  dataFlow: BigNumberish;
+  value: BigNumberish;
+  termsOkCheck: boolean;
+};
+
+export type ActionStructOutput = [
+  string,
+  string,
+  number,
+  number,
+  BigNumber,
+  boolean
+] & {
+  addr: string;
+  data: string;
+  operation: number;
+  dataFlow: number;
+  value: BigNumber;
+  termsOkCheck: boolean;
+};
+
+export type TaskStruct = {
+  conditions: ConditionStruct[];
+  actions: ActionStruct[];
+  selfProviderGasLimit: BigNumberish;
+  selfProviderGasPriceCeil: BigNumberish;
+};
+
+export type TaskStructOutput = [
+  ConditionStructOutput[],
+  ActionStructOutput[],
+  BigNumber,
+  BigNumber
+] & {
+  conditions: ConditionStructOutput[];
+  actions: ActionStructOutput[];
+  selfProviderGasLimit: BigNumber;
+  selfProviderGasPriceCeil: BigNumber;
+};
+
 export interface LendingMarketPlaceInterface extends utils.Interface {
   functions: {
     "AcceptDemand()": FunctionFragment;
@@ -88,6 +146,8 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     "demandLoan((uint256,uint16,address,uint16,int96))": FunctionFragment;
     "getMaths(uint256,uint16,uint256,uint16)": FunctionFragment;
     "offerLoan((uint256,uint256,uint16,address,uint16,uint256))": FunctionFragment;
+    "submitTaskCycle((address,address),((address,bytes)[],(address,bytes,uint8,uint8,uint256,bool)[],uint256,uint256)[],uint256,uint256)": FunctionFragment;
+    "testPrint()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -130,6 +190,11 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     functionFragment: "offerLoan",
     values: [OfferConfigStruct]
   ): string;
+  encodeFunctionData(
+    functionFragment: "submitTaskCycle",
+    values: [ProviderStruct, TaskStruct[], BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "testPrint", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "AcceptDemand",
@@ -162,6 +227,11 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "demandLoan", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMaths", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "offerLoan", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "submitTaskCycle",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "testPrint", data: BytesLike): Result;
 
   events: {};
 }
@@ -279,6 +349,16 @@ export interface LendingMarketPlace extends BaseContract {
       config: OfferConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    submitTaskCycle(
+      _provider: ProviderStruct,
+      _tasks: TaskStruct[],
+      _expiryDate: BigNumberish,
+      _cycles: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    testPrint(overrides?: CallOverrides): Promise<[void]>;
   };
 
   AcceptDemand(
@@ -359,6 +439,16 @@ export interface LendingMarketPlace extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  submitTaskCycle(
+    _provider: ProviderStruct,
+    _tasks: TaskStruct[],
+    _expiryDate: BigNumberish,
+    _cycles: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  testPrint(overrides?: CallOverrides): Promise<void>;
+
   callStatic: {
     AcceptDemand(overrides?: CallOverrides): Promise<void>;
 
@@ -435,6 +525,16 @@ export interface LendingMarketPlace extends BaseContract {
       config: OfferConfigStruct,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    submitTaskCycle(
+      _provider: ProviderStruct,
+      _tasks: TaskStruct[],
+      _expiryDate: BigNumberish,
+      _cycles: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    testPrint(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
@@ -479,6 +579,16 @@ export interface LendingMarketPlace extends BaseContract {
       config: OfferConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    submitTaskCycle(
+      _provider: ProviderStruct,
+      _tasks: TaskStruct[],
+      _expiryDate: BigNumberish,
+      _cycles: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    testPrint(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -530,5 +640,15 @@ export interface LendingMarketPlace extends BaseContract {
       config: OfferConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    submitTaskCycle(
+      _provider: ProviderStruct,
+      _tasks: TaskStruct[],
+      _expiryDate: BigNumberish,
+      _cycles: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    testPrint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

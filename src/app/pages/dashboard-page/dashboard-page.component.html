@@ -34,22 +34,8 @@
                   *ngFor="let loanTrade of loanTrades"
                 ></trade-display>
               </div>
-            </p-tabPanel>
-            <p-tabPanel header="Loan Offers" class="line-height-3 m-0">
-              <div class="grid p-fluid display">
-                <offer-display
-                  class="col-12 lg:col-6 xl:col-6"
-                  [offer]="loanOffer"
-                  *ngFor="let loanOffer of loanOffers"
-                ></offer-display>
-              </div>
-            </p-tabPanel>
-            <!-- <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
-            ///// TODO ///////     
-            </p-tabPanel> -->
-          </p-tabView>
-
-          <div *ngIf="loanOffers?.length == 0 && loanTrades?.length == 0" class="card">
+              
+          <div *ngIf="loanTrades?.length == 0" class="card">
             <div class="grid flex flex-column align-items-center">
               <div
                 class="flex justify-content-center align-items-center bg-pink-500 border-circle"
@@ -60,11 +46,39 @@
                 ></i>
               </div>
               <h1 class="text-900 font-bold text-5xl mb-2">Nothing Found</h1>
-              <span class="text-600"
-                >Please create a new Perpetual Conditional loanOffer</span
-              >
+     
             </div>
           </div>
+            </p-tabPanel>
+            <p-tabPanel header="Loan Offers" class="line-height-3 m-0">
+              <div class="grid p-fluid display justify-content-center">
+                <offer-display
+                  class="col-12 lg:col-6 xl:col-6"
+                  [offer]="loanOffer"
+                  *ngFor="let loanOffer of loanOffers"
+                ></offer-display>
+              </div>
+              <div *ngIf="loanOffers?.length == 0" class="card">
+                <div class="grid flex flex-column align-items-center">
+                  <div
+                    class="flex justify-content-center align-items-center bg-pink-500 border-circle"
+                    style="height: 3.2rem; width: 3.2rem"
+                  >
+                    <i
+                      class="pi pi-fw pi-exclamation-circle text-2xl text-white"
+                    ></i>
+                  </div>
+                  <h1 class="text-900 font-bold text-5xl mb-2">Nothing Found</h1>
+           
+                </div>
+              </div>
+            </p-tabPanel>
+            <!-- <p-tabPanel header="Loan Requests" class="line-height-3 m-0">
+            ///// TODO ///////     
+            </p-tabPanel> -->
+          </p-tabView>
+
+     
         </div>
       </div>
     </div>
