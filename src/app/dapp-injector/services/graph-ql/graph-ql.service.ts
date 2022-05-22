@@ -66,7 +66,7 @@ export class GraphQlService implements OnDestroy {
   }
 
 
-  async queryTead():Promise<any> {
+  async queryTrades():Promise<any> {
     try {
  
       const posts = await  firstValueFrom(this.apollo

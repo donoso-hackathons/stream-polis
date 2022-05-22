@@ -236,8 +236,12 @@ export class LoanTraded extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("loanTotalAmount", Value.fromBigInt(BigInt.zero()));
+    this.set("loanAmount", Value.fromBigInt(BigInt.zero()));
     this.set("collateral", Value.fromBigInt(BigInt.zero()));
+    this.set("fee", Value.fromBigInt(BigInt.zero()));
     this.set("initTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("duration", Value.fromBigInt(BigInt.zero()));
+    this.set("superToken", Value.fromString(""));
     this.set("flowRate", Value.fromBigInt(BigInt.zero()));
     this.set("status", Value.fromBigInt(BigInt.zero()));
     this.set("collateralShare", Value.fromBigInt(BigInt.zero()));
@@ -280,6 +284,15 @@ export class LoanTraded extends Entity {
     this.set("loanTotalAmount", Value.fromBigInt(value));
   }
 
+  get loanAmount(): BigInt {
+    let value = this.get("loanAmount");
+    return value!.toBigInt();
+  }
+
+  set loanAmount(value: BigInt) {
+    this.set("loanAmount", Value.fromBigInt(value));
+  }
+
   get collateral(): BigInt {
     let value = this.get("collateral");
     return value!.toBigInt();
@@ -289,6 +302,15 @@ export class LoanTraded extends Entity {
     this.set("collateral", Value.fromBigInt(value));
   }
 
+  get fee(): BigInt {
+    let value = this.get("fee");
+    return value!.toBigInt();
+  }
+
+  set fee(value: BigInt) {
+    this.set("fee", Value.fromBigInt(value));
+  }
+
   get initTimestamp(): BigInt {
     let value = this.get("initTimestamp");
     return value!.toBigInt();
@@ -296,6 +318,24 @@ export class LoanTraded extends Entity {
 
   set initTimestamp(value: BigInt) {
     this.set("initTimestamp", Value.fromBigInt(value));
+  }
+
+  get duration(): BigInt {
+    let value = this.get("duration");
+    return value!.toBigInt();
+  }
+
+  set duration(value: BigInt) {
+    this.set("duration", Value.fromBigInt(value));
+  }
+
+  get superToken(): string {
+    let value = this.get("superToken");
+    return value!.toString();
+  }
+
+  set superToken(value: string) {
+    this.set("superToken", Value.fromString(value));
   }
 
   get flowRate(): BigInt {

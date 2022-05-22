@@ -272,7 +272,7 @@ export class Web3ModalComponent implements AfterViewInit {
 
     this.store.pipe(web3Selectors.hookForceDisconnect).subscribe(()=> {
       console.log('i amdisconencting manually')
-      this.logoutOfWeb3Modal()
+     // this.logoutOfWeb3Modal()
     })
 
     this.loading = true;

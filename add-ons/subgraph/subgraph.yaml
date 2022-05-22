@@ -6,9 +6,9 @@ dataSources:
     name: LendingMarketPlace
     network: localhost
     source:
-      address: '0xd44b059795c8286Bfe4C43C552039cEEaE68E7cd'
+      address: '0x16e19d86e6401DCC9FFdbc58a9Cc6070b93ddb61'
       abi: LendingMarketPlace
-      startBlock: 26376360
+      startBlock: 26418855
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -27,7 +27,7 @@ dataSources:
           handler: handleLoanOfferCreated
         - event: LoanDemandCreated((uint256,(uint256,uint16,address,uint16,int96),address,uint8))
           handler: handleLoanDemadCreated
-        - event: LoanTradeCreated((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address))
+        - event: LoanTradeCreated((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint256,uint8,address,address,address,address))
           handler: handleLoanTradeCreated
       file: ./src/mapping.ts
 # templates:

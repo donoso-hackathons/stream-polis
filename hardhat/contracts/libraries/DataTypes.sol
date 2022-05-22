@@ -59,6 +59,7 @@ struct TradeConfig {
     uint16 collateralShare;
      int96 flowRate;
     uint256 initTimestamp;
+    uint256 duration;
     LOAN_STATUS status;    
     address loanTaker;
     address loanProvider;

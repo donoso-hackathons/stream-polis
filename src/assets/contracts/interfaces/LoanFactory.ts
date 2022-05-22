@@ -26,6 +26,7 @@ export type LoanTradedStruct = {
   collateralShare: BigNumberish;
   flowRate: BigNumberish;
   initTimestamp: BigNumberish;
+  duration: BigNumberish;
   status: BigNumberish;
   loanTaker: string;
   loanProvider: string;
@@ -42,6 +43,7 @@ export type LoanTradedStructOutput = [
   number,
   BigNumber,
   BigNumber,
+  BigNumber,
   number,
   string,
   string,
@@ -56,6 +58,7 @@ export type LoanTradedStructOutput = [
   collateralShare: number;
   flowRate: BigNumber;
   initTimestamp: BigNumber;
+  duration: BigNumber;
   status: number;
   loanTaker: string;
   loanProvider: string;
@@ -74,7 +77,7 @@ export interface LoanFactoryInterface extends utils.Interface {
     "beforeAgreementUpdated(address,address,bytes32,bytes,bytes)": FunctionFragment;
     "cfa()": FunctionFragment;
     "host()": FunctionFragment;
-    "initialize((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address))": FunctionFragment;
+    "initialize((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint256,uint8,address,address,address,address))": FunctionFragment;
     "parseLoanData(bytes)": FunctionFragment;
   };
 

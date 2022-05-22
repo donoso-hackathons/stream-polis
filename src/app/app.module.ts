@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DappInjectorModule } from './dapp-injector/dapp-injector.module';
 import { StoreModule } from '@ngrx/store';
-import { ICONTRACT_METADATA, we3ReducerFunction } from 'angular-web3';
+import { global_address, ICONTRACT_METADATA, we3ReducerFunction } from 'angular-web3';
 import { AppFooterComponent } from './shared/components/footer/app.footer.component';
 import { LoadingComponent } from './shared/components/loading/loading.component';
 import { AppTopBarComponent } from './shared/components/toolbar/app.topbar.component';
@@ -23,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SuperFluidServiceModule } from './dapp-injector/services/super-fluid/super-fluid-service.module';
 
 export const contractMetadata = new InjectionToken<ICONTRACT_METADATA>('contractMetadata')
 
@@ -46,7 +47,8 @@ const network = 'localhost';
     AppRoutingModule,
     DappInjectorModule.forRoot({wallet:'local', defaultNetwork:network}),
     StoreModule.forRoot({web3: we3ReducerFunction}),
-    GraphQlModule.forRoot({uri: 'http://localhost:8000/subgraphs/name/donoso-eth/stream-polis'}),
+    GraphQlModule.forRoot({uri: global_address[network].graphUri}),
+    SuperFluidServiceModule,
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,

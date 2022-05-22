@@ -24,8 +24,12 @@ type LoanDemand @entity {
 type LoanTraded @entity {
   id: ID!
   loanTotalAmount: BigInt!
+  loanAmount: BigInt!
   collateral: BigInt!
+  fee: BigInt!
   initTimestamp: BigInt!
+  duration: BigInt!
+  superToken: String!
   flowRate: BigInt!
   status: BigInt!
   collateralShare: BigInt!
