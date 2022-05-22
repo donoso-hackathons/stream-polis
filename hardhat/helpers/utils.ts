@@ -93,17 +93,26 @@ export async function resertHardhat(hre:HardhatRuntimeEnvironment, ):Promise<voi
 }
 
 
-export async function forwardChainTime(hre:HardhatRuntimeEnvironment, INCREASE_PERIOD :number):Promise<void> {
-
-  await hre.network.provider.send("evm_increaseTime", [INCREASE_PERIOD + 1])
-
+export async function forwardChainTime(
+  hre: HardhatRuntimeEnvironment,
+  INCREASE_PERIOD: number
+): Promise<void> {
+  await hre.network.provider.send('evm_increaseTime', [INCREASE_PERIOD + 1]);
 }
 
-export async function mineBlocks(hre:HardhatRuntimeEnvironment, nrOfBlocks:number) {
+export async function mineBlocks(
+  hre: HardhatRuntimeEnvironment,
+  nrOfBlocks: number
+) {
   for (let i = 1; i <= nrOfBlocks; i++) {
     await hre.network.provider.request({
-      method: "evm_mine",
+      method: 'evm_mine',
       params: [],
     });
   }
+}
+
+
+export async function setNextBlockTimestamp(hre: HardhatRuntimeEnvironment,timestamp: number): Promise<void> {
+  await hre.ethers.provider.send('evm_setNextBlockTimestamp', [timestamp]);
 }

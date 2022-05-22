@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: LendingMarketPlace
-    network: mumbai
+    network: localhost
     source:
-      address: '0x002Cf1c331e0f24fA2E9F43846591C4C3f85C7e2'
+      address: '0x7A1D11379Ed9A566f54A1aaaC2233d9712625a74'
       abi: LendingMarketPlace
-      startBlock: 26376360
+      startBlock: 26418855
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -27,13 +27,13 @@ dataSources:
           handler: handleLoanOfferCreated
         - event: LoanDemandCreated((uint256,(uint256,uint16,address,uint16,int96),address,uint8))
           handler: handleLoanDemadCreated
-        - event: LoanTradeCreated((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address))
+        - event: LoanTradeCreated((uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint256,uint8,address,address,address,address))
           handler: handleLoanTradeCreated
       file: ./src/mapping.ts
 # templates:
 #   - name: LoanFactory
 #     kind: ethereum/contract
-#     network: mumbai
+#     network: localhost
 #     source:
 #       abi: LoanFactory
 #     mapping:

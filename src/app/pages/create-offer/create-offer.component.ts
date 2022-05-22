@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { utils } from 'ethers';
 
-import { DappBaseComponent, DappInjector,  global_address,  target_conditions,  Web3Actions } from 'angular-web3';
+import { createERC20Instance, DappBaseComponent, DappInjector,  global_address,  target_conditions,  Web3Actions } from 'angular-web3';
 
 import { doSignerTransaction } from 'src/app/dapp-injector/classes/transactor';
 import { Store } from '@ngrx/store';
@@ -111,12 +111,16 @@ export class CreateOfferComponent extends DappBaseComponent {
 
        this.store.dispatch(Web3Actions.chainBusy({ status: true }));
 
+       const resultApprove = await doSignerTransaction(createERC20Instance(  offerConfig.superToken, this.dapp.signer!)
+       .approve( this.dapp.defaultContract?.address, offerConfig.loanMaxAmount ));
+
+
     const result = await doSignerTransaction(this.dapp.defaultContract?.instance.offerLoan(offerConfig)!);
     if (result.success == true) {
       this.msg.add({ key: 'tst', severity: 'success', summary: 'Great!', detail: `Your Offer has been created` });
  
       this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-
+      this.router.navigate(['dashboard'])
     } else {
       this.msg.add({ key: 'tst', severity: 'error', summary: 'OOPS', detail: `Error creating your Loan Offer` });
       this.store.dispatch(Web3Actions.chainBusy({ status: false }));

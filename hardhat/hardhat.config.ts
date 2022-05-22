@@ -49,7 +49,7 @@ const config: HardhatUserConfig = {
       forking: {
         //your rpc url here, in this case for Mumbai
         url: process.env.MUMBAI_URL || "",
-        blockNumber: 26376362,
+        blockNumber: 26418855,
       },
     },
     localhost: {

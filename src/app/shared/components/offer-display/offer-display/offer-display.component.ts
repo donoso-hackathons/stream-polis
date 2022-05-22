@@ -32,7 +32,9 @@ export class OfferDisplayComponent extends DappBaseComponent implements OnInit {
 
  async  acceptOffer(){
 
+  this.showAcceptOfferState = false;
 
+  this.store.dispatch(Web3Actions.chainBusy({ status: true }));
 
 
     let tradeConfig:TradeConfigStruct = {
@@ -62,9 +64,7 @@ export class OfferDisplayComponent extends DappBaseComponent implements OnInit {
 
      await  this.superfluidService.approveOperator(this.offer.superToken,1,getMaths!.totalInflowRate.toString())
 
-    this.showAcceptOfferState = false;
 
-    this.store.dispatch(Web3Actions.chainBusy({ status: true }));
 
     const result = await doSignerTransaction(
       this.dapp.defaultContract?.instance.acceptOffer(tradeConfig)!

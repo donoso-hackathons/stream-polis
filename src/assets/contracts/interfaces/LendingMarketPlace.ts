@@ -223,6 +223,7 @@ export interface LendingMarketPlace extends BaseContract {
         number,
         BigNumber,
         BigNumber,
+        BigNumber,
         number,
         string,
         string,
@@ -237,6 +238,7 @@ export interface LendingMarketPlace extends BaseContract {
         collateralShare: number;
         flowRate: BigNumber;
         initTimestamp: BigNumber;
+        duration: BigNumber;
         status: number;
         loanTaker: string;
         loanProvider: string;
@@ -302,6 +304,7 @@ export interface LendingMarketPlace extends BaseContract {
       number,
       BigNumber,
       BigNumber,
+      BigNumber,
       number,
       string,
       string,
@@ -316,6 +319,7 @@ export interface LendingMarketPlace extends BaseContract {
       collateralShare: number;
       flowRate: BigNumber;
       initTimestamp: BigNumber;
+      duration: BigNumber;
       status: number;
       loanTaker: string;
       loanProvider: string;
@@ -377,6 +381,7 @@ export interface LendingMarketPlace extends BaseContract {
         number,
         BigNumber,
         BigNumber,
+        BigNumber,
         number,
         string,
         string,
@@ -391,6 +396,7 @@ export interface LendingMarketPlace extends BaseContract {
         collateralShare: number;
         flowRate: BigNumber;
         initTimestamp: BigNumber;
+        duration: BigNumber;
         status: number;
         loanTaker: string;
         loanProvider: string;

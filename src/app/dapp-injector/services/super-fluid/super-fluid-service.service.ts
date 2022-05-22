@@ -32,9 +32,9 @@ export class SuperFluidServiceService {
     //   provider: this.dapp.DAPP_STATE.defaultProvider!,
     // });
 
-    this.flow = this.sf.cfaV1;
+    // this.flow = this.sf.cfaV1;
 
-    console.log(this.sf.settings);
+    // console.log(this.sf.settings);
     //675833120
   }
 ///// ---------  --------- ACLg ---------  ---------  ////

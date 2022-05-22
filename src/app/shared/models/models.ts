@@ -12,3 +12,20 @@ export interface ILOAN_OFFER {
     loanProvider: string;
     status:number;
 }
+
+export interface ILOAN_TRADE {
+    id: string;
+    loanAmount:number;
+    loanTotalAmount:number;
+    collateral:number;
+    collateralShared:number;
+    initTimestamp:number;
+    flowRate:number;
+    fee:number;
+    status:number;
+    loanTaker: string;
+    loanProvider: string;
+    superToken: string;
+    duration:number;
+   
+}

@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 
 import { GraphQlService } from 'src/app/dapp-injector/services/graph-ql/graph-ql.service';
-import { ILOAN_OFFER } from 'src/app/shared/models/models';
+import { ILOAN_OFFER, ILOAN_TRADE} from 'src/app/shared/models/models';
 
 export enum REWARD_STEP {
   QUALIFYING,
@@ -32,7 +32,7 @@ export class DashboardPageComponent
   loanOffers: Array<any> = [];
   loanDemand: Array<any> = [];
   loansSold: Array<any> = [];
-  loansBougth: Array<any> = [];
+  loanTrades: Array<ILOAN_TRADE> = [];
   utils = utils;
 
   activeStep = 0;
@@ -72,7 +72,7 @@ export class DashboardPageComponent
     this.loanOffers = [];
     this.loanDemand = [];
     this.loansSold = [];
-    this.loansBougth = [];
+    this.loanTrades = [];
     const users = this.graphqlService
       .queryUser(this.dapp.signerAddress!)
       .pipe(takeUntil(this.destroyHooks))
@@ -100,9 +100,32 @@ export class DashboardPageComponent
           } else {
             this.loanOffers = [];
           }
+
+          const localTrades = user.loansSold;
+          if (localTrades !== undefined) {
+            localTrades.forEach((each: any) => {
+              const availableTokenIndex = this.loanTrades
+                .map((fil) => fil.id)
+                .indexOf(each.id);
+              if (availableTokenIndex == -1) {
+                let updated = {...each, ...{ loanTaker:each.loanTaker.id,  loanProvider:each.loanProvider.id}}
+
+                this.loanTrades.push(updated);
+              } else {
+                this.loanTrades[availableTokenIndex] = {
+                  ...this.loanTrades[availableTokenIndex],
+                  ...each,
+                  ...{ loanTaker:each.loanTaker.id,  loanProvider:each.loanProvider.id}
+                };
+              }
+            });
+          } else {
+            this.loanTrades = [];
+          }
+
         }
       });
-      console.log(JSON.stringify(this.loanOffers))
+     // console.log(JSON.stringify(this.loanOffers))
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   }
 

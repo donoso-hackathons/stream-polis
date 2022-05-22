@@ -191,24 +191,28 @@ export class LoanTradeCreatedLoanTradedStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
+  get duration(): BigInt {
+    return this[8].toBigInt();
+  }
+
   get status(): i32 {
-    return this[8].toI32();
+    return this[9].toI32();
   }
 
   get loanTaker(): Address {
-    return this[9].toAddress();
-  }
-
-  get loanProvider(): Address {
     return this[10].toAddress();
   }
 
-  get superToken(): Address {
+  get loanProvider(): Address {
     return this[11].toAddress();
   }
 
-  get loanContract(): Address {
+  get superToken(): Address {
     return this[12].toAddress();
+  }
+
+  get loanContract(): Address {
+    return this[13].toAddress();
   }
 }
 
@@ -221,11 +225,12 @@ export class LendingMarketPlace___loansTradedByIdResult {
   value5: i32;
   value6: BigInt;
   value7: BigInt;
-  value8: i32;
-  value9: Address;
+  value8: BigInt;
+  value9: i32;
   value10: Address;
   value11: Address;
   value12: Address;
+  value13: Address;
 
   constructor(
     value0: BigInt,
@@ -236,11 +241,12 @@ export class LendingMarketPlace___loansTradedByIdResult {
     value5: i32,
     value6: BigInt,
     value7: BigInt,
-    value8: i32,
-    value9: Address,
+    value8: BigInt,
+    value9: i32,
     value10: Address,
     value11: Address,
-    value12: Address
+    value12: Address,
+    value13: Address
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -255,6 +261,7 @@ export class LendingMarketPlace___loansTradedByIdResult {
     this.value10 = value10;
     this.value11 = value11;
     this.value12 = value12;
+    this.value13 = value13;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -273,14 +280,15 @@ export class LendingMarketPlace___loansTradedByIdResult {
     );
     map.set("value6", ethereum.Value.fromSignedBigInt(this.value6));
     map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
+    map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
     map.set(
-      "value8",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value8))
+      "value9",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value9))
     );
-    map.set("value9", ethereum.Value.fromAddress(this.value9));
     map.set("value10", ethereum.Value.fromAddress(this.value10));
     map.set("value11", ethereum.Value.fromAddress(this.value11));
     map.set("value12", ethereum.Value.fromAddress(this.value12));
+    map.set("value13", ethereum.Value.fromAddress(this.value13));
     return map;
   }
 }
@@ -382,7 +390,7 @@ export class LendingMarketPlace extends ethereum.SmartContract {
   _loansTradedById(param0: BigInt): LendingMarketPlace___loansTradedByIdResult {
     let result = super.call(
       "_loansTradedById",
-      "_loansTradedById(uint256):(uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address)",
+      "_loansTradedById(uint256):(uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint256,uint8,address,address,address,address)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -395,11 +403,12 @@ export class LendingMarketPlace extends ethereum.SmartContract {
       result[5].toI32(),
       result[6].toBigInt(),
       result[7].toBigInt(),
-      result[8].toI32(),
-      result[9].toAddress(),
+      result[8].toBigInt(),
+      result[9].toI32(),
       result[10].toAddress(),
       result[11].toAddress(),
-      result[12].toAddress()
+      result[12].toAddress(),
+      result[13].toAddress()
     );
   }
 
@@ -408,7 +417,7 @@ export class LendingMarketPlace extends ethereum.SmartContract {
   ): ethereum.CallResult<LendingMarketPlace___loansTradedByIdResult> {
     let result = super.tryCall(
       "_loansTradedById",
-      "_loansTradedById(uint256):(uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint8,address,address,address,address)",
+      "_loansTradedById(uint256):(uint256,uint16,uint256,uint256,uint256,uint16,int96,uint256,uint256,uint8,address,address,address,address)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -425,11 +434,12 @@ export class LendingMarketPlace extends ethereum.SmartContract {
         value[5].toI32(),
         value[6].toBigInt(),
         value[7].toBigInt(),
-        value[8].toI32(),
-        value[9].toAddress(),
+        value[8].toBigInt(),
+        value[9].toI32(),
         value[10].toAddress(),
         value[11].toAddress(),
-        value[12].toAddress()
+        value[12].toAddress(),
+        value[13].toAddress()
       )
     );
   }

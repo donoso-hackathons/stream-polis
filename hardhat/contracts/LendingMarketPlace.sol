@@ -146,11 +146,14 @@ contract LendingMarketPlace {
         offer.config.collateralShare
       );
       
+    console.log(block.timestamp);
+
     DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
       loanTradedId: loanId,
       fee: offer.config.fee,
       loanAmount: _config.loanAmount,
       loanTotalAmount: totalLoanAmount,
+      duration:_config.duration,
       collateral: collateral,
       collateralShare: offer.config.collateralShare,
       flowRate: totalInflowRate,
@@ -182,6 +185,8 @@ contract LendingMarketPlace {
       loanContractImpl,
       loan.collateral
     );
+
+    console.log(uint(loan.loanAmount));
 
       loan.superToken.transferFrom(
       loan.loanProvider,

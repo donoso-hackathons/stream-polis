@@ -1,1 +1,113 @@
-<p>trade-display works!</p>
+<div class="card mb-0">
+    <div class="grid p-fluid justify-content-center">
+      <div class="col-12 flex align-items-center">
+        <div
+          style="
+            width: 25px;
+            height: 25px;
+            border-radius: 13px;
+            background: lightgreen;
+          "
+        ></div>
+        <span class="block text-500 font-small ml-2">
+          {{ trade.loanProvider }}</span
+        >
+      </div>
+      <!-- #region Max ////  -->
+      <div class="col-4 text-center">
+        <div class="flex justify-content-between flex-column mb-3">
+          <div class="text-900 font-medium text-lg">
+            Amount <br />
+            <span
+              [class]="
+                +trade!.loanAmount > 0 ? 'text-green-500' : 'text-orange-500'
+              "
+            >
+              {{ (+utils.formatEther(trade!.loanAmount)).toFixed(4) }}</span
+            >
+          </div>
+        </div>
+      </div>
+  
+      <!-- #endregion Max ////  -->
+  
+      <!-- #region Min////  -->
+      <div class="col-4 text-center">
+        <div class="flex justify-content-between flex-column mb-3">
+          <div class="text-900 font-medium text-lg">
+           Will Finish <br />
+          <span style="color: var(--primary-color)">
+            {{finish}}</span
+            > 
+          </div>
+        </div>
+      </div>
+      <!-- #endregion Min////  -->
+  
+      <!-- #region SuperToken  ////  -->
+      <div class="col-4 text-center">
+        <div class="flex justify-content-between flex-column mb-3">
+          <div class="text-900 font-medium text-lg">
+            Token<br />
+            <img
+              [width]="40"
+              src="assets/images/tokens/{{ superToken?.image }}_icon.svg"
+              style="margin-right: 5px"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- #endregion SuperToken////  -->
+  
+      <!-- #region Fee ////  -->
+      <div class="col-4 text-center">
+        <div class="flex justify-content-between flex-column mb-3">
+          <div class="text-900 font-medium text-lg">
+            Fee <br />
+            <span
+          
+            >
+              {{ (trade!.fee / 100).toFixed(3) }} %</span
+            >
+          </div>
+        </div>
+      </div>
+  
+      <!-- #endregion Fee ////  -->
+  
+      <!-- #region Fee ////  -->
+      <div class="col-4 text-center">
+        <div class="flex justify-content-between flex-column mb-3">
+          <div class="text-900 font-medium text-lg">
+            Collateral % <br />
+            <span
+            
+            >
+              {{ (trade!.collateral / 100).toFixed(3) }}%</span
+            >
+          </div>
+        </div>
+      </div>
+  
+      <!-- #endregion Fee ////  -->
+  
+      <div class="col-4 text-center">
+        <div class="flex justify-content-between flex-column mb-3">
+          <div class="text-900 font-medium text-lg">
+            Max Days <br />
+            <span
+            
+            >
+              <!-- {{ (trade!.maxDuration / (24 * 60 * 60)).toFixed(2) }} -->
+              </span>
+          
+          </div>
+        </div>
+      </div>
+  
+      <!-- #endregion Fee ////  -->
+  
+    </div>
+  </div>
+
+  

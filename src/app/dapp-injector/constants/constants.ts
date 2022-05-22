@@ -260,7 +260,7 @@ export const global_address = {
     resolver:"0x8C54C83FbDe3C59e59dd6E324531FB93d4F504d3",
     subgraph:"https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-mumbai",
     sfNetwork:"local",
-    graphUri:"http://localhost:8000/subgraphs/name/donoso-eth/perpetual-conditional-reward"
+    graphUri:"http://localhost:8000/subgraphs/name/donoso-eth/stream-polis"
   },
 
   mumbai: {

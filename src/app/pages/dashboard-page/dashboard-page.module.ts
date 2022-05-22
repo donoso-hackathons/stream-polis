@@ -6,6 +6,7 @@ import { DashboardPageComponent } from './dashboard-page.component';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import { OfferDisplayModule } from 'src/app/shared/components/offer-display/offer-display.module';
+import { TradeDisplayModule } from 'src/app/shared/components/trade-display/trade-display.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { OfferDisplayModule } from 'src/app/shared/components/offer-display/offe
     DashboardPageRoutingModule,
 
     OfferDisplayModule,
-
+    TradeDisplayModule,
     ButtonModule,
     TabViewModule
     

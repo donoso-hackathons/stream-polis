@@ -48,6 +48,36 @@ export const GET_DEMANDS = `
             id
           }
         }
+        loansSold {
+          id
+          loanTotalAmount
+          loanAmount
+          collateral
+          initTimestamp
+          flowRate
+          status
+          collateralShare
+          fee
+          loanTaker {id}
+          loanProvider { id }
+          duration
+          superToken
+        }
+        loansBought {
+          id
+          loanTotalAmount
+          loanAmount
+          collateral
+          initTimestamp
+          flowRate
+          status
+          collateralShare
+          fee
+          loanTaker {id}
+          loanProvider { id }
+          duration
+          superToken
+        }
       }
     }
   `;

@@ -79,7 +79,7 @@ export class DappInjector implements OnDestroy {
     /// todo launch read contract async not required to await
 
     ///// ---------  Signer Initialization in order to xxxxxx
-
+    console.log(this.dappConfig.wallet)
     switch (this.dappConfig.wallet) {
       case 'wallet':
         const walletResult = await this.walletInitialization();
@@ -94,6 +94,8 @@ export class DappInjector implements OnDestroy {
 
       case 'local':
         ////// local wallet
+
+
 
         this.harhdat_local_privKeys = (await import('../../assets/contracts/local_accouts.json')).default;
         
