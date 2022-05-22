@@ -101,7 +101,8 @@ export class DashboardPageComponent
             this.loanOffers = [];
           }
 
-          const localTrades = user.loansSold;
+          const localTrades = user.loansSold.concat(user.loansBought);
+          console.log(localTrades)
           if (localTrades !== undefined) {
             localTrades.forEach((each: any) => {
               const availableTokenIndex = this.loanTrades

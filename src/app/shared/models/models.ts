@@ -18,7 +18,7 @@ export interface ILOAN_TRADE {
     loanAmount:number;
     loanTotalAmount:number;
     collateral:number;
-    collateralShared:number;
+    collateralShare:number;
     initTimestamp:number;
     flowRate:number;
     fee:number;
