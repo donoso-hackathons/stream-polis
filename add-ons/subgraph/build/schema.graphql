@@ -8,6 +8,8 @@ type LoanOffer @entity {
   maxDuration: BigInt!
   loanProvider: User!
   status: BigInt!
+  infinite: Boolean!
+  numberOfLoans: BigInt!
 }
 
 type LoanDemand @entity {

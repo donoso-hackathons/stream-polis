@@ -10,6 +10,28 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
+  }
+}
+
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
+  }
+
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
 export class LoanDemandCreated extends ethereum.Event {
   get params(): LoanDemandCreated__Params {
     return new LoanDemandCreated__Params(this);
@@ -136,6 +158,18 @@ export class LoanOfferCreatedLoanOfferedConfigStruct extends ethereum.Tuple {
   get maxDuration(): BigInt {
     return this[5].toBigInt();
   }
+
+  get isInfinite(): boolean {
+    return this[6].toBoolean();
+  }
+
+  get numberOfLoansOffered(): i32 {
+    return this[7].toI32();
+  }
+
+  get numberOfLoansTraded(): i32 {
+    return this[8].toI32();
+  }
 }
 
 export class LoanTradeCreated extends ethereum.Event {
@@ -216,6 +250,24 @@ export class LoanTradeCreatedLoanTradedStruct extends ethereum.Tuple {
   }
 }
 
+export class LoanTradeFinished extends ethereum.Event {
+  get params(): LoanTradeFinished__Params {
+    return new LoanTradeFinished__Params(this);
+  }
+}
+
+export class LoanTradeFinished__Params {
+  _event: LoanTradeFinished;
+
+  constructor(event: LoanTradeFinished) {
+    this._event = event;
+  }
+
+  get loanTradedId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class LendingMarketPlace___loansTradedByIdResult {
   value0: BigInt;
   value1: i32;
@@ -293,6 +345,23 @@ export class LendingMarketPlace___loansTradedByIdResult {
   }
 }
 
+export class LendingMarketPlace__checkerStopStreamResult {
+  value0: boolean;
+  value1: Bytes;
+
+  constructor(value0: boolean, value1: Bytes) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromBoolean(this.value0));
+    map.set("value1", ethereum.Value.fromBytes(this.value1));
+    return map;
+  }
+}
+
 export class LendingMarketPlace__getMathsResult {
   value0: BigInt;
   value1: BigInt;
@@ -316,6 +385,44 @@ export class LendingMarketPlace__getMathsResult {
 export class LendingMarketPlace extends ethereum.SmartContract {
   static bind(address: Address): LendingMarketPlace {
     return new LendingMarketPlace("LendingMarketPlace", address);
+  }
+
+  ETH(): Address {
+    let result = super.call("ETH", "ETH():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_ETH(): ethereum.CallResult<Address> {
+    let result = super.tryCall("ETH", "ETH():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  _gelatoTaskIdbyLoanClone(param0: Address): Bytes {
+    let result = super.call(
+      "_gelatoTaskIdbyLoanClone",
+      "_gelatoTaskIdbyLoanClone(address):(bytes32)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return result[0].toBytes();
+  }
+
+  try__gelatoTaskIdbyLoanClone(param0: Address): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "_gelatoTaskIdbyLoanClone",
+      "_gelatoTaskIdbyLoanClone(address):(bytes32)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   _loanIdByTaker(param0: Address): BigInt {
@@ -467,6 +574,56 @@ export class LendingMarketPlace extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  checkerStopStream(
+    loanId: BigInt
+  ): LendingMarketPlace__checkerStopStreamResult {
+    let result = super.call(
+      "checkerStopStream",
+      "checkerStopStream(uint256):(bool,bytes)",
+      [ethereum.Value.fromUnsignedBigInt(loanId)]
+    );
+
+    return new LendingMarketPlace__checkerStopStreamResult(
+      result[0].toBoolean(),
+      result[1].toBytes()
+    );
+  }
+
+  try_checkerStopStream(
+    loanId: BigInt
+  ): ethereum.CallResult<LendingMarketPlace__checkerStopStreamResult> {
+    let result = super.tryCall(
+      "checkerStopStream",
+      "checkerStopStream(uint256):(bool,bytes)",
+      [ethereum.Value.fromUnsignedBigInt(loanId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new LendingMarketPlace__checkerStopStreamResult(
+        value[0].toBoolean(),
+        value[1].toBytes()
+      )
+    );
+  }
+
+  gelato(): Address {
+    let result = super.call("gelato", "gelato():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_gelato(): ethereum.CallResult<Address> {
+    let result = super.tryCall("gelato", "gelato():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getMaths(
     _loanAmount: BigInt,
     _fee: i32,
@@ -519,6 +676,59 @@ export class LendingMarketPlace extends ethereum.SmartContract {
       )
     );
   }
+
+  ops(): Address {
+    let result = super.call("ops", "ops():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_ops(): ethereum.CallResult<Address> {
+    let result = super.tryCall("ops", "ops():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  withdrawContract(): boolean {
+    let result = super.call(
+      "withdrawContract",
+      "withdrawContract():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_withdrawContract(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "withdrawContract",
+      "withdrawContract():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
 }
 
 export class ConstructorCall extends ethereum.Call {
@@ -550,7 +760,7 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[2].value.toI32();
   }
 
-  get _gelato(): Address {
+  get _ops(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 }
@@ -632,6 +842,40 @@ export class AcceptOfferCall_configStruct extends ethereum.Tuple {
 
   get duration(): BigInt {
     return this[2].toBigInt();
+  }
+}
+
+export class CancelTaskbyIdCall extends ethereum.Call {
+  get inputs(): CancelTaskbyIdCall__Inputs {
+    return new CancelTaskbyIdCall__Inputs(this);
+  }
+
+  get outputs(): CancelTaskbyIdCall__Outputs {
+    return new CancelTaskbyIdCall__Outputs(this);
+  }
+}
+
+export class CancelTaskbyIdCall__Inputs {
+  _call: CancelTaskbyIdCall;
+
+  constructor(call: CancelTaskbyIdCall) {
+    this._call = call;
+  }
+
+  get _taskId(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get loanContract(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class CancelTaskbyIdCall__Outputs {
+  _call: CancelTaskbyIdCall;
+
+  constructor(call: CancelTaskbyIdCall) {
+    this._call = call;
   }
 }
 
@@ -745,114 +989,132 @@ export class OfferLoanCallConfigStruct extends ethereum.Tuple {
   get maxDuration(): BigInt {
     return this[5].toBigInt();
   }
-}
 
-export class SubmitTaskCycleCall extends ethereum.Call {
-  get inputs(): SubmitTaskCycleCall__Inputs {
-    return new SubmitTaskCycleCall__Inputs(this);
+  get isInfinite(): boolean {
+    return this[6].toBoolean();
   }
 
-  get outputs(): SubmitTaskCycleCall__Outputs {
-    return new SubmitTaskCycleCall__Outputs(this);
-  }
-}
-
-export class SubmitTaskCycleCall__Inputs {
-  _call: SubmitTaskCycleCall;
-
-  constructor(call: SubmitTaskCycleCall) {
-    this._call = call;
+  get numberOfLoansOffered(): i32 {
+    return this[7].toI32();
   }
 
-  get _provider(): SubmitTaskCycleCall_providerStruct {
-    return changetype<SubmitTaskCycleCall_providerStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-
-  get _tasks(): Array<SubmitTaskCycleCall_tasksStruct> {
-    return this._call.inputValues[1].value.toTupleArray<
-      SubmitTaskCycleCall_tasksStruct
-    >();
-  }
-
-  get _expiryDate(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get _cycles(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
+  get numberOfLoansTraded(): i32 {
+    return this[8].toI32();
   }
 }
 
-export class SubmitTaskCycleCall__Outputs {
-  _call: SubmitTaskCycleCall;
+export class RenounceOwnershipCall extends ethereum.Call {
+  get inputs(): RenounceOwnershipCall__Inputs {
+    return new RenounceOwnershipCall__Inputs(this);
+  }
 
-  constructor(call: SubmitTaskCycleCall) {
+  get outputs(): RenounceOwnershipCall__Outputs {
+    return new RenounceOwnershipCall__Outputs(this);
+  }
+}
+
+export class RenounceOwnershipCall__Inputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
 
-export class SubmitTaskCycleCall_providerStruct extends ethereum.Tuple {
-  get addr(): Address {
-    return this[0].toAddress();
-  }
+export class RenounceOwnershipCall__Outputs {
+  _call: RenounceOwnershipCall;
 
-  get module(): Address {
-    return this[1].toAddress();
+  constructor(call: RenounceOwnershipCall) {
+    this._call = call;
   }
 }
 
-export class SubmitTaskCycleCall_tasksStruct extends ethereum.Tuple {
-  get conditions(): Array<SubmitTaskCycleCall_tasksConditionsStruct> {
-    return this[0].toTupleArray<SubmitTaskCycleCall_tasksConditionsStruct>();
+export class StopStreamCall extends ethereum.Call {
+  get inputs(): StopStreamCall__Inputs {
+    return new StopStreamCall__Inputs(this);
   }
 
-  get actions(): Array<SubmitTaskCycleCall_tasksActionsStruct> {
-    return this[1].toTupleArray<SubmitTaskCycleCall_tasksActionsStruct>();
-  }
-
-  get selfProviderGasLimit(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get selfProviderGasPriceCeil(): BigInt {
-    return this[3].toBigInt();
+  get outputs(): StopStreamCall__Outputs {
+    return new StopStreamCall__Outputs(this);
   }
 }
 
-export class SubmitTaskCycleCall_tasksConditionsStruct extends ethereum.Tuple {
-  get inst(): Address {
-    return this[0].toAddress();
+export class StopStreamCall__Inputs {
+  _call: StopStreamCall;
+
+  constructor(call: StopStreamCall) {
+    this._call = call;
   }
 
-  get data(): Bytes {
-    return this[1].toBytes();
+  get loanId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
   }
 }
 
-export class SubmitTaskCycleCall_tasksActionsStruct extends ethereum.Tuple {
-  get addr(): Address {
-    return this[0].toAddress();
+export class StopStreamCall__Outputs {
+  _call: StopStreamCall;
+
+  constructor(call: StopStreamCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
   }
 
-  get data(): Bytes {
-    return this[1].toBytes();
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
   }
 
-  get operation(): i32 {
-    return this[2].toI32();
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawContractCall extends ethereum.Call {
+  get inputs(): WithdrawContractCall__Inputs {
+    return new WithdrawContractCall__Inputs(this);
   }
 
-  get dataFlow(): i32 {
-    return this[3].toI32();
+  get outputs(): WithdrawContractCall__Outputs {
+    return new WithdrawContractCall__Outputs(this);
+  }
+}
+
+export class WithdrawContractCall__Inputs {
+  _call: WithdrawContractCall;
+
+  constructor(call: WithdrawContractCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawContractCall__Outputs {
+  _call: WithdrawContractCall;
+
+  constructor(call: WithdrawContractCall) {
+    this._call = call;
   }
 
-  get value(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get termsOkCheck(): boolean {
-    return this[5].toBoolean();
+  get value0(): boolean {
+    return this._call.outputValues[0].value.toBoolean();
   }
 }

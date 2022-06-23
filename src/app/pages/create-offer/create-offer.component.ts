@@ -78,7 +78,8 @@ export class CreateOfferComponent extends DappBaseComponent {
       collateralShareCtrl: [0, [Validators.required]],
       durationCtrl: [ { name: 'hours', id: 1, factor: 3600 }, [Validators.required]],
       durationAmountCtrl: [25, [Validators.required, Validators.min(1)]],
-      
+      offerNumberCtrl:[],
+      offerNumberTimesCtrl:[],
 
      
     });

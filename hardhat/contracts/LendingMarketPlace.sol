@@ -132,8 +132,13 @@ contract LendingMarketPlace is OpsReady , Ownable {
 
   function acceptOffer(DataTypes.TradeConfig memory _config) public {
     // ;
-
+    
+    DataTypes.LoanOffer storage offer = _loansOfferedById[_config.offerId];
+    require(offer.config.isInfinite == true || offer.config.numberOfLoansOffered >  offer.config.numberOfLoansTraded, 'OFFER_NOT_AVAILABLE');
     address loanContractImpl = Clones.clone(loanFactory);
+
+
+    offer.config.numberOfLoansTraded++;
 
     // LoanFactory loanContract = new LoanFactory();
 
@@ -146,8 +151,8 @@ contract LendingMarketPlace is OpsReady , Ownable {
 
     host.registerAppByFactory(ISuperApp(loanContractImpl), configWord);
 
-    DataTypes.LoanOffer memory offer = _loansOfferedById[_config.offerId];
-
+ 
+ 
     _loansTradedCounter.increment();
     uint256 loanId = _loansTradedCounter.current();
 

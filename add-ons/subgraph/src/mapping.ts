@@ -9,6 +9,7 @@ import {
   LoanDemandCreated,
   LoanOfferCreated,
   LoanTradeCreated,
+  LoanTradeFinished,
 } from '../generated/LendingMarketPlace/LendingMarketPlace';
 
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts';
@@ -92,6 +93,10 @@ export function handleLoanTradeCreated(event: LoanTradeCreated): void {
     loanTraded.flowRate
   );
   totalSummary.save()
+}
+
+export function handleLoanTradedFinished(event:LoanTradeFinished):void {
+
 }
 
 function createUser(userId: string): User {

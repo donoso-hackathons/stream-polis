@@ -18,7 +18,7 @@
       },
       {
         "internalType": "address",
-        "name": "_gelato",
+        "name": "_ops",
         "type": "address"
       }
     ],
@@ -26,10 +26,61 @@
     "type": "constructor"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "AcceptDemand",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ETH",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "_gelatoTaskIdbyLoanClone",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -207,6 +258,48 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_taskId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "loanContract",
+        "type": "address"
+      }
+    ],
+    "name": "cancelTaskbyId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "loanId",
+        "type": "uint256"
+      }
+    ],
+    "name": "checkerStopStream",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "canExec",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "execPayload",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "components": [
           {
             "internalType": "uint256",
@@ -242,6 +335,19 @@
     "name": "demandLoan",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gelato",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -321,6 +427,21 @@
             "internalType": "uint256",
             "name": "maxDuration",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isInfinite",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint8",
+            "name": "numberOfLoansOffered",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "numberOfLoansTraded",
+            "type": "uint8"
           }
         ],
         "internalType": "struct DataTypes.OfferConfig",
@@ -334,117 +455,80 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "ops",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "addr",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IGelatoProviderModule",
-            "name": "module",
-            "type": "address"
-          }
-        ],
-        "internalType": "struct Provider",
-        "name": "_provider",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "components": [
-              {
-                "internalType": "contract IGelatoCondition",
-                "name": "inst",
-                "type": "address"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              }
-            ],
-            "internalType": "struct Condition[]",
-            "name": "conditions",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              },
-              {
-                "internalType": "enum Operation",
-                "name": "operation",
-                "type": "uint8"
-              },
-              {
-                "internalType": "enum DataFlow",
-                "name": "dataFlow",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "bool",
-                "name": "termsOkCheck",
-                "type": "bool"
-              }
-            ],
-            "internalType": "struct Action[]",
-            "name": "actions",
-            "type": "tuple[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "selfProviderGasLimit",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "selfProviderGasPriceCeil",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Task[]",
-        "name": "_tasks",
-        "type": "tuple[]"
-      },
-      {
         "internalType": "uint256",
-        "name": "_expiryDate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_cycles",
+        "name": "loanId",
         "type": "uint256"
       }
     ],
-    "name": "submitTaskCycle",
+    "name": "stopStream",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "testPrint",
-    "outputs": [],
-    "stateMutability": "pure",
+    "name": "withdrawContract",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   },
   {
     "anonymous": false,
@@ -549,6 +633,21 @@
                 "internalType": "uint256",
                 "name": "maxDuration",
                 "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "isInfinite",
+                "type": "bool"
+              },
+              {
+                "internalType": "uint8",
+                "name": "numberOfLoansOffered",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint8",
+                "name": "numberOfLoansTraded",
+                "type": "uint8"
               }
             ],
             "internalType": "struct DataTypes.OfferConfig",
@@ -658,6 +757,19 @@
       }
     ],
     "name": "LoanTradeCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "loanTradedId",
+        "type": "uint256"
+      }
+    ],
+    "name": "LoanTradeFinished",
     "type": "event"
   }
 ]

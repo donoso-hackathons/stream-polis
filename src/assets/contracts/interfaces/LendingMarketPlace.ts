@@ -13,7 +13,7 @@ import {
   Signer,
   utils,
 } from "ethers";
-import { FunctionFragment, Result } from "@ethersproject/abi";
+import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
@@ -58,6 +58,9 @@ export type OfferConfigStruct = {
   superToken: string;
   collateralShare: BigNumberish;
   maxDuration: BigNumberish;
+  isInfinite: boolean;
+  numberOfLoansOffered: BigNumberish;
+  numberOfLoansTraded: BigNumberish;
 };
 
 export type OfferConfigStructOutput = [
@@ -66,7 +69,10 @@ export type OfferConfigStructOutput = [
   number,
   string,
   number,
-  BigNumber
+  BigNumber,
+  boolean,
+  number,
+  number
 ] & {
   loanMaxAmount: BigNumber;
   loanMinAmount: BigNumber;
@@ -74,85 +80,44 @@ export type OfferConfigStructOutput = [
   superToken: string;
   collateralShare: number;
   maxDuration: BigNumber;
-};
-
-export type ProviderStruct = { addr: string; module: string };
-
-export type ProviderStructOutput = [string, string] & {
-  addr: string;
-  module: string;
-};
-
-export type ConditionStruct = { inst: string; data: BytesLike };
-
-export type ConditionStructOutput = [string, string] & {
-  inst: string;
-  data: string;
-};
-
-export type ActionStruct = {
-  addr: string;
-  data: BytesLike;
-  operation: BigNumberish;
-  dataFlow: BigNumberish;
-  value: BigNumberish;
-  termsOkCheck: boolean;
-};
-
-export type ActionStructOutput = [
-  string,
-  string,
-  number,
-  number,
-  BigNumber,
-  boolean
-] & {
-  addr: string;
-  data: string;
-  operation: number;
-  dataFlow: number;
-  value: BigNumber;
-  termsOkCheck: boolean;
-};
-
-export type TaskStruct = {
-  conditions: ConditionStruct[];
-  actions: ActionStruct[];
-  selfProviderGasLimit: BigNumberish;
-  selfProviderGasPriceCeil: BigNumberish;
-};
-
-export type TaskStructOutput = [
-  ConditionStructOutput[],
-  ActionStructOutput[],
-  BigNumber,
-  BigNumber
-] & {
-  conditions: ConditionStructOutput[];
-  actions: ActionStructOutput[];
-  selfProviderGasLimit: BigNumber;
-  selfProviderGasPriceCeil: BigNumber;
+  isInfinite: boolean;
+  numberOfLoansOffered: number;
+  numberOfLoansTraded: number;
 };
 
 export interface LendingMarketPlaceInterface extends utils.Interface {
   functions: {
     "AcceptDemand()": FunctionFragment;
+    "ETH()": FunctionFragment;
+    "_gelatoTaskIdbyLoanClone(address)": FunctionFragment;
     "_loanIdByTaker(address)": FunctionFragment;
     "_loansDemandCounter()": FunctionFragment;
     "_loansOfferedCounter()": FunctionFragment;
     "_loansTradedById(uint256)": FunctionFragment;
     "_loansTradedCounter()": FunctionFragment;
     "acceptOffer((uint256,uint256,uint256))": FunctionFragment;
+    "cancelTaskbyId(bytes32,address)": FunctionFragment;
+    "checkerStopStream(uint256)": FunctionFragment;
     "demandLoan((uint256,uint16,address,uint16,int96))": FunctionFragment;
+    "gelato()": FunctionFragment;
     "getMaths(uint256,uint16,uint256,uint16)": FunctionFragment;
-    "offerLoan((uint256,uint256,uint16,address,uint16,uint256))": FunctionFragment;
-    "submitTaskCycle((address,address),((address,bytes)[],(address,bytes,uint8,uint8,uint256,bool)[],uint256,uint256)[],uint256,uint256)": FunctionFragment;
-    "testPrint()": FunctionFragment;
+    "offerLoan((uint256,uint256,uint16,address,uint16,uint256,bool,uint8,uint8))": FunctionFragment;
+    "ops()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "stopStream(uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "withdrawContract()": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "AcceptDemand",
     values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "ETH", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "_gelatoTaskIdbyLoanClone",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "_loanIdByTaker",
@@ -179,9 +144,18 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     values: [TradeConfigStruct]
   ): string;
   encodeFunctionData(
+    functionFragment: "cancelTaskbyId",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkerStopStream",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "demandLoan",
     values: [DemandConfigStruct]
   ): string;
+  encodeFunctionData(functionFragment: "gelato", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getMaths",
     values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
@@ -190,14 +164,32 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     functionFragment: "offerLoan",
     values: [OfferConfigStruct]
   ): string;
+  encodeFunctionData(functionFragment: "ops", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "submitTaskCycle",
-    values: [ProviderStruct, TaskStruct[], BigNumberish, BigNumberish]
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "testPrint", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "stopStream",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawContract",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "AcceptDemand",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "ETH", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "_gelatoTaskIdbyLoanClone",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -224,17 +216,48 @@ export interface LendingMarketPlaceInterface extends utils.Interface {
     functionFragment: "acceptOffer",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "demandLoan", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getMaths", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "offerLoan", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "submitTaskCycle",
+    functionFragment: "cancelTaskbyId",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "testPrint", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "checkerStopStream",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "demandLoan", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "gelato", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getMaths", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "offerLoan", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ops", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "stopStream", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawContract",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  { previousOwner: string; newOwner: string }
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface LendingMarketPlace extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -266,6 +289,13 @@ export interface LendingMarketPlace extends BaseContract {
     AcceptDemand(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    ETH(overrides?: CallOverrides): Promise<[string]>;
+
+    _gelatoTaskIdbyLoanClone(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     _loanIdByTaker(
       arg0: string,
@@ -326,10 +356,23 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    cancelTaskbyId(
+      _taskId: BytesLike,
+      loanContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    checkerStopStream(
+      loanId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean, string] & { canExec: boolean; execPayload: string }>;
+
     demandLoan(
       config: DemandConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    gelato(overrides?: CallOverrides): Promise<[string]>;
 
     getMaths(
       _loanAmount: BigNumberish,
@@ -350,20 +393,39 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    submitTaskCycle(
-      _provider: ProviderStruct,
-      _tasks: TaskStruct[],
-      _expiryDate: BigNumberish,
-      _cycles: BigNumberish,
+    ops(overrides?: CallOverrides): Promise<[string]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    testPrint(overrides?: CallOverrides): Promise<[void]>;
+    stopStream(
+      loanId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    withdrawContract(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   AcceptDemand(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  ETH(overrides?: CallOverrides): Promise<string>;
+
+  _gelatoTaskIdbyLoanClone(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   _loanIdByTaker(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -415,10 +477,23 @@ export interface LendingMarketPlace extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  cancelTaskbyId(
+    _taskId: BytesLike,
+    loanContract: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  checkerStopStream(
+    loanId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[boolean, string] & { canExec: boolean; execPayload: string }>;
+
   demandLoan(
     config: DemandConfigStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  gelato(overrides?: CallOverrides): Promise<string>;
 
   getMaths(
     _loanAmount: BigNumberish,
@@ -439,18 +514,37 @@ export interface LendingMarketPlace extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  submitTaskCycle(
-    _provider: ProviderStruct,
-    _tasks: TaskStruct[],
-    _expiryDate: BigNumberish,
-    _cycles: BigNumberish,
+  ops(overrides?: CallOverrides): Promise<string>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  testPrint(overrides?: CallOverrides): Promise<void>;
+  stopStream(
+    loanId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawContract(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     AcceptDemand(overrides?: CallOverrides): Promise<void>;
+
+    ETH(overrides?: CallOverrides): Promise<string>;
+
+    _gelatoTaskIdbyLoanClone(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     _loanIdByTaker(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -502,10 +596,23 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    cancelTaskbyId(
+      _taskId: BytesLike,
+      loanContract: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    checkerStopStream(
+      loanId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean, string] & { canExec: boolean; execPayload: string }>;
+
     demandLoan(
       config: DemandConfigStruct,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    gelato(overrides?: CallOverrides): Promise<string>;
 
     getMaths(
       _loanAmount: BigNumberish,
@@ -526,22 +633,43 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    submitTaskCycle(
-      _provider: ProviderStruct,
-      _tasks: TaskStruct[],
-      _expiryDate: BigNumberish,
-      _cycles: BigNumberish,
+    ops(overrides?: CallOverrides): Promise<string>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    stopStream(loanId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    testPrint(overrides?: CallOverrides): Promise<void>;
+    withdrawContract(overrides?: CallOverrides): Promise<boolean>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): OwnershipTransferredEventFilter;
+  };
 
   estimateGas: {
     AcceptDemand(
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    ETH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _gelatoTaskIdbyLoanClone(
+      arg0: string,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     _loanIdByTaker(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -562,10 +690,23 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    cancelTaskbyId(
+      _taskId: BytesLike,
+      loanContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    checkerStopStream(
+      loanId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     demandLoan(
       config: DemandConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    gelato(overrides?: CallOverrides): Promise<BigNumber>;
 
     getMaths(
       _loanAmount: BigNumberish,
@@ -580,20 +721,39 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    submitTaskCycle(
-      _provider: ProviderStruct,
-      _tasks: TaskStruct[],
-      _expiryDate: BigNumberish,
-      _cycles: BigNumberish,
+    ops(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    testPrint(overrides?: CallOverrides): Promise<BigNumber>;
+    stopStream(
+      loanId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    withdrawContract(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     AcceptDemand(
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    ETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _gelatoTaskIdbyLoanClone(
+      arg0: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     _loanIdByTaker(
@@ -623,10 +783,23 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    cancelTaskbyId(
+      _taskId: BytesLike,
+      loanContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    checkerStopStream(
+      loanId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     demandLoan(
       config: DemandConfigStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    gelato(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getMaths(
       _loanAmount: BigNumberish,
@@ -641,14 +814,26 @@ export interface LendingMarketPlace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    submitTaskCycle(
-      _provider: ProviderStruct,
-      _tasks: TaskStruct[],
-      _expiryDate: BigNumberish,
-      _cycles: BigNumberish,
+    ops(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    testPrint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    stopStream(
+      loanId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawContract(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

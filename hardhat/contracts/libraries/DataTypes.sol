@@ -19,6 +19,9 @@ library DataTypes {
     address superToken;
     uint16 collateralShare;
     uint256 maxDuration;
+    bool isInfinite;
+    uint8 numberOfLoansOffered;
+    uint8 numberOfLoansTraded;
   }
 
   struct LoanOffer {
