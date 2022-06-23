@@ -11,6 +11,7 @@ import { LoadingComponent } from './shared/components/loading/loading.component'
 import { AppTopBarComponent } from './shared/components/toolbar/app.topbar.component';
 
 import { GraphQlModule } from './dapp-injector/services/graph-ql/graph-ql.module';
+
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';

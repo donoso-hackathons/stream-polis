@@ -40,7 +40,14 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
 
   constructor() {
     
-    host = ISuperfluid(0xEB796bdb90fFA0f28255275e16936D25d3418603);
+  }
+
+ /**
+   * @notice initializer of the contract/oracle
+   */
+  function initialize(DataTypes.LoanTraded memory _loan) external override initializer {
+  
+        host = ISuperfluid(0xEB796bdb90fFA0f28255275e16936D25d3418603);
         cfa = IConstantFlowAgreementV1(
       address(
         host.getAgreementClass(
@@ -50,25 +57,6 @@ contract LoanFactory is ILoanFactory, SuperAppBase, Initializable {
         )
       )
     );
-    uint256 configWord = SuperAppDefinitions.APP_LEVEL_FINAL |
-      SuperAppDefinitions.BEFORE_AGREEMENT_CREATED_NOOP |
-      SuperAppDefinitions.BEFORE_AGREEMENT_UPDATED_NOOP |
-      SuperAppDefinitions.BEFORE_AGREEMENT_TERMINATED_NOOP;
- 
-
-    host.registerApp(configWord);
-
- 
-  
-
-  }
-
- /**
-   * @notice initializer of the contract/oracle
-   */
-  function initialize(DataTypes.LoanTraded memory _loan) external override initializer {
-  
-  
     loan = _loan;
 
 

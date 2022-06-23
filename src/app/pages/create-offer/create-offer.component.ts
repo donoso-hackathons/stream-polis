@@ -21,8 +21,6 @@ export class CreateOfferComponent extends DappBaseComponent {
 
   conditions = target_conditions;
 
-
-
   tokens = [
     {
       name: 'DAI',
@@ -31,13 +29,13 @@ export class CreateOfferComponent extends DappBaseComponent {
       token: global_address.mumbai.fDai,
       superToken: global_address.mumbai.fDaix,
     },
-    // {
-    //   name: 'USDC',
-    //   id: 0,
-    //   image: 'usdc',
-    //   token: global_address.mumbai.fDai,
-    //   superToken: global_address.mumbai.fDaix,
-    // },
+    {
+      name: 'USDC',
+      id: 0,
+      image: 'usdc',
+      token: global_address.mumbai.fDai,
+      superToken: global_address.mumbai.fDaix,
+    },
     // { name: 'DAIx', id: 1, image: 'dai', token:global_address.mumbai.fDaix,superToken:global_address.mumbai.fDaix  },
     // { name: 'USDCx', id: 2, image: 'usdc' },
     // { name: 'USDC', id: 3, image: 'usdc' },

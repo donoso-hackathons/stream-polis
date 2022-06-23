@@ -22,6 +22,7 @@ let HOST = '0xEB796bdb90fFA0f28255275e16936D25d3418603';
 let CFA = '0x49e565Ed1bdc17F3d220f72DF0857C26FA83F873';
 let TOKEN1 = '0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f';
 let GELATOCORE = '0x25aD59adbe00C2d80c86d01e2E05e1294DA84823';
+let GELATO_OPS =     '0xB3f5503f93d5Ef84b06993a1975B9D21B962892F';
 interface ICONTRACT_DEPLOY {
   artifactsPath:string,
   name:string,
@@ -97,7 +98,7 @@ if (network == "localhost") {
 
 
 
-  const lendingMarketPlace = await new LendingMarketPlace__factory(deployer).deploy(loanFactory.address,HOST,25,GELATOCORE)
+  const lendingMarketPlace = await new LendingMarketPlace__factory(deployer).deploy(loanFactory.address,HOST,25,GELATO_OPS)
   toDeployContract = contract_config['lendingMarketPlace'];
   writeFileSync(
     `${contract_path}/${toDeployContract.jsonName}_metadata.json`,

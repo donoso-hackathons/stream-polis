@@ -17,4 +17,6 @@ library Events {
   event LoanDemandCreated(DataTypes.LoanDemand loanDemand);
 
   event LoanTradeCreated(DataTypes.LoanTraded loanTraded);
+
+  event LoanTradeFinished(uint256 loanTradedId);
 }

@@ -5,16 +5,14 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
-import {IGelatoCore} from "@gelatonetwork/core/contracts/gelato_core/interfaces/IGelatoCore.sol";
-import {GelatoBytes} from "@gelatonetwork/core/contracts/libraries/GelatoBytes.sol";
-import {
-    Action, Operation, Provider, Task, TaskReceipt, IGelatoCore
-} from "@gelatonetwork/core/contracts/gelato_core/interfaces/IGelatoCore.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 import {ISuperfluid, ISuperAgreement, ISuperApp, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
 import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
+
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
 import {LoanFactory} from "./LoanFactory.sol";
@@ -22,15 +20,17 @@ import {ILoanFactory} from "./interfaces/ILoanFactory.sol";
 
 import "hardhat/console.sol";
 
-contract LendingMarketPlace {
+import {OpsReady} from "./gelato/OpsReady.sol";
+import {IOps} from "./gelato/IOps.sol";
+import {ITaskTreasury} from "./gelato/ITaskTreasury.sol";
+
+contract LendingMarketPlace is OpsReady , Ownable {
   using CFAv1Library for CFAv1Library.InitData;
   using SafeMath for uint256;
   using Counters for Counters.Counter;
 
   uint16 MARKET_PLACE_FEE;
 
-
-  address gelato;
   // declare `_idaLib` of type InitData
 
   ISuperfluid immutable host; // host
@@ -54,14 +54,16 @@ contract LendingMarketPlace {
 
   mapping(address => uint256) public _loanIdByTaker;
 
+  mapping(address => bytes32) public _gelatoTaskIdbyLoanClone;
+
   address immutable loanFactory;
 
   constructor(
     address _loanFactory,
     ISuperfluid _host,
     uint16 _marketPlaceFee,
-    address _gelato
-  ) {
+    address _ops
+  ) OpsReady(_ops) {
     loanFactory = _loanFactory;
     host = _host;
     MARKET_PLACE_FEE = _marketPlaceFee;
@@ -76,10 +78,6 @@ contract LendingMarketPlace {
       )
     );
     _cfaLib = CFAv1Library.InitData(_host, cfa);
-
-    gelato = _gelato;
-
-    // _cfaLib = CFAv1Library.InitData(_host, cfa);
   }
 
   // ============= =============  Modifiers ============= ============= //
@@ -133,11 +131,20 @@ contract LendingMarketPlace {
   }
 
   function acceptOffer(DataTypes.TradeConfig memory _config) public {
-    // address loanContractImpl = Clones.clone(loanFactory);
+    // ;
 
-    LoanFactory loanContract = new LoanFactory();
+    address loanContractImpl = Clones.clone(loanFactory);
 
-    address loanContractImpl = address(loanContract);
+    // LoanFactory loanContract = new LoanFactory();
+
+    // address loanContractImpl = address(loanContract);
+
+    uint256 configWord = SuperAppDefinitions.APP_LEVEL_FINAL |
+      SuperAppDefinitions.BEFORE_AGREEMENT_CREATED_NOOP |
+      SuperAppDefinitions.BEFORE_AGREEMENT_UPDATED_NOOP |
+      SuperAppDefinitions.BEFORE_AGREEMENT_TERMINATED_NOOP;
+
+    host.registerAppByFactory(ISuperApp(loanContractImpl), configWord);
 
     DataTypes.LoanOffer memory offer = _loansOfferedById[_config.offerId];
 
@@ -154,7 +161,7 @@ contract LendingMarketPlace {
         _config.duration,
         offer.config.collateralShare
       );
-      
+
     console.log(block.timestamp);
 
     DataTypes.LoanTraded memory loan = DataTypes.LoanTraded({
@@ -162,7 +169,7 @@ contract LendingMarketPlace {
       fee: offer.config.fee,
       loanAmount: _config.loanAmount,
       loanTotalAmount: totalLoanAmount,
-      duration:_config.duration,
+      duration: _config.duration,
       collateral: collateral,
       collateralShare: offer.config.collateralShare,
       flowRate: totalInflowRate,
@@ -188,6 +195,22 @@ contract LendingMarketPlace {
       userData
     );
 
+    //// Gelato Task to Stop the stream
+    bytes32 taskId = IOps(ops).createTimedTask(
+      uint128(block.timestamp + loan.duration), //// timestamp at which the task should be first  executed (stream should stop)
+      600, /// Interval between executions, we will cancel after the first
+      address(this), /// Contract executing the task
+      this.stopStream.selector, /// Executable function's selector
+      address(this), /// Resolver contract, in our case will be the same
+      abi.encodeWithSelector(
+        this.checkerStopStream.selector,
+       loan.loanTradedId
+      ), /// Checker Condition
+      ETH, ///  feetoken
+      false /// we will not  use the treasury contract for funding
+    );
+    _gelatoTaskIdbyLoanClone[loanContractImpl] = taskId;
+
     //  loantaker must approve the marketplace for tranfering the ERC20
     loan.superToken.transferFrom(
       loan.loanTaker,
@@ -195,19 +218,101 @@ contract LendingMarketPlace {
       loan.collateral
     );
 
-    console.log(uint(loan.loanAmount));
+    console.log(uint256(loan.loanAmount));
 
-      loan.superToken.transferFrom(
+    loan.superToken.transferFrom(
       loan.loanProvider,
       loan.loanTaker,
       loan.loanAmount
     );
 
-
     emit Events.LoanTradeCreated(loan);
 
     //// event
     /// update state
+  }
+
+  // ============= =============  GELATO Functions ============= ============= //
+  // #region Public Functions
+
+  function checkerStopStream(uint256 loanId)
+    external
+    pure
+    returns (bool canExec, bytes memory execPayload)
+  {
+    canExec = true;
+
+    execPayload = abi.encodeWithSelector(this.stopStream.selector, loanId);
+  }
+
+  function stopStream(uint256 loanId) external onlyOps {
+    //// check if
+
+    uint256 fee;
+    address feeToken;
+
+    (fee, feeToken) = IOps(ops).getFeeDetails();
+
+    _transfer(fee, feeToken);
+
+    DataTypes.LoanTraded memory loan = _loansTradedById[loanId];
+
+    ISuperToken superToken = loan.superToken;
+    address sender = loan.loanTaker;
+    address receiver = loan.loanProvider;
+
+    /////// STOP IF EXISTS outcoming stream
+    (, int96 outFlowRate, , ) = cfa.getFlow(
+      superToken,
+      address(this),
+      receiver
+    );
+
+    if (outFlowRate > 0) {
+      host.callAgreement(
+        cfa,
+        abi.encodeWithSelector(
+          cfa.deleteFlow.selector,
+          superToken,
+          address(this),
+          receiver,
+          new bytes(0) // placeholder
+        ),
+        "0x"
+      );
+    }
+
+    /////// STOP IF EXISTS incoming stream
+    (, int96 inFlowRate, , ) = cfa.getFlow(superToken, sender, address(this));
+
+    if (inFlowRate > 0) {
+      host.callAgreement(
+        cfa,
+        abi.encodeWithSelector(
+          cfa.deleteFlow.selector,
+          superToken,
+          sender,
+          address(this),
+          new bytes(0) // placeholder
+        ),
+        "0x"
+      );
+    }
+
+    bytes32 taskId = _gelatoTaskIdbyLoanClone[loan.loanContract];
+    cancelTaskbyId(taskId, loan.loanContract);
+
+    ///// emit Event loan mfinish
+
+
+  }
+
+  // endregion
+
+  //// Cancel Task by Id
+  function cancelTaskbyId(bytes32 _taskId, address loanContract) public {
+    IOps(ops).cancelTask(_taskId);
+    _gelatoTaskIdbyLoanClone[loanContract] = bytes32(0);
   }
 
   function AcceptDemand() public {}
@@ -232,44 +337,28 @@ contract LendingMarketPlace {
   {
     console.log(_fee);
     console.log(MARKET_PLACE_FEE);
-    totalLoanAmount = _loanAmount.mul(1000 + _fee).mul(1000 + MARKET_PLACE_FEE).div(
-      1000 * 1000
-    );
+    totalLoanAmount = _loanAmount
+      .mul(1000 + _fee)
+      .mul(1000 + MARKET_PLACE_FEE)
+      .div(1000 * 1000);
 
     totalInflowRate = int96(int256(totalLoanAmount.div(_duration)));
 
     collateral = _loanAmount.mul(_collateralShare).div(1000);
   }
 
-    // ============= =============  GELATO Functions ============= ============= //
-  // #region Public Functions
+  // ============= =============  ADMIN && TREASURY ============= ============= //
+  // #region ADMIN && TREASURY
 
-  function testPrint() pure public{
-    revert('TEST_WORK');
+     receive() external payable {}
+    
+    function withdrawContract() external onlyOwner returns (bool) {
+    (bool result, ) = payable(msg.sender).call{value: address(this).balance}(
+      ""
+    );
+    return result;
   }
 
 
-    function submitTaskCycle(
-        Provider calldata _provider,
-        Task[] calldata _tasks,
-        uint256 _expiryDate,
-        uint256 _cycles  // num of full cycles
-    )
-        public
-       
-    {
-        try IGelatoCore(gelato).submitTaskCycle(
-            _provider,
-            _tasks,
-            _expiryDate,
-            _cycles
-        ) {
-        } catch Error(string memory err) {
-            revert(string(abi.encodePacked("GelatoUserProxy.submitTaskCycle:", err)));
-        } catch {
-            revert("GelatoUserProxy.submitTaskCycle:undefinded");
-        }
-    }
-
-  // endregion
+  // #endregion ADMIN && TREASURY
 }
